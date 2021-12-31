@@ -7,8 +7,10 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^1.29.1",
     "core-js": "^3.6.5",
     "register-service-worker": "^1.7.1",
+    "sass": "^1.45.2",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
@@ -19,7 +21,6 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
   }
