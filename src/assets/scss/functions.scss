@@ -1,0 +1,3 @@
+@function padding($count: 1) {
+	@return $count * $base-padding;
+}

@@ -1,27 +1,77 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+import Main from '../views/Main.vue';
+import Login from '../views/Login.vue';
+import Register from '../views/Register.vue';
+import Page404 from '../views/Page404.vue';
+import Cabinet from '../views/Cabinet.vue';
+import Master from '../views/Master.vue';
+
+Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+	{
+		path: '/',
+		name: 'main',
+		component: Main,
+	},
+	{
+		path: '/login',
+		name: 'login',
+		component: Login,
+		meta: {
+			isVipLogin: false,
+		},
+	},
+	{
+		path: '/vip-login',
+		name: 'vip-login',
+		component: Login,
+		meta: {
+			isVipLogin: true,
+		},
+	},
+	{
+		path: '/register',
+		name: 'register',
+		component: Register,
+		meta: {
+			isVipRegister: false,
+		},
+	},
+	{
+		path: '/vip-register',
+		name: 'vip-register',
+		component: Register,
+		meta: {
+			isVipRegister: true,
+		},
+	},
+	{
+		path: '/cabinet',
+		name: 'cabinet',
+		component: Cabinet,
+	},
+	{
+		path: '/master',
+		name: 'master',
+		// redirect: { name: '404' },
+		component: Master,
+	},
+	{
+		path: '/404',
+		name: '404',
+		component: Page404,
+	},
+	{
+		path: '*',
+		redirect: { name: '404' },
+	},
+];
 
 const router = new VueRouter({
-  routes
-})
+	routes,
+});
 
-export default router
+export default router;

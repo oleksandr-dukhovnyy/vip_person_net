@@ -1,32 +1,44 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <Header />
+    <main>
+      <router-view
+        class="animate__animated animate__backInLeft"
+      />
+    </main>
+    <Footer />
+    <Terminal />
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { mapActions } from 'vuex';
+import Terminal from '@/components/Terminal/Terminal.vue';
+import Header from '@/components/Header/Header.vue';
+import Footer from '@/components/Footer/Footer.vue';
 
-#nav {
-  padding: 30px;
+const vuexActions = [
+  'LOAD_USER_DATA'
+];
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+export default {
+  components: {
+    Header, Footer, Terminal
+  },
+  methods: {
+    ...mapActions(vuexActions)
+  },
+  created(){
+    console.log('------------------');
+    this.LOAD_USER_DATA();
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+    // this.$notify({
+    //   title: 'created',
+    //   message: 'This is a success message',
+    //   type: 'success'
+    // });
   }
 }
-</style>
+</script>
+
+<style lang="scss" src="@/assets/scss/app.scss"></style>
