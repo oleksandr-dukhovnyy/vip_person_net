@@ -1,0 +1,35 @@
+// libs
+@import 'bootstrap/scss/bootstrap.scss';
+
+// normalize
+@import './normalize.scss';
+
+// mixins
+@import './mixins.scss';
+
+// vars
+@import './vars.scss';
+
+body,
+html {
+	font-family: 'Roboto', sans-serif;
+	background-color: $background-color;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.empty {
+	opacity: 0.6;
+}
+
+.c {
+	&-link {
+		@include link;
+	}
+	&-small {
+		font-size: $font-size-small;
+		opacity: 0.5;
+	}
+}
