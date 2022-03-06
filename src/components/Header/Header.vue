@@ -47,6 +47,7 @@
 						<router-link
 							:to="{ name: 'cabinet' }"
 							class="header__dropdown--link"
+							v-if="IS_RESIDENT"
 						>
 							Кабинет
 						</router-link>

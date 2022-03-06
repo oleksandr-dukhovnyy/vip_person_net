@@ -27,6 +27,15 @@
 					{{ client.data.email | text }}
 				</div>
 			</div>
+
+			<div class="client-info__line">
+				<div class="client-info__title">
+					Роль
+				</div>
+				<div class="client-info__value">
+					{{ client.roleRu | text }}
+				</div>
+			</div>
 			
 			<div class="dropdown-divider"></div>
 			<router-link

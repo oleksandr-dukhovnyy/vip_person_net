@@ -1,8 +1,14 @@
 import API from '@/utils/API/API.js';
 import { AppRouter } from '@/main';
-// import cache from '@/utils/cache/cache';
+import notificate from '@/utils/notification.js';
 
 let client = new API();
+
+const rolesTranslate = {
+	resident: 'Резидент',
+	admin: 'Администратор',
+	user: 'Пользователь',
+};
 
 export default {
 	actions: {
@@ -17,6 +23,27 @@ export default {
 					});
 				}
 			});
+		},
+		SAVE_USER_DATA({ commit }, _client) {
+			commit('SET_LOADER', {
+				loaderName: 'SAVE_USER_DATA',
+				loaderCondition: true,
+			});
+
+			client
+				.updateClientData(_client)
+				.then((res) => {
+					if (res.status === 200) {
+						notificate('Сохранение данных пользователя', 'Успешно!');
+					}
+				})
+				.catch(console.error)
+				.finally(() => {
+					commit('SET_LOADER', {
+						loaderName: 'SAVE_USER_DATA',
+						loaderCondition: false,
+					});
+				});
 		},
 		REMOVE_CODE({ commit }, code) {
 			client.removeCode(code).then((res) => {
@@ -149,7 +176,12 @@ export default {
 			state.inviteCodes = state.inviteCodes.filter((c) => c.code !== code);
 		},
 		SET_CLIENTS(state, arr) {
-			state.clients = arr;
+			state.clients = arr.map((user) => ({
+				...user,
+				roleRu: rolesTranslate[user.role]
+					? rolesTranslate[user.role]
+					: user.role,
+			}));
 		},
 		SET_USER(state, user) {
 			state.user = user;
@@ -162,6 +194,7 @@ export default {
 			login: false,
 			register: false,
 			loadClients: false,
+			SAVE_USER_DATA: false,
 		},
 		errors: {
 			login: null,
@@ -172,13 +205,15 @@ export default {
 	},
 	getters: {
 		AUTH_LOGIN_LOADING: (s) => s.loaders.login,
+		SAVE_USER_DATA_LOADING: (s) => s.loaders.SAVE_USER_DATA,
 		CLIENT: (s) => s.user,
 		CLIENT_DATA: (s) => s.userData,
 		USER_AUTHED: (s) => s.user?.aud === 'authenticated',
-		IS_ADMIN: (s) => s.user.role === 'supabase_admin',
+		IS_ADMIN: (s) => s.userData?.role === 'admin',
 		INVITE_CODES: (s) => s.inviteCodes,
 		CLIENTS: (s) => s.clients,
 		CLIENTS_LOADING: (s) => s.loaders.loadClients,
 		USER_NAME: (s) => s.userData?.data?.name || s.user?.email || 'Гость',
+		IS_RESIDENT: (s) => s.userData?.role === 'resident',
 	},
 };

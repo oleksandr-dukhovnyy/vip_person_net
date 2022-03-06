@@ -1,14 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import getUniqueCode from './getUniqueCode.js';
 
-// const testUsers = [
-// 	{
-// 		email: 'lebitoh943@ehstock.com',
-// 		password: 'ZSvWEYGtbbszwDHxdQRx',
-// 		id: '07893d2d-c26e-49fb-a67f-8ac61a0e6f8e',
-// 	},
-// ];
-
 const config = {
 	DB: {
 		usersData: 'users_data',
@@ -24,31 +16,39 @@ class _API {
 	constructor() {
 		this.client = createClient(config.SUPABASE_URL, config.SUPABASE_KEY);
 
-		this.autoAuth.bind(this);
 		this.login.bind(this);
+		this.logout.bind(this);
+		this.autoAuth.bind(this);
 		this.register.bind(this);
-		this.getUserData.bind(this);
 		this.getClient.bind(this);
-		this.generateInviteCode.bind(this);
+		this.removeCode.bind(this);
+		this.getUserData.bind(this);
+		this.loadClients.bind(this);
 		this.checkInviteCode.bind(this);
 		this.loadInviteCodes.bind(this);
-		this.removeCode.bind(this);
-		this.loadClients.bind(this);
+		this.updateClientData.bind(this);
+		this.generateInviteCode.bind(this);
 
 		this.apiList = [
-			'autoAuth',
 			'login',
 			'logout',
+			'autoAuth',
 			'register',
-			'getUserData',
 			'getClient',
-			'generateInviteCode',
+			'removeCode',
+			'getUserData',
+			'loadClients',
 			'checkInviteCode',
 			'loadInviteCodes',
-			'removeCode',
-			'loadClients',
+			'updateClientData',
+			'generateInviteCode',
 		];
-		// this.updateUserData.bind(this);
+	}
+	updateClientData(client) {
+		return this.client
+			.from(config.DB.usersData)
+			.update(client)
+			.match({ user_id: client.user_id });
 	}
 	autoAuth() {
 		return new Promise((r) => r(this.client.auth.user()));

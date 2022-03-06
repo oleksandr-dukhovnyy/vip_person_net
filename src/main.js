@@ -9,6 +9,7 @@ import 'animate.css';
 import { mapGetters } from 'vuex';
 
 import config from '@/config.js';
+import notificate from '@/utils/notification.js';
 
 import Logo from '@/components/global/Logo.vue';
 import Loader from '@/components/global/Loader.vue';
@@ -16,11 +17,16 @@ import Loader from '@/components/global/Loader.vue';
 import clickOutside from './directives/click-outside.js';
 
 // element-ui
-import { DatePicker } from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import DatePicker from 'element-ui/lib/date-picker';
+
+import 'element-ui/lib/theme-chalk/date-picker.css';
+import 'element-ui/lib/theme-chalk/icon.css';
+import 'element-ui/lib/theme-chalk/button.css';
+import 'element-ui/lib/theme-chalk/notification.css';
+
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
-// animate.css
+
 import 'animate.css';
 
 locale.use(lang);
@@ -48,6 +54,7 @@ Vue.mixin({
 		'USER_AUTHED',
 		'AUTH_LOGIN_LOADING',
 		'IS_ADMIN',
+		'IS_RESIDENT',
 		'CLIENT_DATA',
 		'USER_NAME',
 	]),
@@ -78,6 +85,9 @@ Vue.mixin({
 			return `${day}.${month}.${year} ${hour}:${minutes}`;
 		},
 		text: (v) => (v !== undefined ? v : '-'),
+	},
+	methods: {
+		notificate,
 	},
 });
 

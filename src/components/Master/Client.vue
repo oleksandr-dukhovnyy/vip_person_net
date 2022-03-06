@@ -8,6 +8,12 @@
 		<div class="client__actions">
 			<Actions
 				:client="client"
+
+				@moveAction="moveAction"
+			/>
+			<div class="dropdown-divider client--divider"></div>
+			<ClientTable
+				:client="client"
 			/>
 		</div>
 	</div>
@@ -16,6 +22,7 @@
 <script>
 import Chart from './Chart.vue';
 import Actions from './Actions.vue';
+import ClientTable from './ClientTable.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 const vuexActions = ['CHANGE_CLIENT_DATA'];
@@ -23,7 +30,7 @@ const vuexGetters = ['CLIENTS'];
 
 export default {
 	name: 'Client',
-	components: { Chart, Actions },
+	components: { Chart, Actions, ClientTable },
 	props: {
 		client: {
 			type: Object,
@@ -31,7 +38,10 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions(vuexActions)
+		...mapActions(vuexActions),
+		moveAction(index){
+			
+		}
 	},
 	computed: {
 		...mapGetters(vuexGetters)
@@ -44,6 +54,10 @@ export default {
 	.client {
 		@include container;
 		padding: 0 0 0 padding();
+
+		&--divider {
+			margin-top: padding(7);
+		}
 
 		&__show-cabinet {
 			@include link;

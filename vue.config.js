@@ -1,21 +1,29 @@
-// const BundleAnalyzerPlugin =
-// 	require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const webpack = require('webpack');
+const isDev = process.env.BUILD_MODE === 'D';
+
+const plugins = [
+	new webpack.NormalModuleReplacementPlugin(
+		/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/,
+		'element-ui/lib/locale/lang/en'
+	),
+];
+
+if (!isDev) {
+	plugins.push(
+		new BundleAnalyzerPlugin({
+			// analyzerMode: 'server',
+			analyzerPort: 5000,
+			analyzerHost: '127.0.0.1',
+		})
+	);
+}
 
 module.exports = {
 	// publicPath: 'vip-person',
 	configureWebpack: {
-		plugins: [
-			// new BundleAnalyzerPlugin({
-			// 	analyzerPort: 5000,
-			// 	analyzerHost: '127.0.0.1',
-			// }),
-			new webpack.NormalModuleReplacementPlugin(
-				/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/,
-				'element-ui/lib/locale/lang/en'
-			),
-		],
+		plugins,
 	},
 	css: {
 		loaderOptions: {

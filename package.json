@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "BUILD_MODE=P;vue-cli-service build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.29.1",
