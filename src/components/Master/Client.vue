@@ -2,14 +2,12 @@
 	<div class="client">
 		<div class="client__chart">
 			<Chart
-				:client="client"
+				:actions="client.actions"
 			/>
 		</div>
 		<div class="client__actions">
 			<Actions
 				:client="client"
-
-				@moveAction="moveAction"
 			/>
 			<div class="dropdown-divider client--divider"></div>
 			<ClientTable
@@ -20,7 +18,7 @@
 </template>
 
 <script>
-import Chart from './Chart.vue';
+import Chart from '@/components/Chart/Chart.vue';
 import Actions from './Actions.vue';
 import ClientTable from './ClientTable.vue';
 import { mapActions, mapGetters } from 'vuex';
@@ -39,8 +37,8 @@ export default {
 	},
 	methods: {
 		...mapActions(vuexActions),
-		moveAction(index){
-			
+		viewClient(client){
+
 		}
 	},
 	computed: {
@@ -63,8 +61,8 @@ export default {
 			@include link;
 		}
 
-		&__chart {
-			height: 250px;
-		}
+		// &__chart {
+		// 	height: 500px;
+		// }
 	}
 </style>

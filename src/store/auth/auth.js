@@ -4,12 +4,6 @@ import notificate from '@/utils/notification.js';
 
 let client = new API();
 
-const rolesTranslate = {
-	resident: 'Резидент',
-	admin: 'Администратор',
-	user: 'Пользователь',
-};
-
 export default {
 	actions: {
 		AUTO_AUTH({ commit, dispatch }) {
@@ -178,9 +172,7 @@ export default {
 		SET_CLIENTS(state, arr) {
 			state.clients = arr.map((user) => ({
 				...user,
-				roleRu: rolesTranslate[user.role]
-					? rolesTranslate[user.role]
-					: user.role,
+				oldData: JSON.parse(JSON.stringify(user)),
 			}));
 		},
 		SET_USER(state, user) {
@@ -215,5 +207,12 @@ export default {
 		CLIENTS_LOADING: (s) => s.loaders.loadClients,
 		USER_NAME: (s) => s.userData?.data?.name || s.user?.email || 'Гость',
 		IS_RESIDENT: (s) => s.userData?.role === 'resident',
+		HAS_UNSAVED_CLIENTS_DATA: (s) =>
+			s.clients.some((c) => {
+				const clearClient = JSON.parse(JSON.stringify(c));
+				delete clearClient.oldData;
+
+				return JSON.stringify(clearClient) !== JSON.stringify(c.oldData);
+			}),
 	},
 };

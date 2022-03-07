@@ -1,6 +1,6 @@
 <template>
 	<section class="cabinet">
-		<div v-if="!AUTH_LOGIN_LOADING && false">
+		<div v-if="!AUTH_LOGIN_LOADING">
 			{{ client }}
 		</div>
 		<loader 

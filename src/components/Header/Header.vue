@@ -136,7 +136,7 @@ export default {
 		...mapActions(['LOGOUT']),
 		goBack() {
 			this.$router.push({
-				name: 'main'
+				name: this.$route.params.client ? 'master' : 'main'
 			});
 		},
 		dropdownClick(e) {

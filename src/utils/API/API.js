@@ -45,6 +45,8 @@ class _API {
 		];
 	}
 	updateClientData(client) {
+		delete client.oldData;
+
 		return this.client
 			.from(config.DB.usersData)
 			.update(client)
@@ -189,7 +191,10 @@ class _API {
 		return this.client.from(config.DB.inviteCodes).delete().eq('code', code);
 	}
 	loadClients() {
-		return this.client.from(config.DB.usersData).select('*');
+		return this.client
+			.from(config.DB.usersData)
+			.select('*')
+			.eq('role', 'resident');
 	}
 }
 

@@ -33,7 +33,7 @@
 					Роль
 				</div>
 				<div class="client-info__value">
-					{{ client.roleRu | text }}
+					{{ client.roleRu | role }}
 				</div>
 			</div>
 			

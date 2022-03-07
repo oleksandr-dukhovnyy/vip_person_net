@@ -10,6 +10,7 @@ import { mapGetters } from 'vuex';
 
 import config from '@/config.js';
 import notificate from '@/utils/notification.js';
+import { DDMMYYYY_ttmm as dateParser } from '@/utils/timeParser';
 
 import Logo from '@/components/global/Logo.vue';
 import Loader from '@/components/global/Loader.vue';
@@ -41,7 +42,11 @@ Vue.component('Loader', Loader);
 
 Vue.config.productionTip = false;
 
-const normalize = (n) => (n < 10 ? `0${n}` : n);
+const rolesTranslate = {
+	resident: 'Резидент',
+	admin: 'Администратор',
+	user: 'Пользователь',
+};
 
 Vue.mixin({
 	data() {
@@ -73,18 +78,9 @@ Vue.mixin({
 		}
 	},
 	filters: {
-		timeFromISO8601(time) {
-			const date = new Date(time);
-
-			const year = date.getFullYear();
-			const month = normalize(date.getMonth() + 1);
-			const day = normalize(date.getDate());
-			const hour = normalize(date.getHours());
-			const minutes = normalize(date.getMinutes());
-
-			return `${day}.${month}.${year} ${hour}:${minutes}`;
-		},
+		timeFromISO8601: (t) => dateParser(t),
 		text: (v) => (v !== undefined ? v : '-'),
+		role: (v) => (rolesTranslate[v] ? rolesTranslate[v] : v),
 	},
 	methods: {
 		notificate,

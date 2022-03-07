@@ -7,11 +7,11 @@
 						'closed-editor': editorOn
 					}"
 				>
-					<div>#</div>
-					<div>Экшн</div>
-					<div>Значение</div>
-					<div>Дата</div>
-					<div>Управление</div>
+					<div title="Порядковый номер экшена. Чем больше - тем старше. Экшн №1, например, произошел ПОСЛЕ экшена №2">#</div>
+					<div title="Название экшена (действия)">Экшн</div>
+					<div title="НОВОЕ значение заработка клиента в %">Значение</div>
+					<div title="Дата события">Дата</div>
+					<div title="Панель с кнопками управления событиями. Наведите на иконки действий, чтобы увидеть подсказку">Управление</div>
 				</div>
 				<div
 					v-for="(action, i) in actions"
@@ -22,7 +22,9 @@
 						selected: i === currentActionID
 					}"
 				>
-					<div>{{ i + 1 }}</div>
+					<div title="Порядковый номер экшена. Чем больше - тем старше. Экшн №1, например, произошел ПОСЛЕ экшена №2">
+						{{ i + 1 }}
+					</div>
 					<div>{{ actionNames[action.name] | text }}</div>
 					<div>{{ action.value }}</div>
 					<div>{{ action.date | timeFromISO8601 }}</div>
@@ -42,14 +44,14 @@
 						<img
 							src="@/assets/icons/move.png"
 							alt="move"
-							title="Переместить экшн."
+							title="Переместить экшн. В выпадающем окне укажите новый индекс экшена. Экшн, который сейчас на заданном индексе, сдвинется вниз"
 							@click="moveAction(i)"
 						>
 						<button
 							type="button"
 							class="btn-close"
 							aria-label="close"
-							title="Удалить экшн. После сохранения изменений это действие нельзя отменить!"
+							title="Удалить экшн навсегда. После сохранения изменений это действие нельзя будет отменить!"
 							@click="deleteAction(i)"
 						></button>
 					</div>
@@ -133,6 +135,7 @@
 				type="button"
 				class="btn btn-success"
 				@click="newAction"
+				title="Создать новый экшн. Он появится на позиции 1"
 			>
 				Новый экшн
 			</button>
@@ -141,6 +144,7 @@
 				class="btn btn-success"
 				:disabled="!clientDataChanged"
 				@click="saveChanges"
+				title="Отправить изменения на сервер. Это действие нельзя отменить!"
 			>
 				Сохранить изменения
 			</button>
@@ -149,6 +153,7 @@
 				class="btn btn-dark"
 				:disabled="!clientDataChanged"
 				@click="resetChanges"
+				title="Сбросить не сохраненные изменения."
 			>
 				Отменить изменения
 			</button>
@@ -164,19 +169,7 @@ import { mapActions, mapGetters } from 'vuex';
 const vuexActions = ['SAVE_USER_DATA'];
 const vuexGetters = ['SAVE_USER_DATA_LOADING']
 
-/*
-actionControlls:
-	Редактировать экшн
-	Дублировать экшн
-	Переместить экшн
-	Удалить экшн
-*/
-
 function editedTrue () { this.edited = true; }
-
-// const rand = (mx = 5, mn = 0, tf = 2) =>
-// 	(Math.random() * (mx - mn) + mn).toFixed(tf);
-// const randDate = () => new Date(+`1${rand(5, 1, 0)}0${rand(99, 10, 0)}0000000`).toISOString();
 
 export default {
 	name: 'Actions',
@@ -201,11 +194,7 @@ export default {
 				open: 'Открытие счёта'
 			},
 			currentActionID: -1,
-			oldClientData: ''
 		}
-	},
-	created(){
-		this.oldClientData = JSON.stringify(this.client.actions);
 	},
 	watch: {
 		editorName: editedTrue,
@@ -282,11 +271,9 @@ export default {
 			this.client.actions.splice(index, 1);
 		},
 		resetChanges(){
-			this.client.actions = JSON.parse(this.oldClientData);
+			this.client.actions = JSON.parse(JSON.stringify(this.client.oldData)).actions;
 		},
 		saveChanges(){
-			this.oldClientData = JSON.stringify(this.client.actions);
-			
 			this.SAVE_USER_DATA(
 				JSON.parse(JSON.stringify(this.client))
 			);			
@@ -306,7 +293,11 @@ export default {
 			return this.client.actions;
 		},
 		clientDataChanged(){
-			return JSON.stringify(this.client.actions) !== this.oldClientData;
+			const client = JSON.parse(JSON.stringify(this.client));
+			const oldData = client.oldData.actions;
+			delete client.oldData;
+
+			return JSON.stringify(client.actions) !== JSON.stringify(oldData);
 		}
 	}
 }

@@ -3,5 +3,8 @@ export default {
 	needAuth: ['cabinet', 'master'],
 	ui: {
 		dropdownWorkSpeedMS: 400,
+		colors: {
+			cta: '#ffb800',
+		},
 	},
 };
