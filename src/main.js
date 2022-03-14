@@ -81,6 +81,9 @@ Vue.mixin({
 		timeFromISO8601: (t) => dateParser(t),
 		text: (v) => (v !== undefined ? v : '-'),
 		role: (v) => (rolesTranslate[v] ? rolesTranslate[v] : v),
+		number0: (v) => (+v).toFixed(0),
+		number2: (v) => (+v).toFixed(2),
+		number4: (v) => (+v).toFixed(4),
 	},
 	methods: {
 		notificate,

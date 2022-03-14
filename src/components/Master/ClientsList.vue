@@ -49,6 +49,7 @@ export default {
 		padding-right: 0px;
 
 		&__client {
+			cursor: pointer;
 			padding: (padding() / 2);
 			border: 1px solid #fff;
 

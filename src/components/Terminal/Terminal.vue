@@ -143,4 +143,4 @@ export default {
 
 </script>
 
-<style src="./terminal.scss" lang="scss"></style>
+<style src="./terminal.scss" scoped lang="scss"></style>

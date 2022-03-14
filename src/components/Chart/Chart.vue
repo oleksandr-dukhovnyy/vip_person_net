@@ -8,6 +8,18 @@
 import Chart from 'chart.js/dist/chart.js';
 import { DDMMYY } from '@/utils/timeParser.js';
 
+function calculePoints() {
+	return JSON.parse(JSON.stringify(
+		this.actions.map(a => +a.value)
+	));
+}
+
+function calculeDates() {
+	return JSON.parse(JSON.stringify(
+		this.actions.map(a => DDMMYY(a.date))
+	));
+}
+
 export default {
 	name: 'Chart',
 	props: {
@@ -15,7 +27,6 @@ export default {
 			type: Array
 		}
 	},
-	data: {},
 	computed: {
 		ctx(){
 			return this.$refs?.canvas?.getContext('2d');
@@ -23,21 +34,38 @@ export default {
 	},
 	watch: {
 		actions(){
-			console.log('actions')
-			
+			const points = calculePoints.call(this);
+			const dates = calculeDates.call(this);
+
+			this.chart.data.labels = points;
+
+			this.chart.update();
+
+			this.chart.data.datasets[0] = {
+				label: '',
+				data: calculePoints.call(this),
+				backgroundColor: [this.config.ui.colors.cta],
+				borderColor: ['#ffb800'],
+				borderWidth: 3
+			};
+
+			this.chart.options = {
+				tooltips: {
+					enabled: false
+				}
+			}
+
+			this.chart.update();
 		}
 	},
 	mounted(){
-		const values = this.actions.map(a => a.value);
-		const dates = this.actions.map(a => DDMMYY(a.date));
-
 		this.chart = new Chart(this.ctx, {
 			type: 'line',
 			data: {
-				labels: dates,
+				labels: calculeDates.call(this),
 				datasets: [{
 					label: '',
-					data: values,
+					data: calculePoints.call(this),
 					backgroundColor: [this.config.ui.colors.cta],
 					borderColor: [
 						'#ffb800'
@@ -46,6 +74,9 @@ export default {
 				}]
 			},
 			options: {
+				tooltips: {
+         			enabled: false,
+				},
 				animations: {
 					y: {
 						easing: 'easeInOutElastic',
@@ -63,18 +94,10 @@ export default {
 					y: {
 						beginAtZero: true
 					}
-				}
+				},
 			}
 		});
 	}
 }
 
 </script>
-
-<style lang="scss" scoped>
-	.chart {
-		margin: auto;
-		width: 480px;
-		height: 290px;
-	}
-</style>

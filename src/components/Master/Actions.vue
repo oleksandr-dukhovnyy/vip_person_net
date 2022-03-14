@@ -26,7 +26,7 @@
 						{{ i + 1 }}
 					</div>
 					<div>{{ actionNames[action.name] | text }}</div>
-					<div>{{ action.value }}</div>
+					<div>{{ action.value | number2 }}</div>
 					<div>{{ action.date | timeFromISO8601 }}</div>
 					<div class="actions__table--item">
 						<img
@@ -124,13 +124,6 @@
 			</div>
 		</div>
 		<div class="actions__new-action" v-if="!SAVE_USER_DATA_LOADING">
-			<!-- <Pagination
-				:perPage="10"
-				:page="0"
-				:items="32"
-
-				@pageSelected="pageSelected"
-			/> -->
 			<button
 				type="button"
 				class="btn btn-success"
@@ -139,6 +132,22 @@
 			>
 				Новый экшн
 			</button>
+		</div>
+		<div class="dropdown-divider dropdown-divider--top"></div>
+		<!-- <div v-if="!SAVE_USER_DATA_LOADING">
+			<ClientTable
+				:client="client"
+			/>
+		</div>
+		<div class="dropdown-divider dropdown-divider--top"></div> -->
+		<div class="actions__save-changes" v-if="!SAVE_USER_DATA_LOADING">
+			<!-- <Pagination
+				:perPage="10"
+				:page="0"
+				:items="32"
+
+				@pageSelected="pageSelected"
+			/> -->
 			<button
 				type="button"
 				class="btn btn-success"
@@ -164,6 +173,7 @@
 
 <script>
 // import Pagination from '@/components/Pagination/Pagination.vue';
+import ClientTable from '../ClientTable.vue';
 import move from '@/utils/moveItemInArray.js';
 import { mapActions, mapGetters } from 'vuex';
 const vuexActions = ['SAVE_USER_DATA'];
@@ -173,6 +183,7 @@ function editedTrue () { this.edited = true; }
 
 export default {
 	name: 'Actions',
+	components: { ClientTable },
 	props: {
 		client: {
 			type: Object
@@ -276,7 +287,11 @@ export default {
 		saveChanges(){
 			this.SAVE_USER_DATA(
 				JSON.parse(JSON.stringify(this.client))
-			);			
+			);
+			this.client.oldData = JSON.parse(JSON.stringify({
+				...this.client.oldData,
+				actions: this.client.actions
+			}));
 		},
 		newAction(){
 			this.insertAction({
@@ -312,6 +327,12 @@ export default {
 	$date-cs: 150px;
 	$controlls-cs: 100px;
 
+	.dropdown-divider {
+		&--top {
+			margin-top: padding(5);
+		}
+	}
+
 	.actions {
 		padding: padding() 0;
 		display: flex;
@@ -333,6 +354,13 @@ export default {
 				display: flex;
 				margin: none;
 			}
+		}
+
+		&__save-changes {
+			display: grid;
+			grid-template-columns: max-content max-content;
+			grid-gap: padding();
+			justify-content: flex-end;
 		}
 
 		&__table {
