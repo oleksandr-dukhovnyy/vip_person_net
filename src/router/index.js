@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import Main from '../views/Main.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
-import Page404 from '../views/Page404.vue';
+import ErrorPage from '../views/ErrorPage.vue';
 import Cabinet from '../views/Cabinet.vue';
 import Master from '../views/Master.vue';
 
@@ -19,7 +19,8 @@ const routes = [
 	{
 		path: '/login',
 		name: 'login',
-		component: Login,
+		redirect: { name: 'vip-login' },
+		//component: Login,
 		meta: {
 			isVipLogin: false,
 		},
@@ -62,7 +63,10 @@ const routes = [
 	{
 		path: '/404',
 		name: '404',
-		component: Page404,
+		component: ErrorPage,
+		params: {
+			errorCode: 404,
+		},
 	},
 	{
 		path: '*',

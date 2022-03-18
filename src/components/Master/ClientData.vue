@@ -92,6 +92,12 @@ export default {
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-row-gap: 10px;
+		margin: 0 auto;
+
+		&--wrapper {
+			max-width: 250px;
+			margin: 0 auto;
+		}
 
 		&__line {
 			display: grid;

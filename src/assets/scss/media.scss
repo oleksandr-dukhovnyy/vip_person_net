@@ -1,0 +1,365 @@
+$breakpoints: (
+	m-sm: 0px,
+	m-s: 455px,
+	m: 576px,
+	t-sm: 863px,
+	t: 992px,
+	t-l: 1200px,
+	d: 1300px,
+	d-xl: 2000px,
+);
+
+@mixin get-media-up($after: 0px) {
+	@media screen and (max-width: $after) {
+		& {
+			@content;
+		}
+	}
+}
+
+@mixin get-media-down($before: 0px) {
+	@media screen and (min-width: $before) {
+		& {
+			@content;
+		}
+	}
+}
+
+@mixin media-up($brekpoint-name) {
+	@if map-has-key($breakpoints, $brekpoint-name) {
+		@include get-media-up(#{map-get($breakpoints, $brekpoint-name)}) {
+			@content;
+		}
+	} @else {
+		@warn "Unfortunately, no value could be retrieved from `#{$brekpoint-name}`. "
+        + "Please make sure it is defined in `$breakpoints` map.";
+	}
+}
+
+@mixin media-down($brekpoint-name) {
+	@if map-has-key($breakpoints, $brekpoint-name) {
+		@include get-media-up(#{map-get($breakpoints, $brekpoint-name)}) {
+			@content;
+		}
+	} @else {
+		@warn "Unfortunately, no value could be retrieved from `#{$brekpoint-name}`. "
+        + "Please make sure it is defined in `$breakpoints` map.";
+	}
+}
+
+@mixin landscape() {
+	html.landscape & {
+		@content;
+	}
+}
+
+@mixin portrait() {
+	html.portrait & {
+		@content;
+	}
+}
+
+// // general
+// @mixin media-mn-mx($from, $to) {
+// 	@media screen and (min-width: $from) and (max-width: $to) {
+// 		@content;
+// 	}
+// }
+
+// @mixin media-mn($from) {
+// 	@media screen and (min-width: $from) {
+// 		@content;
+// 	}
+// }
+
+// @mixin media-mx($to) {
+// 	@media screen and (max-width: $to) {
+// 		@content;
+// 	}
+// }
+
+// @mixin landscape() {
+// 	html.landscape & {
+// 		@content;
+// 	}
+// }
+
+// @mixin portrait() {
+// 	html.portrait & {
+// 		@content;
+// 	}
+// }
+
+// // media mixins
+
+// // mobile
+// @mixin mobile {
+// 	html.mobile & {
+// 		// @include media-mx($media-mobile-l) {
+// 		// 	@content;
+// 		// }
+// 		@content;
+// 	}
+// }
+// @mixin mobile-landscape {
+// 	html.mobile.landscape & {
+// 		@include media-mx($media-mobile-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin mobile-portrait {
+// 	html.mobile.portrait & {
+// 		@include media-mx($media-mobile-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin mobile-s() {
+// 	html.mobile & {
+// 		@include media-mx($media-mobile-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin mobile-s-landscape() {
+// 	html.mobile.landscape & {
+// 		@include media-mx($media-mobile-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin mobile-s-portrait() {
+// 	html.mobile.portrait & {
+// 		@include media-mx($media-mobile-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin mobile-m() {
+// 	html.mobile & {
+// 		@include media-mn-mx($media-mobile-s, $media-mobile-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+
+// @mixin mobile-m-landscape() {
+// 	html.mobile.landscape & {
+// 		@include media-mn-mx($media-mobile-s, $media-mobile-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin mobile-m-portrait() {
+// 	html.mobile.portrait & {
+// 		@include media-mn-mx($media-mobile-s, $media-mobile-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin mobile-l() {
+// 	html.mobile & {
+// 		@include media-mn-mx($media-mobile-m, $media-mobile-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+
+// @mixin mobile-l-landscape() {
+// 	html.mobile.landscape & {
+// 		@include media-mn-mx($media-mobile-m, $media-mobile-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin mobile-l-portrait() {
+// 	html.mobile.portrait & {
+// 		@include media-mn-mx($media-mobile-m, $media-mobile-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+
+// // tablet
+// @mixin tablet() {
+// 	html.tablet & {
+// 		// @include media-mn-mx($media-tablet-s, $media-tablet-l) {
+// 		// 	@content;
+// 		// }
+// 		@content;
+// 	}
+// }
+// @mixin tablet-landscape() {
+// 	html.tablet.landscape & {
+// 		@include media-mn-mx($media-tablet-s, $media-tablet-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin tablet-portrait() {
+// 	html.tablet.portrait & {
+// 		@include media-mn-mx($media-tablet-s, $media-tablet-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin tablet-s() {
+// 	html.tablet & {
+// 		@include media-mx($media-tablet-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin tablet-s-landscape() {
+// 	html.tablet.landscape & {
+// 		@include media-mx($media-tablet-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin tablet-s-portrait() {
+// 	html.tablet.portrait & {
+// 		@include media-mx($media-tablet-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin tablet-m() {
+// 	html.tablet & {
+// 		@include media-mn-mx($media-tablet-s, $media-tablet-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin tablet-m-landscape() {
+// 	html.tablet.landscape & {
+// 		@include media-mn-mx($media-tablet-s, $media-tablet-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin tablet-m-portrait() {
+// 	html.tablet.landscape & {
+// 		@include media-mn-mx($media-tablet-s, $media-tablet-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin tablet-l() {
+// 	html.tablet & {
+// 		@include media-mn-mx($media-tablet-m, $media-tablet-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin tablet-l-landscape() {
+// 	html.tablet.landscape & {
+// 		@include media-mn-mx($media-tablet-m, $media-tablet-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin tablet-l-portrait() {
+// 	html.tablet.portrait & {
+// 		@include media-mn-mx($media-tablet-m, $media-tablet-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+
+// // desktop
+// @mixin desktop() {
+// 	html.desktop & {
+// 		// @include media-mn-mx($media-desktop-s, $media-desktop-l) {
+// 		// 	@content;
+// 		// }
+// 		@content;
+// 	}
+// }
+// @mixin desktop-landscape() {
+// 	html.desktop.landscape & {
+// 		@include media-mn-mx($media-desktop-s, $media-desktop-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin desktop-portrait() {
+// 	html.desktop.portrait & {
+// 		@include media-mn-mx($media-desktop-s, $media-desktop-l) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin desktop-s() {
+// 	html.desktop & {
+// 		@include media-mx($media-desktop-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin desktop-s-landscape() {
+// 	html.desktop.landscape & {
+// 		@include media-mx($media-desktop-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin desktop-s-portrait() {
+// 	html.desktop.portrait & {
+// 		@include media-mx($media-desktop-s) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin desktop-m() {
+// 	html.desktop & {
+// 		@include media-mn-mx($media-desktop-s, $media-desktop-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin desktop-m-landscape() {
+// 	html.desktop.landscape & {
+// 		@include media-mn-mx($media-desktop-s, $media-desktop-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin desktop-m-portrait() {
+// 	html.desktop.portrait & {
+// 		@include media-mn-mx($media-desktop-s, $media-desktop-m) {
+// 			@content;
+// 		}
+// 	}
+// }
+// // -
+// @mixin desktop-l() {
+// 	html.desktop & {
+// 		@include media-mn-mx($media-desktop-l, $max-supported-width) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin desktop-l-landscape() {
+// 	html.desktop.landscape & {
+// 		@include media-mn-mx($media-desktop-l, $max-supported-width) {
+// 			@content;
+// 		}
+// 	}
+// }
+// @mixin desktop-l-portrait() {
+// 	html.desktop.portrait & {
+// 		@include media-mn-mx($media-desktop-l, $max-supported-width) {
+// 			@content;
+// 		}
+// 	}
+// }

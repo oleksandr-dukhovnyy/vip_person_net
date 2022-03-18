@@ -47,7 +47,7 @@
 						<router-link
 							:to="{ name: 'cabinet' }"
 							class="header__dropdown--link"
-							v-if="IS_RESIDENT"
+							v-if="IS_RESIDENT || IS_ADMIN"
 						>
 							Кабинет
 						</router-link>
@@ -70,13 +70,23 @@
 						>
 							Выйти
 						</button>
-						<router-link
-							:to="{name: 'login'}"
+						<!-- <router-link
+							:to="{name: 'main'}"
 							v-else
-							class="c-link"
+							class="c-link mutted"
+							disabled="disabled"
 						>
 							Войти
-						</router-link>
+						</router-link> -->
+						<button
+							type="button"
+							class="btn btn-link c-link header__dropdown--link mutted"
+							@click="LOGOUT"
+							disabled="disabled"
+							v-else
+						>
+							Войти
+						</button>
 					</dir>
 				</div>
 				<Loader class="user__link" v-else />

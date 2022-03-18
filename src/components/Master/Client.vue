@@ -45,6 +45,10 @@ export default {
 		@include container;
 		padding: 0 0 0 padding();
 
+		@include media-down('m') {
+			padding: 0;
+		}
+
 		&__show-cabinet {
 			@include link;
 		}

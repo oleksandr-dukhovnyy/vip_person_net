@@ -22,12 +22,12 @@
 						selected: i === currentActionID
 					}"
 				>
-					<div title="Порядковый номер экшена. Чем больше - тем старше. Экшн №1, например, произошел ПОСЛЕ экшена №2">
-						{{ i + 1 }}
+					<div class="actions__table--name" title="Порядковый номер экшена. Чем больше - тем старше. Экшн №1, например, произошел ПОСЛЕ экшена №2">
+						{{ actions.length - i }}
 					</div>
-					<div>{{ actionNames[action.name] | text }}</div>
-					<div>{{ action.value | number2 }}</div>
-					<div>{{ action.date | timeFromISO8601 }}</div>
+					<div class="actions__table--name">{{ actionNames[action.name] | text }}</div>
+					<div class="actions__table--value">{{ action.value | number2 }}</div>
+					<div class="actions__table--date">{{ action.date | timeFromISO8601 }}</div>
 					<div class="actions__table--item">
 						<img
 							src="@/assets/icons/edit.svg"
@@ -126,7 +126,7 @@
 		<div class="actions__new-action" v-if="!SAVE_USER_DATA_LOADING">
 			<button
 				type="button"
-				class="btn btn-success"
+				class="btn btn-success actions__new-action--button"
 				@click="newAction"
 				title="Создать новый экшн. Он появится на позиции 1"
 			>
@@ -250,7 +250,7 @@ export default {
 			this.edited = false;
 		},
 		moveAction(index){
-			const newPosition = +prompt('На какую позицию переместить?') - 1;
+			const newPosition = (this.client.actions.length - +prompt('На какую позицию переместить?'));
 
 			if (!isNaN(newPosition) && newPosition !== null && newPosition !== undefined) {
 				move(this.client.actions, +index, newPosition);
@@ -321,10 +321,11 @@ export default {
 
 <style scoped lang="scss">
 	// sizes (cs - ceil size)
-	$id-cs: 16px;
+	$id-cs: 9px;
 	$name-cs: 1fr;
+	$name-cs-small: 92px;
 	$value-cs: 80px;
-	$date-cs: 150px;
+	$date-cs: 120px;
 	$controlls-cs: 100px;
 
 	.dropdown-divider {
@@ -337,6 +338,12 @@ export default {
 		padding: padding() 0;
 		display: flex;
 
+		@include media-down('t-l') {
+			display: grid;
+			grid-template-columns: 1fr;
+			grid-template-rows: repeat(2, max-content);
+		}
+
 		&.closed-editor {
 			display: block;
 		}
@@ -345,14 +352,19 @@ export default {
 			text-align: right;
 
 			display: grid;
-			grid-template-columns: max-content max-content max-content;
+			grid-template-columns: 100%;
 			grid-gap: padding();
-			justify-items: center;
+			justify-items: flex-start;
 
-			.pagination--contain {
-				align-items: center;
-				display: flex;
-				margin: none;
+			@include media-down('m-s') {
+				justify-items: center;
+				grid-template-columns: 100%;
+			}
+
+			&--button {
+				@include media-down('m-s'){
+					width: 100%;
+				}
 			}
 		}
 
@@ -361,15 +373,30 @@ export default {
 			grid-template-columns: max-content max-content;
 			grid-gap: padding();
 			justify-content: flex-end;
+
+			@include media-down('m-s') {
+				grid-template-columns: 100%;
+				grid-template-rows: max-content max-content;
+				justify-content: center;
+			}
 		}
 
 		&__table {
-			width: 100%;
 			display: grid;
 			grid-gap: padding();
 			grid-template-columns: $id-cs $name-cs $value-cs $date-cs $controlls-cs;
 			border-bottom: 1px solid $gray;
 			padding: padding();
+
+			@include media-down('m') {
+				grid-gap: padding();
+				justify-content: space-between;
+				grid-template-columns: $id-cs $name-cs-small $value-cs $date-cs $controlls-cs;
+			}
+
+			@include media-down('m-s') {
+				width: max-content;
+			}
 
 			&.selected {
 				background-color: aliceblue;
@@ -395,6 +422,10 @@ export default {
 
 			&--contain {
 				width: 100%;
+
+				@include media-down('m-s') {
+					overflow-x: scroll;
+				}
 			}
 		}
 
@@ -403,7 +434,7 @@ export default {
 
 			padding: padding();
 
-			width: 100%;
+			width: (235px + paddng(2));
 			min-height: 250px;
 			max-height: 400px;
 			max-width: 255px;
@@ -413,6 +444,10 @@ export default {
 			display: grid;
 			grid-template-rows: 14px (40px + 32px + 32px) 1fr;
 			grid-gap: padding();
+
+			@include media-down('t-l') {
+				margin: padding() auto;
+			}
 
 			&--close-contain {
 				text-align: right;

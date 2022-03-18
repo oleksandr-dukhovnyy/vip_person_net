@@ -92,17 +92,20 @@ export default {
 			&--contain {
 				display: grid;
 				grid-template-rows: repeat(3, 40px);
-				grid-template-columns: repeat(2, 1fr);
+				grid-template-columns: repeat(180px, 150px);
 				grid-gap: padding();
 				padding: padding();
 
-				width: 33%;
+				// width: 33%;
+				width: max-content;
 
 				outline: 1px solid coral;
 			}
 
 			&--title {
-				font-size: $font-size-regular;
+				font-size: $font-size-micro;
+				display: flex;
+    			align-items: center;
 			}
 
 			@include input;

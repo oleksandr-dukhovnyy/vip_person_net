@@ -75,6 +75,12 @@ export default {
 		display: grid;
 		grid-template-columns: max-content 1fr;
 
+		@include media-down ('t-sm') {
+			grid-template-columns: 100%;
+			margin: 0 auto;
+			width: 100%;
+		}
+
 		&__select {
 			margin-bottom: 10px;
 		}

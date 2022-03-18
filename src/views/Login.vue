@@ -122,7 +122,6 @@ export default {
 			@include input;
 
 			font-size: 14px;
-			padding: 7px;
 
 			width: 200px;
 			height: 24px;

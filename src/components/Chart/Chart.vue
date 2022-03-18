@@ -35,7 +35,7 @@ export default {
 	watch: {
 		actions(){
 			const points = calculePoints.call(this);
-			const dates = calculeDates.call(this);
+			// const dates = calculeDates.call(this);
 
 			this.chart.data.labels = points;
 
@@ -43,7 +43,7 @@ export default {
 
 			this.chart.data.datasets[0] = {
 				label: '',
-				data: calculePoints.call(this),
+				data: calculePoints.call(this).reverse(),
 				backgroundColor: [this.config.ui.colors.cta],
 				borderColor: ['#ffb800'],
 				borderWidth: 3
@@ -62,10 +62,10 @@ export default {
 		this.chart = new Chart(this.ctx, {
 			type: 'line',
 			data: {
-				labels: calculeDates.call(this),
+				labels: calculeDates.call(this).reverse(),
 				datasets: [{
 					label: '',
-					data: calculePoints.call(this),
+					data: calculePoints.call(this).reverse(),
 					backgroundColor: [this.config.ui.colors.cta],
 					borderColor: [
 						'#ffb800'

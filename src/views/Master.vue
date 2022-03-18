@@ -93,5 +93,9 @@ export default {
 		max-width: 1400px;
 		margin: 0 auto;
 		@include page;
+
+		@include media-down('m') {
+			padding: padding(2) 0 0;
+		}
 	}
 </style>

@@ -9,8 +9,11 @@
 </template>
 
 <script>
-import Terminal from './terminal_core';
+import Terminal from './core/js/terminal_core.js';
 import api from '@/utils/API/API';
+import { mapGetters } from 'vuex';
+
+const vuexGetters = ['USER_NAME'];
 
 const API = new api();
 
@@ -120,7 +123,7 @@ export default {
 			reload(){
 				location.reload();
 			}
-		});
+		}, this.USER_NAME === 'Гость' ? 'guest' : this.USER_NAME);
 
 		let presses = 0;
 
@@ -138,9 +141,12 @@ export default {
 		});
 
 		move.call(this, {log: () => {}}, [this.siide]);
+	},
+	computed: {
+		...mapGetters(vuexGetters)
 	}
 }
 
 </script>
 
-<style src="./terminal.scss" scoped lang="scss"></style>
+<style src="./terminal.scss" lang="scss"></style>

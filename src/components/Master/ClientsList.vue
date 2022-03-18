@@ -50,7 +50,7 @@ export default {
 
 		&__client {
 			cursor: pointer;
-			padding: (padding() / 2);
+			padding: padding(0.5);
 			border: 1px solid #fff;
 
 			&--selected {

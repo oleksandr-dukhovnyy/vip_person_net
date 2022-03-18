@@ -56,7 +56,6 @@ export default {
 <style scoped lang="scss">
 
 $search-width: 154px;
-$padding: 9px;
 $shot-color: #ffb800;
 $search_icon-width: 16px;
 
@@ -65,13 +64,13 @@ $search_icon-width: 16px;
 
 	display: grid;
 	grid-template-columns: $search_icon-width 1fr;
-	grid-gap: 9px;
+	grid-gap: padding();
 	align-items: center;
 
 	height: 34px;
-	padding: 7px;
+	padding: 0 padding();
 	background: #ECECEC;
-	border-radius: 7px;
+	border-radius: $border-radius;
 
 	&__icon {
 		width: $search_icon-width;

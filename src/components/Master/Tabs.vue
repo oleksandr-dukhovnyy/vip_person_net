@@ -40,7 +40,8 @@ export default {
 				);
 
 				if (active) {
-					const tabsBottomChilds = this.$slots[tab.key]
+					const hasSlot = !!this.$slots[tab.key];
+					const tabsBottomChilds = hasSlot
 						? this.$slots[tab.key]
 						: `${tab.title} (пока в разработке)`;
 
@@ -50,7 +51,7 @@ export default {
 							{
 								class: {
 									'tabs__bottom--item': true,
-									empty: this.$slots[tab.key] === undefined,
+									empty: !hasSlot,
 								},
 							},
 							tabsBottomChilds
@@ -113,10 +114,15 @@ $tabs-top-height: 40px;
 
 		border-bottom: 1px solid #fff;
 
+		@include media-down('m-s'){
+			overflow-x: scroll;
+		}
+
 		&--item {
 			width: 100%;
 			height: $tabs-top-height;
 
+			padding: padding();
 			font-size: 12px;
 
 			display: flex;
@@ -130,14 +136,12 @@ $tabs-top-height: 40px;
 			border-left: $border;
 			border-right: $border;
 
-			opacity: 0.6;
 			letter-spacing: 2px;
 			transition: 0.3s;
 			cursor: pointer;
 		}
 
 		&--active {
-			opacity: 1;
 			background-color: $cta-color;
 			color: #fff;
 
@@ -152,8 +156,16 @@ $tabs-top-height: 40px;
 
 		@include container(1);
 
+		@include media-down('m') {
+			border-radius: $border-radius $border-radius 0 0;
+		}
+
 		&--item {
 			@include container(1);
+
+			@include media-down('m') {
+				padding: 0;
+			}
 		}
 	}
 }
