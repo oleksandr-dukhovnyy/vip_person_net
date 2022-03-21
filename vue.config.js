@@ -1,7 +1,7 @@
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+//const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const webpack = require('webpack');
-const isDev = process.env.BUILD_MODE === 'D';
+const isDev = process.VUE_CLI_SERVICE.mode === 'development';
 
 const plugins = [
 	new webpack.NormalModuleReplacementPlugin(
@@ -10,30 +10,34 @@ const plugins = [
 	),
 ];
 
-if (!isDev) {
-	plugins.push(
-		new BundleAnalyzerPlugin({
-			// analyzerMode: 'server',
-			analyzerPort: 5000,
-			analyzerHost: '127.0.0.1',
-		})
-	);
-}
+// if (!isDev) {
+// 	plugins.push(
+// 		new BundleAnalyzerPlugin({
+// 			analyzerPort: 5432,
+// 			analyzerHost: '127.0.0.1',
+// 		})
+// 	);
+// }
 
 module.exports = {
 	// publicPath: 'vip-person',
-	configureWebpack: {
-		plugins,
-	},
 	css: {
 		loaderOptions: {
 			sass: {
-				prependData: `
-					@import "@/assets/scss/mixins.scss";
-					@import "@/assets/scss/vars.scss";
-					@import '@/assets/scss/media.scss';
-				`,
+				prependData: `@import '@/assets/scss/imports.scss';`,
+				sourceMap: isDev,
 			},
 		},
+	},
+	configureWebpack: {
+		plugins,
+		// module: {
+		// 	rules: [
+		// 		{
+		// 			test: /\.scss$/,
+		// 			use: ['sass-loader', 'group-css-media-queries-loader'],
+		// 		},
+		// 	],
+		// },
 	},
 };

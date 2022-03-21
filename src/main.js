@@ -4,8 +4,6 @@ import './registerServiceWorker';
 import AppRouter from './router';
 import store from './store';
 
-import 'animate.css';
-
 import { mapGetters } from 'vuex';
 
 import config from '@/config.js';

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "BUILD_MODE=P&& vue-cli-service build"
+    "build": "vue-cli-service build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.29.1",
@@ -14,7 +14,6 @@
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
     "register-service-worker": "^1.7.1",
-    "sass": "^1.45.2",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",
     "vue-router": "^3.2.0",
@@ -27,6 +26,7 @@
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "sass-loader": "^8.0.2",
+    "sass": "^1.45.2",
     "vue-template-compiler": "^2.6.11",
     "webpack-bundle-analyzer": "^4.5.0"
   }

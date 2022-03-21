@@ -41,18 +41,17 @@
 				<h3>Сложный процент + пополнения</h3>
 			</div>
 			<div class="client-table__body">
-				<div class="paint">
-					<div v-for="n in 10" :key="n">
-						{{ +deposit + (deposit * (percent/100) * n) | number0}}
+				<div v-for="(c, i) in table" :key="i">
+					<div>
+						<div
+							v-for="(n, i) in c"
+							:key="i"
+							 class="client-table--item"
+						>
+							<div>{{ i }}</div>
+							<div>{{ n | number0 }}</div>
+						</div>
 					</div>
-				</div>
-				<div class="complex">
-					<div v-for="n in 10" :key="n">
-						{{ +deposit + (deposit * (1 + percent/100)**n) | number0}}
-					</div>
-				</div>
-				<div class="complex-plus">
-					complex-plus
 				</div>
 			</div>
 		</div>
@@ -64,10 +63,11 @@
 export default {
 	name: 'ClientTable',
 	data: () => ({
-		showTable: false,
+		showTable: true,
 		deposit: 0,
 		percent: 0,
 		additions: 0,
+		tableSize: 10
 	}),
 	props: {
 		client: {
@@ -78,6 +78,15 @@ export default {
 		this.deposit = this.client.table.deposit;
 		this.percent = this.client.table.percent;
 		this.additions = this.client.table.additions;
+	},
+	computed: {
+		table(){
+			return [
+				Array(this.tableSize).fill().map((_, i) => i + 1),
+				Array(this.tableSize).fill().map((_, i) => this.deposit * (1 + (i+1) / 100) ** this.tableSize),
+				Array(this.tableSize).fill().map((_, i) => i + 1)
+			]
+		},
 	}
 }
 
@@ -119,6 +128,11 @@ export default {
 
 		&__body {
 			grid-gap: padding();
+		}
+
+		&--item {
+			display: flex;
+
 		}
 	}
 
