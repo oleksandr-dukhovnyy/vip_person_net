@@ -38,9 +38,23 @@ function DDMMYY(time) {
 	return `${day}.${month}.${year - 2000}`;
 }
 
-export { DDMMYYYY_ttmm, DDMMYY };
+function YYYY(time) {
+	const { year } = parse(time, ['year']);
+
+	return `${year}`;
+}
+
+function MM(time) {
+	const { month } = parse(time, ['month']);
+
+	return `${month}`;
+}
+
+export { DDMMYYYY_ttmm, DDMMYY, YYYY, MM, normalize };
 
 export default {
 	DDMMYYYY_ttmm,
 	DDMMYY,
+	YYYY,
+	MM,
 };
