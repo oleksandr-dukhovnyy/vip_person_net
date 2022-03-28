@@ -82,6 +82,7 @@ Vue.mixin({
 		number0: (v) => (+v).toFixed(0),
 		number2: (v) => (+v).toFixed(2),
 		number4: (v) => (+v).toFixed(4),
+		dollar: (v) => `$${v}`,
 	},
 	methods: {
 		notificate,
