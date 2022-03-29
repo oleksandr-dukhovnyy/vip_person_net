@@ -93,3 +93,7 @@
 		}
 	}
 }
+
+@mixin bold() {
+	font-weight: 600;
+}
