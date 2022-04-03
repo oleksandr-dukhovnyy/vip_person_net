@@ -183,6 +183,10 @@ export default {
 
 		@include container(1);
 
+		img {
+			@include scaleble;
+		}
+
 		p {
 			margin: 0;
 			font-size: $font-size-navigation;

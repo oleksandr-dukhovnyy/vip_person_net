@@ -4,16 +4,22 @@
 			<div class="clocks">
 				<Clocks />
 			</div>
-			<div class="cabinet__chart">
-				<Chart
-					:actions="client.actions"
-				/>
-			</div>
-			<div class="cabinet__table">
-				<ClientTable
+			<div>
+				<ClientData
 					:client="client"
 				/>
 			</div>
+			<div class="cabinet__chart">
+				<Chart
+					:actions="client.actions"
+					:raito="4"
+				/>
+			</div>
+			<!-- <div class="cabinet__table">
+				<ClientTable
+					:client="client"
+				/>
+			</div> -->
 		</div>  
 		<loader
 			v-else
@@ -26,10 +32,11 @@
 import Clocks from '@/components/Cabinet/Clocks.vue';
 import Chart from '@/components/Chart/Chart.vue';
 import ClientTable from '@/components/ClientTable.vue';
+import ClientData from '@/components/Cabinet/ClentData.vue';
 
 export default {
 	name: 'Cabinet',
-	components: { Chart, Clocks, ClientTable },
+	components: { Chart, Clocks, ClientTable, ClientData },
 	computed: {
 		client(){
 			return this.$route.params.client !== undefined
@@ -46,6 +53,8 @@ export default {
 .cabinet {
 	@include container();
 	background-color: #fff;
+	border-radius: $border-radius;
+	@include shadow;
 
 	&--contain {
 		@include page(0, 0, 40px);
@@ -54,8 +63,9 @@ export default {
 	}
 
 	&__chart {
-		width: 50%;
+		width: 100%;
 		margin: auto;
+		margin-bottom: padding(4);
 	}
 }
 

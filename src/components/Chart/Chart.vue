@@ -25,6 +25,10 @@ export default {
 	props: {
 		actions: {
 			type: Array
+		},
+		raito: {
+			type: Number,
+			default: 2
 		}
 	},
 	computed: {
@@ -74,6 +78,7 @@ export default {
 				}]
 			},
 			options: {
+				aspectRatio: this.raito,
 				tooltips: {
          			enabled: false,
 				},

@@ -321,11 +321,11 @@ export default {
 
 <style scoped lang="scss">
 	// sizes (cs - ceil size)
-	$id-cs: 9px;
+	$id-cs: 18px;
 	$name-cs: 1fr;
 	$name-cs-small: 92px;
 	$value-cs: 80px;
-	$date-cs: 120px;
+	$date-cs: 125px;
 	$controlls-cs: 100px;
 
 	.dropdown-divider {

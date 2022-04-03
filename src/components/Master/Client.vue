@@ -3,6 +3,7 @@
 		<div class="client__chart">
 			<Chart
 				:actions="client.actions"
+				:raito="4"
 			/>
 		</div>
 		<div class="client__actions">
@@ -55,8 +56,9 @@ export default {
 
 		&__chart {
 			margin: auto;
-			max-width: 528px;
-			max-height: 319px;
+			// max-width: 528px;
+			// max-height: 319px;
+			width: 100%;
 		}
 	}
 </style>

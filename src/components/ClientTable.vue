@@ -54,7 +54,7 @@ export default {
 		deposit: 0,
 		percent: 0,
 		additions: 0,
-		tableSize: 10,
+		tableSize: 8,
 	}),
 	props: {
 		client: {
@@ -82,11 +82,32 @@ export default {
 			const complexPerc = [...Array(this.tableSize)]
 				.map(() => lastSumm = lastSumm + getPercents(lastSumm));
 
-			let lastComplexSum = deposit + additions * 11;
+			const med = arr => {
+				const arrayHalf = arr.length / 2
+				const sorted = [].concat(arr).sort((a,b) => a - b)
+				
+				return arr.length % 2 === 0
+				? (sorted[arrayHalf] + sorted[arrayHalf + 1]) / 2
+				: sorted[~~(arrayHalf)]
+			}
+			lastSumm = deposit + additions * 11;
 			const complexPercWidthAdds = [...Array(this.tableSize)]
-				.map(() =>
-					lastComplexSum = (lastComplexSum + getPercents(lastComplexSum) + additions * 12)
-				);
+				.map((_, i) => {
+					console.group(i);
+
+					const adds = additions * 12;
+					const percent = getPercents(med(lastSumm, adds + lastSumm));
+
+					console.log('lastSumm', lastSumm)
+					console.log('adds', adds)
+					console.log('percent', percent);
+
+					const rez = lastSumm + 612;
+
+					console.groupEnd(i);
+
+					return lastSumm = rez;
+				});
 
 			return [painPerc, complexPerc, complexPercWidthAdds];
 		},
@@ -97,7 +118,7 @@ export default {
 <style scoped lang="scss">
 $border: 1px solid $gray-light;
 
-$column-width: 350px;
+$column-max-width: 360px;
 
 .client-table {
 	// border: 1px solid black;
@@ -113,7 +134,12 @@ $column-width: 350px;
 			// width: 33%;
 			width: max-content;
 
-			outline: 1px solid coral;
+			//outline: 1px solid coral;
+			
+			border-radius: $border-radius;
+			border: $border;
+
+			margin-bottom: padding(4);
 		}
 
 		&--title {
@@ -131,7 +157,7 @@ $column-width: 350px;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		grid-gap: padding();
-		justify-content: space-evenly;
+		justify-content: space-between;
 	}
 
 	&__header {
@@ -143,7 +169,9 @@ $column-width: 350px;
 			border-right: $border;
 			padding: padding();
 			margin-bottom: 0;
-			width: $column-width;
+			width: 100%;
+    		max-width: $column-max-width;
+			border-radius: $border-radius $border-radius 0 0;
 		}
 	}
 
@@ -170,7 +198,10 @@ $column-width: 350px;
 		}
 
 		&-contain {
-			border-bottom: $border;
+			& > div:last-of-type {
+				border-radius: 0 0 $border-radius $border-radius;
+				border-bottom: $border;
+			}
 		}
 
 		&--header {
@@ -182,7 +213,8 @@ $column-width: 350px;
 		display: flex;
 		justify-content: space-evenly;
 
-		width: $column-width;
+    	max-width: $column-max-width;
+		width: $column-max-width;
 		margin: 0 auto;
 
 		& > div {

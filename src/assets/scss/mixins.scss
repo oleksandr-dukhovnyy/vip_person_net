@@ -11,6 +11,17 @@
 	padding: padding($padding);
 }
 
+@mixin root-contant-container {
+	width: 100%;
+
+	display: flex;
+	justify-content: center;
+
+	& > .content {
+		max-width: $max-site-content-width;
+	}
+}
+
 @mixin page($calc-header: 1, $calc-footer: 1, $top-offset: 0px) {
 	// background-color: $background-color;
 
@@ -37,7 +48,7 @@
 	line-height: 11px;
 	text-decoration-line: underline;
 
-	color: #00c7af;
+	color: $color-link;
 }
 
 @mixin input {
