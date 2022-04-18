@@ -16,7 +16,7 @@ import {
 	Modules as fields,
 	supportedTypes,
 	supportedTypeAlias
-} from './index.js';
+} from '../index.js';
 
 export default {
 	name: 'FormField',

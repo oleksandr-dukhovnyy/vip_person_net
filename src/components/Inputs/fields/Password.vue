@@ -1,13 +1,13 @@
 <template>
-	<div>phone</div>
+	<div>Password</div>
 </template>
 
 <script>
-import fieldMixin from './fieldMixin.js';
+import fieldMixin from '../fieldMixin.js';
 
 export default {
 	mixins: [fieldMixin],
-	name: 'Phone'
+	name: 'Password'
 }
 
 </script>

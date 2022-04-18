@@ -43,7 +43,7 @@
 }
 
 @mixin link() {
-	font-weight: 300;
+	font-weight: 400;
 	font-size: $font-size-navigation;
 	line-height: 11px;
 	text-decoration-line: underline;
@@ -53,8 +53,8 @@
 
 @mixin input {
 	width: 100%;
-	border: none;
-	background: #ececec;
+	border: 1px solid #cfcfcf;
+	background: transparent;
 	color: #000;
 	border-radius: 7px;
 	font-style: normal;
@@ -72,6 +72,10 @@
 	&::placeholder {
 		color: #ababab;
 		font-weight: 300;
+	}
+
+	&.error {
+		border: 1px solid $color-error;
 	}
 }
 

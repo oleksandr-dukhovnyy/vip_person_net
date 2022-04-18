@@ -12,13 +12,20 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(code, i) in inviteCodes" :key="i">
+					<tr
+						v-for="(code, i) in inviteCodesToRender"
+						:key="i"
+					
+						:class="{loading: code.loading}"
+					>
 						<th scope="row">{{ i + 1 }}</th>
 						<td>{{ code.code }}</td>
 						<td>{{ code.comment }}</td>
 						<td>{{ code.created_at | timeFromISO8601 }}</td>
 						<td>
 							<button
+								v-if="!code.loading"
+
 								type="button"
 								class="btn-close"
 								aria-label="Close"
@@ -45,12 +52,36 @@ export default {
 			required: true,
 		},
 	},
+	data: () => ({
+		inviteCodesToRender: []
+	}),
+	watch: {
+		inviteCodes(n){
+			this.setCodes(n)
+		}
+	},
+	created(){
+		this.setCodes(this.inviteCodes);
+	},
 	methods: {
+		setCodes(n){
+			this.inviteCodesToRender = n.map(c => ({...c, loading: false}));
+		},
 		removeCode(i) {
 			this.$emit('removeCode', i);
 		},
 		createCode() {
-			this.$emit('createCode', prompt('Введите комментарий', ''));
+			const comment = prompt('Введите комментарий', '');
+
+			if (comment !== null) {
+				this.inviteCodesToRender.push({
+					code: 'loading...',
+					comment,
+					created_at: new Date().toISOString(),
+					loading: true
+				});
+				this.$emit('createCode', comment);
+			}
 		},
 	},
 };
@@ -65,6 +96,14 @@ export default {
 			@include media-down('m-s'){
 				overflow-x: scroll;
 			}
+		}
+
+		.loading {
+			opacity: 0.5;
+		}
+
+		.btn-close {
+			@include scaleble(1.2);
 		}
 	}
 

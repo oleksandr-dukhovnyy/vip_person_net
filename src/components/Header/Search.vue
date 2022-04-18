@@ -79,6 +79,7 @@ $search_icon-width: 16px;
 	
 	&__input {
 		@include input;
+		border: none;
 	}
 	
 	// &__rezult {

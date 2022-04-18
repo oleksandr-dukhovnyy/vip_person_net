@@ -4,18 +4,14 @@ import validate from '@/utils/validations/validations.js';
 export default {
 	data() {
 		return {
-			model: '',
+			focused: false,
 			value: '',
 			isValide: false,
-			errorText: errorList[this.inputType].default,
+			errorText:
+				errorList[this.inputType].default || 'Неправильно заполненное поле!',
 		};
 	},
 	props: {
-		inputType: {
-			type: String,
-			validate: (v) => supportedTypes.includes(v),
-			required: true,
-		},
 		required: {
 			type: Boolean,
 			default: false,
@@ -24,18 +20,30 @@ export default {
 			type: Number,
 			default: 0,
 		},
+		label: {
+			type: String,
+			default: '',
+		},
+	},
+	created() {
+		if (!this.type || !supportedTypes.includes(this.type)) {
+			console.log(`inputType error!`, this.type);
+		}
 	},
 	computed: {
 		error() {
-			return !this.isValide && this.value.length > 0;
+			return !this.isValide;
+		},
+	},
+	watch: {
+		value() {
+			this.validate();
 		},
 	},
 	methods: {
 		validate() {
-			this.value = this.model;
-
 			const validationRes = validate({
-				type: this.inputType,
+				type: this.type,
 				data: this.value,
 			});
 
@@ -43,13 +51,10 @@ export default {
 
 			if (!validationRes.ok) {
 				this.errorText =
-					errorList[this.inputType][validationRes.type] !== undefined
-						? errorList[this.inputType][validationRes.type]
-						: errorList[this.inputType].default;
+					errorList[this.type][validationRes.type] !== undefined
+						? errorList[this.type][validationRes.type]
+						: errorList[this.type].default;
 			}
-		},
-		removeError() {
-			this.value = '';
 		},
 	},
 };

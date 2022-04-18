@@ -1,9 +1,9 @@
-import Text from './Text.vue';
-import Phone from './Phone.vue';
-import Email from './Email.vue';
-import Password from './Password.vue';
-import UserName from './UserName.vue';
-import InviteCode from './InviteCode.vue';
+import Text from './fields/PlainText.vue';
+import Phone from './fields/Phone.vue';
+import Email from './fields/Email.vue';
+import Password from './fields/Password.vue';
+import UserName from './fields/UserName.vue';
+import InviteCode from './fields/InviteCode.vue';
 
 export const supportedTypes = [
 	'text',
@@ -15,7 +15,7 @@ export const supportedTypes = [
 ];
 
 export const supportedTypeAlias = {
-	text: 'Text',
+	text: 'PlainText',
 	phone: 'Phone',
 	email: 'Email',
 	password: 'Password',
@@ -49,9 +49,7 @@ export const errorList = {
 	},
 };
 
-export const placeholders = {};
-
-export const Modules = {
+export const Fields = {
 	Text,
 	Phone,
 	Email,

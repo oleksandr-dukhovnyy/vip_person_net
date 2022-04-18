@@ -21,7 +21,7 @@
 
 <script>
 // required
-import fieldMixin from './fieldMixin.js';
+import fieldMixin from '../fieldMixin.js';
 
 export default {
 	mixins: [fieldMixin],
