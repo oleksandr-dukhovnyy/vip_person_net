@@ -92,13 +92,19 @@ class _API {
 					if (rez) {
 						this.client.auth
 							.signUp(signUpData, signUpAdds)
-							.then(resolve)
+							.then((res) => {
+								console.log('register -> res', res);
+
+								this.removeInviteCode(inviteCode);
+								resolve(res);
+							})
 							.catch(reject);
 					} else {
 						reject({
 							status: 403,
 							ok: false,
 							msg: 'unvalide code',
+							rez
 						});
 					}
 				}).catch((err) => {
@@ -178,11 +184,17 @@ class _API {
 				inv_code: code,
 			})
 			.then((res) => {
-				callback(res.data.length > 0);
+				callback(res.data !== null && res.data.length > 0);
 			})
 			.catch((err) => {
 				console.log('not ok', err);
 			});
+	}
+	removeInviteCode(code){
+		return this.client
+			.from(config.DB.inviteCodes)
+			.delete()
+			.eq('code', code);
 	}
 	loadInviteCodes() {
 		return this.client.from(config.DB.inviteCodes).select('*');
@@ -193,8 +205,8 @@ class _API {
 	loadClients() {
 		return this.client
 			.from(config.DB.usersData)
-			.select('*')
-			.eq('role', 'resident');
+			.select('*');
+			//.eq('role', 'resident');
 	}
 }
 

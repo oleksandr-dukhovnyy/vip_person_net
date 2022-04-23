@@ -11,11 +11,11 @@ export default {
 				if (user) {
 					commit('SET_USER', user);
 					dispatch('LOAD_USER_DATA');
-				} else {
-					AppRouter.push({
-						name: 'login',
-					});
-				}
+				}// else {
+					// AppRouter.push({
+					// 	name: 'login',
+					// });
+				//}
 			});
 		},
 		SAVE_USER_DATA({ commit }, _client) {
@@ -152,6 +152,26 @@ export default {
 					});
 				});
 		},
+		REGISTER({ commit }, data){
+			commit('SET_LOADER', {
+				loaderName: 'register',
+				loaderCondition: true,
+			});
+
+			client.register(data).then(res => {
+				// auto auth
+				// { email, password, next = 'cabinet' }
+
+				console.log('register then!!!!', res);
+			}).catch((error) => {
+				console.log('register error', error);
+			}).finally(() => {
+				commit('SET_LOADER', {
+					loaderName: 'register',
+					loaderCondition: false,
+				});
+			});
+		}
 	},
 	mutations: {
 		SET_LOADER(state, { loaderName, loaderCondition = true }) {
@@ -214,5 +234,6 @@ export default {
 
 				return JSON.stringify(clearClient) !== JSON.stringify(c.oldData);
 			}),
+		REGISTER_LOADING: (s) => s.loaders.register || false
 	},
 };

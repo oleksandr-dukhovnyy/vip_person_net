@@ -109,6 +109,17 @@
 	}
 }
 
-@mixin bold() {
+@mixin bold {
 	font-weight: 600;
+}
+
+@mixin content-container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+
+	& > .content-data {
+		width: 100%;
+		max-width: $max-site-content-width;
+	}
 }

@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<Header />
-		<main>
+		<main class="main">
 			<router-view class="animate__animated animate__backInLeft" />
 		</main>
 		<Footer />
@@ -40,3 +40,10 @@ export default {
 </script>
 
 <style lang="scss" src="@/assets/scss/app.scss"></style>
+
+<style lang="scss" scoped>
+	#app {
+		display: grid;
+		grid-template-rows: $header-height 1fr $footer-height;
+	}
+</style>

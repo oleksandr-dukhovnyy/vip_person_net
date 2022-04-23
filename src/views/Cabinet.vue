@@ -1,6 +1,6 @@
 <template>
 	<section class="cabinet--contain">
-		<div v-if="!AUTH_LOGIN_LOADING" class="cabinet">
+		<div v-if="!AUTH_LOGIN_LOADING" class="cabinet content-data">
 			<div class="clocks">
 				<Clocks />
 			</div>
@@ -58,8 +58,7 @@ export default {
 
 	&--contain {
 		@include page(0, 0, 40px);
-
-		display: grid;
+		@include content-container;
 	}
 
 	&__chart {

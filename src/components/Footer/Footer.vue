@@ -1,6 +1,6 @@
 <template>
-	<div class="footer__wrapper">
-		<footer class="footer" v-if="showFullFooter">
+	<div class="footer__wrapper" v-if="showFullFooter">
+		<footer class="footer">
 			<router-link
 				:to="{name: 'vip-login'}"
 				class="footer__link"
@@ -30,18 +30,22 @@ export default {
 .footer {
 	height: $footer-height;
 	width: 100%;
-	position: absolute;
-	bottom: 0;
-	background-color: #fff;
+	
+	max-width: $max-site-content-width;
 
 	&__wrapper {
 		margin-top: padding(2);
+		background-color: #fff;
 		height: $footer-height;
-		position: relative;
+		width: 100%;
+
+		display: flex;
+		justify-content: center;
+		@include shadow;
 	}
 
 	@include container;
-	@include shadow;
+	
 
 	&__link {
 		@include link;
