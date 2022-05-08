@@ -60,7 +60,7 @@
       <div class="register__row">
         <div class="register__title register__title--required">Пароль</div>
         <input
-          type="text"
+          type="password"
           v-model="pass1"
           ref="pass1"
           :class="{
@@ -74,7 +74,7 @@
           Пароль повторно
         </div>
         <input
-          type="text"
+          type="password"
           v-model="pass2"
           ref="pass2"
           :class="{
@@ -99,7 +99,7 @@
         <div>
           <button
             class="btn btn-success"
-            :disabled="formIsValide"
+            :disabled="!formIsValide"
             @click="register"
             v-if="!REGISTER_LOADING"
           >
@@ -119,21 +119,25 @@ import notify from '@/utils/notification.js';
 const vuexActions = ['REGISTER'];
 const vuexGetters = ['REGISTER_LOADING'];
 
-// 89752784
 // 99-57
+// test1
+// some@some.com
+// +380634221588
+// 123456
+// 123456
 
 export default {
   name: 'Register',
   data() {
     return {
-      code: '99-57',
-      name: 'test1',
-      email: 'some@some.com',
-      phone: '+380634221588',
-      pass1: '123456',
-      pass2: '123456',
-      formIsValide: false,
-      policy: true,
+      code: '',
+      name: '',
+      email: '',
+      phone: '',
+      pass1: '',
+      pass2: '',
+      formIsValide: true,
+      policy: false,
       errors: {
         code: {
           value: false,
@@ -195,8 +199,6 @@ export default {
   methods: {
     ...mapActions(vuexActions),
     register() {
-      console.log('register');
-
       this.validate();
 
       if (this.formIsValide) {
@@ -209,6 +211,8 @@ export default {
           inviteCode: this.code,
         });
       }
+
+      this.formIsValide = true;
     },
     clearErrors() {
       for (let fieldName in this.errors) {

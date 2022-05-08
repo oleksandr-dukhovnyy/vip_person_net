@@ -101,6 +101,21 @@ export default {
         client
           .login(email, password)
           .then((res) => {
+            console.log('LOGIN:res', res);
+
+            if (res.error) {
+              if (
+                res.error.status === 400 &&
+                res.error.message === 'Email not confirmed'
+              ) {
+                notificate(
+                  'Email не подтвержден',
+                  `Пожалуйста, дотвердите свой Email, пройдя по ссылке в письме.`,
+                  'warning'
+                );
+              }
+            }
+
             commit('SET_USER', res?.user);
             dispatch('LOAD_USER_DATA');
 
@@ -113,7 +128,19 @@ export default {
               loaderCondition: false,
             });
 
-            AppRouter.push({ name: next });
+            console.log('LOGIN end: res', res);
+
+            if (!res.error) {
+              AppRouter.push({ name: next });
+            } else {
+              if (res.error.message === 'Invalid login credentials') {
+                notificate(
+                  'Неверный Email или пароль',
+                  `Пожалуйста, проверьте правильность ввода`,
+                  'error'
+                );
+              }
+            }
           })
           .catch((err) => {
             console.error(err);
@@ -156,7 +183,7 @@ export default {
           });
         });
     },
-    REGISTER({ commit }, data) {
+    REGISTER({ commit, dispatch }, data) {
       commit('SET_LOADER', {
         loaderName: 'register',
         loaderCondition: true,
@@ -169,15 +196,31 @@ export default {
           // { email, password, next = 'cabinet' }
 
           // console.log('register then!!!!', newUser);
-          client.insertUserToUsersDataTabble({
-            user_id: user.id,
-            actions: [],
-            role: user.user_metadata.role,
-            data: {
-              name: user.user_metadata.name || 'unnamed',
-              email: user.email,
-            },
-          });
+          client
+            .insertUserToUsersDataTabble({
+              user_id: user.id,
+              actions: [],
+              role: user.user_metadata.role,
+              data: {
+                name: user.user_metadata.name || 'unnamed',
+                email: user.email,
+              },
+            })
+            .then((res) => {
+              if (res.status === 201) {
+                // dispatch('LOGIN', {
+                //   email: data.email,
+                //   password: data.password,
+                // });
+                AppRouter.push({
+                  name: 'login',
+                  params: {
+                    forceEmail: data.email,
+                    forcePassword: data.password,
+                  },
+                });
+              }
+            });
         })
         .catch((error) => {
           console.log('register error', error);
@@ -185,7 +228,15 @@ export default {
           if (error.status === 429) {
             notificate(
               'Слишком много попыток!',
-              `Попробуйте ещё раз через ${error.timeleft || '60'} секунд`
+              `Попробуйте ещё раз через ${error.timeleft || '60'} сек`
+            );
+          }
+
+          if (error.status === 403 && error.msg === 'invalide code') {
+            notificate(
+              'Пригласительный код не найден',
+              `Проверьте его правильность и попробуйте ещё раз`,
+              'error'
             );
           }
         })

@@ -65,20 +65,34 @@ export default {
   name: 'Login',
   data() {
     return {
-      email: 'lebitoh943@ehstock.com',
-      password: 'ZSvWEYGtbbszwDHxdQRx',
+      // email: 'lebitoh943@ehstock.com',
+      // password: 'ZSvWEYGtbbszwDHxdQRx',
+      email: '',
+      password: '',
     };
   },
   created() {
-    if (this.CLIENT !== null && this.$route.query.next) {
-      this.$router.push({ name: this.$route.query.next });
-    } else if (this.CLIENT !== null) {
-      this.$router.push({ name: 'cabinet' });
+    if (Object.keys(this.CLIENT).length && this.$route.query.next) {
+      return this.$router.push({ name: this.$route.query.next });
+    } else if (Object.keys(this.CLIENT).length) {
+      return this.$router.push({ name: 'cabinet' });
+    }
+
+    if (this.$route.params.forceEmail !== undefined) {
+      this.email = this.$route.params.forceEmail;
+    }
+
+    if (this.$route.params.forcePassword !== undefined) {
+      this.password = this.$route.params.forcePassword;
     }
   },
   watch: {
     CLIENT() {
-      if (this.CLIENT !== null && this.$route.query.next) {
+      if (
+        this.CLIENT !== null &&
+        this.CLIENT.id !== undefined &&
+        this.$route.query.next
+      ) {
         this.$router.push({ name: this.$route.query.next });
       } else if (this.CLIENT !== null) {
         this.$router.push({ name: 'home' });
@@ -94,7 +108,6 @@ export default {
   methods: {
     ...mapActions(vuexActions),
     login() {
-      console.log(this.email, this.password);
       this.LOGIN({
         email: this.email,
         password: this.password,

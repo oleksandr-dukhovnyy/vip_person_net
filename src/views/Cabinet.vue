@@ -33,7 +33,7 @@ export default {
     client() {
       return this.$route.params.client !== undefined
         ? this.$route.params.client
-        : this.CLIENT_DATA !== null
+        : this.CLIENT_DATA !== null && this.CLIENT_DATA !== undefined
         ? this.CLIENT_DATA
         : {
             data: {},

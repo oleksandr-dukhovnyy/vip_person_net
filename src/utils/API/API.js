@@ -115,7 +115,7 @@ class _API {
             reject({
               status: 403,
               ok: false,
-              msg: 'unvalide code',
+              msg: 'invalide code',
               rez,
             });
           }
