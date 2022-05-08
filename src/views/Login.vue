@@ -1,44 +1,59 @@
 <template>
-	<section class="login" :class="{ 'vip-login': $route.meta.isVipLogin }">
-		<form class="login__form" v-if="!AUTH_LOGIN_LOADING">
-			<strong class="login__form--title">
-				{{ formTitle }}
-			</strong>
-			<input
-				type="text"
-				v-model="email"
-				placeholder="email"
-				class="login__form--email"
-			/>
-			<input
-				type="text"
-				v-model="password"
-				placeholder="password"
-				class="login__form--password"
-			/>
-			<button
-				@click.prevent="login"
-				class="btn btn-success"
-				type="button"
-				:disabled="AUTH_LOGIN_LOADING"
-			>
-				Войти
-			</button>
-			<router-link
-				:to="{
-					name: $route.meta.isVipLogin ? 'vip-register' : 'register',
-				}"
+  <section class="page" :class="{ 'vip-login': $route.meta.isVipLogin }">
+    <form class="login__form" v-if="!AUTH_LOGIN_LOADING">
+      <div>
+        <h1 class="login__form-title">{{ formTitle }}</h1>
+      </div>
+      <div class="dropdown-divider"></div>
 
-				class="login__form--link"
-			>
-				Регистрация
-			</router-link>
-		</form>
-		<Loader
-			v-else
-			:size="50"
-		/>
-	</section>
+      <div class="login__row">
+        <div class="login__title login__title">Email</div>
+        <input
+          type="text"
+          v-model="email"
+          ref="code"
+          @keydown.enter="$refs.password.focus()"
+        />
+      </div>
+
+      <div class="login__row">
+        <div class="login__title login__title">Пароль</div>
+        <input
+          type="password"
+          v-model="password"
+          ref="password"
+          @keydown.enter="$refs.send.focus()"
+        />
+      </div>
+
+      <div class="dropdown-divider"></div>
+
+      <div class="login__controlls">
+        <div class="login__reg-link">
+          <router-link
+            :to="{
+              name: $route.meta.isVipLogin ? 'vip-register' : 'register',
+            }"
+            class="login__form-link"
+          >
+            Регистрация
+          </router-link>
+        </div>
+        <div>
+          <button
+            class="btn btn-success"
+            :disabled="password === '' || email === ''"
+            @click="login"
+            v-if="!AUTH_LOGIN_LOADING"
+          >
+            Войти
+          </button>
+          <Loader v-else />
+        </div>
+      </div>
+    </form>
+    <Loader v-else :size="50" />
+  </section>
 </template>
 
 <script>
@@ -47,107 +62,149 @@ const vuexActions = ['LOGIN'];
 const vuexGetters = ['AUTH_LOGIN_LOADING'];
 
 export default {
-	name: 'Login',
-	data() {
-		return {
-			email: 'lebitoh943@ehstock.com',
-			password: 'ZSvWEYGtbbszwDHxdQRx',
-		};
-	},
-	created() {
-		if(this.CLIENT !== null && this.$route.query.next) {
-			this.$router.push({ name: this.$route.query.next });
-		} else if (this.CLIENT !== null) {
-			this.$router.push({ name: 'cabinet' });
-		}
-	},
-	watch: {
-		CLIENT(){
-			if(this.CLIENT !== null && this.$route.query.next) {
-				this.$router.push({ name: this.$route.query.next });
-			} else if (this.CLIENT !== null) {
-				this.$router.push({ name: 'home' });
-			}
-		}
-	},
-	computed: {
-		...mapGetters(vuexGetters),
-		formTitle() {
-			return this.$route.meta.isVipLogin ? 'Вход для Резидентов' : 'Вход';
-		},
-	},
-	methods: {
-		...mapActions(vuexActions),
-		login() {
-			console.log(this.email, this.password);
-			this.LOGIN({
-				email: this.email,
-				password: this.password,
-				next: this.$route.query.next || 'cabinet'
-			});
-		},
-	},
+  name: 'Login',
+  data() {
+    return {
+      email: 'lebitoh943@ehstock.com',
+      password: 'ZSvWEYGtbbszwDHxdQRx',
+    };
+  },
+  created() {
+    if (this.CLIENT !== null && this.$route.query.next) {
+      this.$router.push({ name: this.$route.query.next });
+    } else if (this.CLIENT !== null) {
+      this.$router.push({ name: 'cabinet' });
+    }
+  },
+  watch: {
+    CLIENT() {
+      if (this.CLIENT !== null && this.$route.query.next) {
+        this.$router.push({ name: this.$route.query.next });
+      } else if (this.CLIENT !== null) {
+        this.$router.push({ name: 'home' });
+      }
+    },
+  },
+  computed: {
+    ...mapGetters(vuexGetters),
+    formTitle() {
+      return this.$route.meta.isVipLogin ? 'Вход для Резидентов' : 'Вход';
+    },
+  },
+  methods: {
+    ...mapActions(vuexActions),
+    login() {
+      console.log(this.email, this.password);
+      this.LOGIN({
+        email: this.email,
+        password: this.password,
+        next: this.$route.query.next || 'cabinet',
+      });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.login {
-	@include page;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.page {
+  @include page();
 
-	&__form {
-		@include shadow;
-		@include container(2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-		width: max-content;
-		min-width: 200px;
-		height: max-content;
+  .login {
+    &__form {
+      width: 450px;
+      padding: padding();
+      background-color: #fff;
+      border-radius: $border-radius;
 
-		display: grid;
-		grid-template-columns: 1fr;
-		grid-template-rows: 50px repeat(2, 24px) 31px;
-		grid-auto-flow: row;
-		grid-gap: padding(2);
+      @include shadow;
 
-		justify-items: center;
-		align-items: center;
+      @include media-down(m) {
+        width: 100%;
+      }
 
-		background-color: #fff;
-		border-radius: 5px;
+      .dropdown-divider {
+        margin: padding() 0;
+      }
+    }
 
-		&--email,
-		&--password {
-			@include input;
+    &__row {
+      padding: padding();
+      display: flex;
 
-			font-size: 14px;
+      @include media-down(m) {
+        flex-direction: column;
+      }
 
-			width: 200px;
-			height: 24px;
+      input {
+        @include input;
+        transition: 0.3s;
 
-			background: #ececec;
-			border-radius: 7px;
-		}
+        @include scaleble(1.04);
 
-		&--title {
-			font-weight: 300;
-			font-size: 18px;
-			line-height: 21px;
-			color: #000;
-		}
+        &:focus {
+          border: 1px solid #838383;
+          transition: 0.3s;
 
-		&--submit {
-			@include button;
+          transform: none;
+        }
+      }
+    }
 
-			width: 100px;
-			height: 31px;
-			background-color: $cta-color;
-		}
+    &__title {
+      width: 500px;
+      font-size: 14px;
+      align-items: center;
+      display: flex;
 
-		&--link {
-			@include link;
-		}
-	}
+      @include media-down(m) {
+        width: 100%;
+      }
+
+      &--required::after {
+        content: '*';
+        padding-left: 2px;
+        color: #f00;
+      }
+    }
+
+    &__form-title {
+      font-size: 18px;
+      text-align: center;
+    }
+
+    &__form-link {
+      @include link;
+    }
+
+    &__controlls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: padding();
+
+      padding: 0 padding();
+
+      @include media-down(m) {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+
+      // padding: padding() 0 0;
+
+      button {
+        width: 100%;
+        @include scaleble(1.02);
+        cursor: pointer;
+      }
+    }
+
+    &__reg-link {
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 </style>
