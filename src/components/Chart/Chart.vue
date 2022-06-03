@@ -1,108 +1,62 @@
 <template>
   <div class="chart">
-	  <canvas ref="canvas"></canvas>
+    <canvas ref="canvas" :width="width" :height="height"></canvas>
   </div>
 </template>
 
 <script>
-import Chart from 'chart.js/dist/chart.js';
-import { DDMMYY } from '@/utils/timeParser.js';
-
-function calculePoints() {
-	return JSON.parse(JSON.stringify(
-		this.actions.map(a => +a.value)
-	));
-}
-
-function calculeDates() {
-	return JSON.parse(JSON.stringify(
-		this.actions.map(a => DDMMYY(a.date))
-	));
-}
+import draw from './draw.js';
 
 export default {
-	name: 'Chart',
-	props: {
-		actions: {
-			type: Array
-		},
-		raito: {
-			type: Number,
-			default: 2
-		}
-	},
-	computed: {
-		ctx(){
-			return this.$refs?.canvas?.getContext('2d');
-		}
-	},
-	watch: {
-		actions(){
-			const points = calculePoints.call(this);
-			// const dates = calculeDates.call(this);
-
-			this.chart.data.labels = points;
-
-			this.chart.update();
-
-			this.chart.data.datasets[0] = {
-				label: '',
-				data: calculePoints.call(this).reverse(),
-				backgroundColor: [this.config.ui.colors.cta],
-				borderColor: ['#ffb800'],
-				borderWidth: 3
-			};
-
-			this.chart.options = {
-				tooltips: {
-					enabled: false
-				}
-			}
-
-			this.chart.update();
-		}
-	},
-	mounted(){
-		this.chart = new Chart(this.ctx, {
-			type: 'line',
-			data: {
-				labels: calculeDates.call(this).reverse(),
-				datasets: [{
-					label: '',
-					data: calculePoints.call(this).reverse(),
-					backgroundColor: [this.config.ui.colors.cta],
-					borderColor: [
-						'#ffb800'
-					],
-					borderWidth: 3
-				}]
-			},
-			options: {
-				aspectRatio: this.raito,
-				tooltips: {
-         			enabled: false,
-				},
-				animations: {
-					y: {
-						easing: 'easeInOutElastic',
-						from: (ctx) => {
-							if (ctx.type === 'data') {
-								if (ctx.mode === 'default' && !ctx.dropped) {
-									ctx.dropped = true;
-									return 0;
-								}
-							}
-						}
-					}
-				},
-				scales: {
-					y: {
-						beginAtZero: true
-					}
-				},
-			}
-		});
-	}
-}
-
+  name: 'Chart',
+  props: {
+    actions: {
+      type: Array,
+    },
+    raito: {
+      type: Number,
+      default: 2,
+    },
+  },
+  data: () => ({
+    width: 1000,
+    height: 500,
+  }),
+  computed: {
+    ctx() {
+      return this.$refs.canvas.getContext('2d');
+    },
+  },
+  mounted() {
+    this.draw();
+  },
+  watch: {
+    actions() {
+      this.draw();
+    },
+  },
+  methods: {
+    clear() {
+      this.ctx.clearRect(0, 0, this.width, this.height);
+    },
+    draw() {
+      draw(
+        this.ctx,
+        {
+          width: this.width,
+          height: this.height,
+        },
+        this.actions
+      );
+    },
+  },
+};
 </script>
+
+<style lang="scss" scoped>
+.chart {
+  padding: padding(2);
+  display: flex;
+  justify-content: center;
+}
+</style>

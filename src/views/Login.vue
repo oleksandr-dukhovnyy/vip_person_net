@@ -65,10 +65,10 @@ export default {
   name: 'Login',
   data() {
     return {
-      // email: 'lebitoh943@ehstock.com',
-      // password: 'ZSvWEYGtbbszwDHxdQRx',
-      email: '',
-      password: '',
+      email: 'lebitoh943@ehstock.com',
+      password: 'ZSvWEYGtbbszwDHxdQRx',
+      // email: '',
+      // password: '',
     };
   },
   created() {
