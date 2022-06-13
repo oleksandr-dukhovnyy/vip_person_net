@@ -4,7 +4,7 @@
       <div>
         <h1 class="login__form-title">{{ formTitle }}</h1>
       </div>
-      <div class="dropdown-divider"></div>
+      <!-- <div class="dropdown-divider"></div> -->
 
       <div class="login__row">
         <div class="login__title login__title">Email</div>
@@ -26,7 +26,7 @@
         />
       </div>
 
-      <div class="dropdown-divider"></div>
+      <!-- <div class="dropdown-divider"></div> -->
 
       <div class="login__controlls">
         <div class="login__reg-link">
@@ -41,7 +41,7 @@
         </div>
         <div>
           <button
-            class="btn btn-success"
+            class="btn btn-success login__enter"
             :disabled="password === '' || email === ''"
             @click="login"
             v-if="!AUTH_LOGIN_LOADING"
@@ -52,7 +52,7 @@
         </div>
       </div>
     </form>
-    <Loader v-else :size="50" />
+    <Loader v-else />
   </section>
 </template>
 
@@ -102,7 +102,7 @@ export default {
   computed: {
     ...mapGetters(vuexGetters),
     formTitle() {
-      return this.$route.meta.isVipLogin ? 'Вход для Резидентов' : 'Вход';
+      return this.$route.meta.isVipLogin ? 'Вход для резидентов' : 'Вход';
     },
   },
   methods: {
@@ -129,7 +129,7 @@ export default {
   .login {
     &__form {
       width: 450px;
-      padding: padding();
+      padding: padding(3.5);
       background-color: #fff;
       border-radius: $border-radius;
 
@@ -145,7 +145,7 @@ export default {
     }
 
     &__row {
-      padding: padding();
+      padding: padding() 0 padding(0.5);
       display: flex;
 
       @include media-down(m) {
@@ -154,7 +154,11 @@ export default {
 
       input {
         @include input;
+        font-size: 13px;
         transition: 0.3s;
+
+        width: 190px;
+        height: 40px;
 
         @include scaleble(1.04);
 
@@ -185,8 +189,10 @@ export default {
     }
 
     &__form-title {
-      font-size: 18px;
+      font-size: 20px;
       text-align: center;
+      margin-top: 0;
+      margin-bottom: padding(2.5);
     }
 
     &__form-link {
@@ -197,8 +203,9 @@ export default {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-gap: padding();
+      padding: padding(3) 0 0;
 
-      padding: 0 padding();
+      // padding: 0;
 
       @include media-down(m) {
         grid-template-columns: 1fr;
@@ -208,7 +215,7 @@ export default {
       // padding: padding() 0 0;
 
       button {
-        width: 100%;
+        // width: 100%;
         @include scaleble(1.02);
         cursor: pointer;
       }
@@ -217,6 +224,12 @@ export default {
     &__reg-link {
       display: flex;
       align-items: center;
+    }
+
+    &__enter {
+      font-size: 15px;
+      width: 190px;
+      height: 40px;
     }
   }
 }

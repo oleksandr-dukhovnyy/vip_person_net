@@ -2,124 +2,129 @@
 @import './functions.scss';
 
 @mixin shadow() {
-	-webkit-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.25);
-	-moz-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.25);
-	box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.25);
 }
 
-@mixin container($padding: 2) {
-	padding: padding($padding);
+@mixin container($padding: 2, $padding-side: 'noneed') {
+  @if $padding-side == 'noneed' {
+    padding: padding($padding);
+  } @else {
+    padding: padding($padding) padding($padding-side);
+  }
 }
 
 @mixin root-contant-container {
-	width: 100%;
+  width: 100%;
 
-	display: flex;
-	justify-content: center;
+  display: flex;
+  justify-content: center;
 
-	& > .content {
-		max-width: $max-site-content-width;
-	}
+  & > .content {
+    max-width: $max-site-content-width;
+  }
 }
 
 @mixin page($calc-header: 1, $calc-footer: 1, $top-offset: 0px) {
-	// background-color: $background-color;
+  // background-color: $background-color;
+  $header-height: 70px;
 
-	@if ($calc-header == 1) {
-		@if ($calc-footer == 1) {
-			min-height: calc(100vh - ($header-height + $footer-height + $top-offset));
-		} @else {
-			min-height: calc(100vh - ($header-height + $top-offset));
-		}
-	} @else {
-		@if ($calc-footer == 1) {
-			min-height: calc(100vh - $footer-height + $top-offset);
-		} @else {
-			min-height: calc(100vh - $top-offset);
-		}
-	}
+  @if ($calc-header == 1) {
+    @if ($calc-footer == 1) {
+      min-height: calc(100vh - ($header-height + $footer-height + $top-offset));
+    } @else {
+      min-height: calc(100vh - ($header-height + $top-offset));
+    }
+  } @else {
+    @if ($calc-footer == 1) {
+      min-height: calc(100vh - $footer-height + $top-offset);
+    } @else {
+      min-height: calc(100vh - $top-offset);
+    }
+  }
 
-	@include container();
+  @include container();
 }
 
 @mixin link() {
-	font-weight: 400;
-	font-size: $font-size-navigation;
-	line-height: 11px;
-	text-decoration-line: underline;
+  font-weight: 400;
+  font-size: $font-size-navigation;
+  // line-height: 11px;
+  text-decoration-line: underline;
 
-	color: $color-link;
+  color: $color-link;
 }
 
 @mixin input {
-	width: 100%;
-	border: 1px solid #cfcfcf;
-	background: transparent;
-	color: #000;
-	border-radius: 7px;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 12px;
-	line-height: 14px;
-	padding: padding();
+  width: 100%;
+  border: 1px solid #cfcfcf;
+  background: transparent;
+  color: #000;
+  border-radius: 7px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  // line-height: 14px;
+  padding: padding();
 
-	&:hover,
-	&:focus,
-	&:active {
-		outline: none;
-	}
+  &:hover,
+  &:focus,
+  &:active {
+    outline: none;
+  }
 
-	&::placeholder {
-		color: #ababab;
-		font-weight: 300;
-	}
+  &::placeholder {
+    color: #ababab;
+    font-weight: 300;
+  }
 
-	&.error {
-		border: 1px solid $color-error;
-	}
+  &.error {
+    border: 1px solid $color-error;
+  }
 }
 
 @mixin button($mode: 'cta') {
-	border: none;
-	border-radius: 5px;
-	border: 1px solid $cta-color;
+  border: none;
+  border-radius: 5px;
+  border: 1px solid $cta-color;
 
-	cursor: pointer;
+  cursor: pointer;
 
-	@if ($mode == 'cta') {
-		background-color: $cta-color;
-		color: #fff;
-	}
+  @if ($mode == 'cta') {
+    background-color: $cta-color;
+    color: #fff;
+  }
 
-	&:hover,
-	&:focus,
-	&:active {
-		outline: none;
-	}
+  &:hover,
+  &:focus,
+  &:active {
+    outline: none;
+  }
 }
 
 @mixin scaleble($scale: 1.2, $to: $transition-fast, $from: $transition-fast) {
-	& {
-		transition: $to;
+  & {
+    transition: $to;
 
-		&:hover {
-			transform: scale($scale);
-			transition: $from;
-		}
-	}
+    &:hover {
+      transform: scale($scale);
+      transition: $from;
+    }
+  }
 }
 
 @mixin bold {
-	font-weight: 600;
+  font-weight: 600;
 }
 
 @mixin content-container {
-	width: 100%;
-	display: flex;
-	justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 
-	& > .content-data {
-		width: 100%;
-		max-width: $max-site-content-width;
-	}
+  & > .content-data {
+    width: 100%;
+    max-width: $max-site-content-width;
+  }
 }

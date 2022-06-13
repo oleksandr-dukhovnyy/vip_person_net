@@ -1,81 +1,84 @@
 <template>
-	<div>
-		<div class="header__wrapper" :class="{
-			'show-full-header': !showFullHeader
-		}">
-			<div class="space"></div>
-			<header class="header" v-if="showFullHeader">
-				<div class="header__group header__group--left">
-					<router-link
-						:to="{
-							name: 'main',
-						}"
-					>
-						<Logo />
-					</router-link>
-				</div>
-				<div class="header__group header__group--right">
-					<Search />
-					<div class="user">
-						<div class="header__dropdown" v-if="!AUTH_LOGIN_LOADING">
-							<div class="user__link" v-click-outside="() => (dropdown = false)">
-								<div class="user">
-									<img
-										v-if="USER_AUTHED"
-										src="@/assets/svg/user-icon-logged.svg"
-										alt="user-icon"
-										@click="dropdown = !dropdown"
-									/>
-									<img
-										v-else
-										src="@/assets/svg/user-icon.svg"
-										alt="user-icon"
-										@click="dropdown = !dropdown"
-									/>
-								</div>
-							</div>
-							<dir
-								class="header__dropdown--container animate__animated"
-								v-show="dropdown || dropdownOutAnimationOn"
-								:class="{
-									animate__fadeIn: dropdown,
-									animate__fadeOut: dropdownOutAnimationOn
-								}"
-
-								@click.stop="dropdownClick($event)"
-								ref="dropdown_container"
-							>
-								<span>
-									{{ USER_NAME }}
-								</span>
-								<div class="dropdown-divider"></div>
-								<router-link
-									:to="{ name: 'cabinet' }"
-									class="header__dropdown--link"
-									v-if="IS_RESIDENT || IS_ADMIN"
-								>
-									Кабинет
-								</router-link>
-								<router-link
-									:to="{ name: 'master' }"
-									class="header__dropdown--link"
-									v-if="IS_ADMIN"
-								>
-									Админка
-								</router-link>
-								<span class="header__dropdown--link mutted">
-									Магазин
-								</span>
-								<div class="dropdown-divider"></div>
-								<button
-									type="button"
-									class="btn btn-danger header__dropdown--logout"
-									v-if="USER_AUTHED"
-									@click="LOGOUT"
-								>
-									Выйти
-								</button>
-								<!-- <router-link
+  <div v-if="showFullHeader">
+    <div
+      class="header__wrapper"
+      :class="{
+        'show-full-header': !showFullHeader,
+      }"
+    >
+      <div class="space"></div>
+      <header class="header" v-if="showFullHeader">
+        <div class="header__group header__group--left">
+          <router-link
+            :to="{
+              name: 'main',
+            }"
+          >
+            <Logo />
+          </router-link>
+        </div>
+        <div class="header__group header__group--right">
+          <!-- <Search /> -->
+          <div class="user">
+            <div class="header__dropdown" v-if="!AUTH_LOGIN_LOADING">
+              <div
+                class="user__link"
+                v-click-outside="() => (dropdown = false)"
+              >
+                <div class="user">
+                  <img
+                    v-if="USER_AUTHED"
+                    src="@/assets/svg/user-icon-logged.svg"
+                    alt="user-icon"
+                    @click="dropdown = !dropdown"
+                  />
+                  <img
+                    v-else
+                    src="@/assets/svg/user-icon.svg"
+                    alt="user-icon"
+                    @click="dropdown = !dropdown"
+                  />
+                </div>
+              </div>
+              <div
+                class="header__dropdown--container animate__animated"
+                v-show="dropdown || dropdownOutAnimationOn"
+                :class="{
+                  animate__fadeIn: dropdown,
+                  animate__fadeOut: dropdownOutAnimationOn,
+                }"
+                @click.stop="dropdownClick($event)"
+                ref="dropdown_container"
+              >
+                <span>
+                  {{ USER_NAME }}
+                </span>
+                <div class="dropdown-divider"></div>
+                <router-link
+                  :to="{ name: 'cabinet' }"
+                  class="header__dropdown--link"
+                  v-if="IS_RESIDENT || IS_ADMIN"
+                >
+                  Кабинет
+                </router-link>
+                <router-link
+                  :to="{ name: 'master' }"
+                  class="header__dropdown--link"
+                  v-if="IS_ADMIN"
+                >
+                  Админка
+                </router-link>
+                <span class="header__dropdown--link mutted"> Магазин </span>
+                <div class="dropdown-divider"></div>
+                <button
+                  type="button"
+                  class="btn btn-danger header__dropdown--logout"
+                  v-if="USER_AUTHED"
+                  @click="LOGOUT"
+                >
+                  Выйти
+                </button>
+                <!-- <router-link
 									:to="{name: 'main'}"
 									v-else
 									class="c-link mutted"
@@ -83,31 +86,35 @@
 								>
 									Войти
 								</router-link> -->
-								<button
-									type="button"
-									class="btn btn-link c-link header__dropdown--link mutted"
-									@click="LOGOUT"
-									disabled="disabled"
-									v-else
-								>
-									Войти
-								</button>
-							</dir>
-						</div>
-						<Loader class="user__link" v-else />
-					</div>
-				</div>
-			</header>
-			<header class="header__hidden__container" v-else>
-				<div @click="goBack" class="header__hidden">
-					<img src="@/assets/svg/back.svg" alt="back" />
-					<p>
-						{{ goBackText }}
-					</p>
-				</div>
-			</header>
-		</div>
-	</div>
+                <button
+                  type="button"
+                  class="btn btn-link c-link header__dropdown--link mutted"
+                  @click="LOGOUT"
+                  disabled="disabled"
+                  v-else
+                >
+                  Войти
+                </button>
+              </div>
+            </div>
+            <Loader class="user__link" v-else />
+          </div>
+        </div>
+      </header>
+      <!-- <header class="header__hidden__container" v-else>
+        <div @click="goBack" class="header__hidden">
+          <img src="@/assets/svg/back.svg" alt="back" />
+          <p v-if="$route.params.client">Вернуться в админку</p>
+          <p v-else>
+            <span class="header__hidden--underline">Вернуться на сайт</span>
+            <span class="header__hidden--muted"
+              >&nbsp;&nbsp;&nbsp;(выход из кабинета)</span
+            >
+          </p>
+        </div>
+      </header> -->
+    </div>
+  </div>
 </template>
 
 <script>
@@ -115,199 +122,170 @@ import { mapActions } from 'vuex';
 import Search from './Search.vue';
 
 export default {
-	name: 'Header',
-	data: () => ({
-		dropdown: false,
-		dropdownOutAnimationOn: false, // false - hidden, true - animation out
-		timeoutID: null
-	}),
-	components: {
-		Search,
-	},
-	watch: {
-		dropdown(n){
-			clearTimeout(this.timeoutID);
+  name: 'Header',
+  data: () => ({
+    dropdown: false,
+    dropdownOutAnimationOn: false, // false - hidden, true - animation out
+    timeoutID: null,
+  }),
+  components: {
+    Search,
+  },
+  watch: {
+    dropdown(n) {
+      clearTimeout(this.timeoutID);
 
-			if (!n) {
-				this.dropdownOutAnimationOn = true;
-				this.timeoutID = setTimeout(() => {
-					this.dropdownOutAnimationOn = false;
-				}, this.config.ui.dropdownWorkSpeedMS);
-			}
-		}
-	},
-	computed: {
-		showFullHeader() {
-			return this.$route.name !== 'cabinet';
-		},
-		goBackText(){
-			return this.$route.params.client
-				? 'Вернуться в админку'
-				: 'Вернуться на сайт'
-		}
-	},
-	beforeRouteUpdate() {
-		this.dropdown = false;
-	},
-	methods: {
-		...mapActions(['LOGOUT']),
-		goBack() {
-			this.$router.push({
-				name: this.$route.params.client ? 'master' : 'main'
-			});
-		},
-		dropdownClick(e) {
-			if (e.target !== this.$refs.dropdown_container) {
-				this.dropdown = false;
-			}
-		}
-	},
+      if (!n) {
+        this.dropdownOutAnimationOn = true;
+        this.timeoutID = setTimeout(() => {
+          this.dropdownOutAnimationOn = false;
+        }, this.config.ui.dropdownWorkSpeedMS);
+      }
+    },
+  },
+  computed: {
+    showFullHeader() {
+      return this.$route.name !== 'cabinet';
+    },
+    // goBackText() {
+    //   return this.$route.params.client
+    //     ? 'Вернуться в админку'
+    //     : 'Вернуться на сайт';
+    // },
+  },
+  beforeRouteUpdate() {
+    this.dropdown = false;
+  },
+  methods: {
+    ...mapActions(['LOGOUT']),
+    dropdownClick(e) {
+      if (e.target !== this.$refs.dropdown_container) {
+        this.dropdown = false;
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .header {
-	width: 100%;
-	height: $header-height;
-	position: fixed;
+  width: 100%;
+  height: $header-height;
+  position: fixed;
 
-	display: flex;
-	justify-content: space-between;
-	max-width: $max-site-content-width;
+  display: flex;
+  justify-content: space-between;
+  max-width: $max-site-content-width;
 
-	&__wrapper {
-		height: $header-height;
-		background-color: #fff;
-		width: 100%;
-		margin-bottom: padding(2);
-		display: flex;
-		justify-content: center;
-		position: fixed;
-		z-index: 2;
+  &__wrapper {
+    height: $header-height;
+    background-color: #fff;
+    width: 100%;
+    margin-bottom: padding(2);
+    display: flex;
+    justify-content: center;
+    z-index: 2;
 
-		.space {
-			height: $header-height;
-			width: 1px;
-		}
+    position: fixed;
 
-		@include shadow();
+    .space {
+      height: $header-height;
+      width: 1px;
+    }
 
-		&.show-full-header {
-			background-color: transparent;
-			height: 40px;
-			box-shadow: none;
-			display: flex;
-			justify-content: center;
-			width: 100%;
+    @include shadow();
 
-			.header__hidden__container {
-				width: 100%;
-				max-width: $max-site-content-width;
-				display: flex;
-				justify-content: flex-start;
-			}
+    &.show-full-header {
+      background-color: transparent;
+      height: 40px;
+      box-shadow: none;
+      display: flex;
+      justify-content: center;
+      width: 100%;
 
-			.space {
-				height: 40px;
-			}
-		}
-	}
+      .header__hidden__container {
+        width: 100%;
+        max-width: $max-site-content-width;
+        display: flex;
+        justify-content: flex-start;
+      }
 
-	&__hidden {
-		&__container {
-			height: 40px;
-		}
+      .space {
+        height: 40px;
+      }
+    }
+  }
 
-		max-width: $max-site-content-width;
+  &__group {
+    display: flex;
+    align-items: center;
 
-		display: grid;
-		grid-template-columns: 12px 1fr;
-		align-items: center;
-		grid-gap: padding();
-		cursor: pointer;
+    &--right {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: padding(2);
 
-		@include container(1);
+      .user {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
 
-		img {
-			@include scaleble;
-		}
+        img {
+          $size: 22px;
+          width: $size;
+          height: $size;
+        }
 
-		p {
-			margin: 0;
-			font-size: $font-size-navigation;
-		}
-	}
+        &__link {
+          display: flex;
+        }
+      }
+    }
+  }
 
-	&__group {
-		display: flex;
-		align-items: center;
+  &__dropdown {
+    position: relative;
 
-		&--right {
-			display: grid;
-			grid-auto-flow: column;
-			grid-gap: padding(2);
+    &--container {
+      position: absolute;
+      background-color: #fff;
+      padding: padding() padding() (padding() + 2px) padding();
+      right: 0px;
+      top: 30px;
+      min-width: 150px;
 
-			.user {
-				display: flex;
-				align-items: center;
-				cursor: pointer;
+      $dbr: 10px;
 
-				img {
-					width: 23px;
-				}
+      border-radius: $dbr 0 $dbr $dbr;
 
-				&__link {
-					display: flex;
-				}
-			}
-		}
-	}
+      display: flex;
+      flex-direction: column;
 
-	&__dropdown {
-		position: relative;
+      @include shadow;
+    }
 
-		&--container {
-			position: absolute;
-			background-color: #fff;
-			padding: padding() padding() (padding() + 2px) padding();
-			right: 0px;
-			top: 30px;
-			min-width: 150px;
+    &--logout {
+      width: 100%;
+      border-radius: $border-radius;
+    }
 
-			$dbr: 10px;
+    &--link {
+      padding: padding() 0;
 
-			border-radius: $dbr 0 $dbr $dbr;
+      @include link;
 
-			display: flex;
-			flex-direction: column;
+      &.mutted {
+        opacity: 0.6;
+      }
+    }
+  }
 
-			@include shadow;
-		}
-
-		&--logout {
-			width: 100%;
-			border-radius: $border-radius;
-		}
-
-		&--link {
-			padding: padding() 0;
-
-			@include link;
-
-			&.mutted {
-				opacity: 0.6;
-			}
-		}
-	}
-
-	
-	@include container(1);
+  @include container(1, 2.4);
 }
 
-
 .user {
-	img {
-		@include scaleble;
-	}
+  img {
+    @include scaleble;
+  }
 }
 </style>

@@ -1,13 +1,12 @@
 <template>
-	<section class="main">
-		<img src="@/assets/svg/star_icon.svg" alt="star">
-	</section>
+  <section class="main">
+    <img src="@/assets/svg/star_icon.svg" alt="star" />
+  </section>
 </template>
 
 <script>
-
 export default {
-	name: 'Main',
+  name: 'Main',
 };
 </script>
 
@@ -17,18 +16,17 @@ export default {
 $size: 200px;
 
 .main {
-	@include page();
+  @include page();
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-	img {
-		width: $size;
-		height: $size;
+  img {
+    width: $size;
+    height: $size;
 
-		@include scaleble(1.4);
-	}
+    @include scaleble(1.4);
+  }
 }
-
 </style>

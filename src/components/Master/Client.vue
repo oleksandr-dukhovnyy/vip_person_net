@@ -1,17 +1,12 @@
 <template>
-	<div class="client">
-		<div class="client__chart">
-			<Chart
-				:actions="client.actions"
-				:raito="4"
-			/>
-		</div>
-		<div class="client__actions">
-			<Actions
-				:client="client"
-			/>
-		</div>
-	</div>
+  <div class="client">
+    <div class="client__chart">
+      <Chart :actions="client.actions" :raito="0.5625" />
+    </div>
+    <div class="client__actions">
+      <Actions :client="client" />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -23,42 +18,41 @@ const vuexActions = ['CHANGE_CLIENT_DATA'];
 const vuexGetters = ['CLIENTS'];
 
 export default {
-	name: 'Client',
-	components: { Chart, Actions },
-	props: {
-		client: {
-			type: Object,
-			required: true
-		}
-	},
-	methods: {
-		...mapActions(vuexActions),
-	},
-	computed: {
-		...mapGetters(vuexGetters)
-	}
-}
-
+  name: 'Client',
+  components: { Chart, Actions },
+  props: {
+    client: {
+      type: Object,
+      required: true,
+    },
+  },
+  methods: {
+    ...mapActions(vuexActions),
+  },
+  computed: {
+    ...mapGetters(vuexGetters),
+  },
+};
 </script>
 
 <style scoped lang="scss">
-	.client {
-		@include container;
-		padding: 0 0 0 padding();
+.client {
+  @include container;
+  padding: 0 0 0 padding();
 
-		@include media-down('m') {
-			padding: 0;
-		}
+  @include media-down('m') {
+    padding: 0;
+  }
 
-		&__show-cabinet {
-			@include link;
-		}
+  &__show-cabinet {
+    @include link;
+  }
 
-		&__chart {
-			margin: auto;
-			// max-width: 528px;
-			// max-height: 319px;
-			width: 100%;
-		}
-	}
+  &__chart {
+    margin: auto;
+    // max-width: 528px;
+    // max-height: 319px;
+    width: 100%;
+  }
+}
 </style>

@@ -2,12 +2,12 @@
   <section class="page">
     <div class="register__form">
       <div>
-        <h1 class="register__form-title">Регистрация резидентов</h1>
+        <h1 class="register__form-title">Регистрация для резидентов</h1>
       </div>
-      <div class="dropdown-divider"></div>
+      <!-- <div class="dropdown-divider"></div> -->
       <div class="register__row">
         <div class="register__title register__title--required">
-          Пригласительный код
+          Код регистрации
         </div>
         <input
           type="text"
@@ -21,7 +21,10 @@
       </div>
       <div class="register__row">
         <div class="register__title register__title--required">
-          Имя пользователя
+          Логин
+          <span class="register__title--muted"
+            >&nbsp;&nbsp;&nbsp;(имя, ник)</span
+          >
         </div>
         <input
           type="text"
@@ -83,7 +86,7 @@
           @keydown.enter="$refs.code.focus()"
         />
       </div>
-      <div class="dropdown-divider"></div>
+      <!-- <div class="dropdown-divider"></div> -->
       <div class="register__controlls">
         <div
           class="register__controlls-policy"
@@ -93,12 +96,12 @@
         >
           <label>
             <input type="checkbox" :checked="policy" v-model="policy" />
-            <span> Даю согласие на обработку своих персональных данных </span>
+            <span>согласие на обработку данных формы</span>
           </label>
         </div>
         <div>
           <button
-            class="btn btn-success"
+            class="btn btn-success register__enter"
             :disabled="!formIsValide"
             @click="register"
             v-if="!REGISTER_LOADING"
@@ -141,7 +144,7 @@ export default {
       errors: {
         code: {
           value: false,
-          text: 'Неверный формат пригласительного кода',
+          text: 'Неверный формат кода регистрации',
         },
         name: {
           value: false,
@@ -286,7 +289,7 @@ export default {
   .register {
     &__form {
       width: 450px;
-      padding: padding();
+      padding: padding(3.5);
       background-color: #fff;
       border-radius: $border-radius;
 
@@ -302,7 +305,7 @@ export default {
     }
 
     &__row {
-      padding: padding();
+      padding: padding() 0 padding(0.5);
       display: flex;
 
       @include media-down(m) {
@@ -311,7 +314,11 @@ export default {
 
       input {
         @include input;
+        font-size: 13px;
         transition: 0.3s;
+
+        width: 190px;
+        height: 40px;
 
         @include scaleble(1.04);
 
@@ -334,35 +341,51 @@ export default {
         width: 100%;
       }
 
-      &--required::after {
-        content: '*';
-        padding-left: 2px;
-        color: #f00;
+      // &--required::after {
+      //   content: '*';
+      //   padding-left: 2px;
+      //   color: #f00;
+      // }
+
+      &--muted {
+        opacity: 0.5;
+        font-style: italic;
       }
     }
 
     &__form-title {
-      font-size: 18px;
+      font-size: 20px;
       text-align: center;
+      margin-top: 0;
+      margin-bottom: padding(2.5);
     }
 
     &__controlls {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-gap: padding();
+      padding: padding(3) 0 0;
+
+      // padding: 0;
 
       @include media-down(m) {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr;
       }
 
-      padding: 0 padding();
+      // padding: padding() 0 0;
 
       button {
-        width: 100%;
+        // width: 100%;
         @include scaleble(1.02);
         cursor: pointer;
       }
+    }
+
+    &__enter {
+      font-size: 15px;
+      width: 190px;
+      height: 40px;
     }
 
     &__controlls-policy {
@@ -380,6 +403,7 @@ export default {
 
         span {
           padding-left: padding();
+          font-style: italic;
         }
 
         input {

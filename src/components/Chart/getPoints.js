@@ -31,7 +31,7 @@ const getPoints = (data, canvasWidth) => {
 
     rez.years[year].push({
       value: item.value,
-      pointY: (95 * item.value) / rez.maxValue + 5,
+      pointY: (100 * item.value) / rez.maxValue,
       month: +MM(item.date),
     });
   });

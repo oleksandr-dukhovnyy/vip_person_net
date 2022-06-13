@@ -1,5 +1,6 @@
 // colors
-$background-color: #f4f4f4;
+// $background-color: #f4f4f4;
+$background-color: #fff;
 $cta-color: #ffb800;
 $gray: #a2a2a2;
 $gray-light: #d2d2d2;
@@ -7,11 +8,11 @@ $color-link: #339ebf;
 $color-error: #ff3131;
 
 // paddings, etc.
-$base-padding: 9px;
+$base-padding: 10px;
 
 // sizes
-$header-height: (32px + ($base-padding * 2)); // 68px
-$footer-height: 134px;
+$header-height: (50px + ($base-padding * 2));
+$footer-height: 50px;
 $border-radius: 7px;
 
 $max-site-content-width: 1400px;
