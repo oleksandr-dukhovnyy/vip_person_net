@@ -1,10 +1,13 @@
 <template>
-  <div class="client">
+  <div class="client" v-if="!CLIENTS_LOADING">
     <div class="client__chart">
-      <Chart :actions="client.actions" :raito="0.5625" />
+      <Chart
+        :actions="this['actions/CURRENT_CLIENT'].actions"
+        :raito="0.5625"
+      />
     </div>
     <div class="client__actions">
-      <Actions :client="client" />
+      <Actions />
     </div>
   </div>
 </template>
@@ -12,26 +15,16 @@
 <script>
 import Chart from '@/components/Chart/Chart.vue';
 import Actions from './Actions.vue';
-import { mapActions, mapGetters } from 'vuex';
-
-const vuexActions = ['CHANGE_CLIENT_DATA'];
-const vuexGetters = ['CLIENTS'];
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Client',
   components: { Chart, Actions },
-  props: {
-    client: {
-      type: Object,
-      required: true,
-    },
-  },
-  methods: {
-    ...mapActions(vuexActions),
-  },
-  computed: {
-    ...mapGetters(vuexGetters),
-  },
+  computed: mapGetters([
+    'CLIENTS',
+    'CLIENTS_LOADING',
+    'actions/CURRENT_CLIENT',
+  ]),
 };
 </script>
 
@@ -50,8 +43,6 @@ export default {
 
   &__chart {
     margin: auto;
-    // max-width: 528px;
-    // max-height: 319px;
     width: 100%;
   }
 }

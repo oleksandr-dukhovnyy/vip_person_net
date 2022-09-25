@@ -12,26 +12,35 @@
 
 body,
 html {
-	font-family: 'Roboto', sans-serif;
-	background-color: $background-color;
+  font-family: 'Roboto', sans-serif;
+  background-color: $background-color;
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .empty {
-	opacity: 0.6;
+  opacity: 0.6;
 }
 
 .c {
-	&-link {
-		@include link;
-	}
-	&-small {
-		font-size: $font-size-small;
-		opacity: 0.5;
-	}
+  &-link {
+    @include link;
+  }
+  &-small {
+    font-size: $font-size-small;
+    opacity: 0.5;
+  }
+  &-blur {
+    opacity: 0.5;
+  }
+  &-italic {
+    font-style: italic;
+  }
+  &-red {
+    color: #dc3545 !important;
+  }
 }
 
 /*

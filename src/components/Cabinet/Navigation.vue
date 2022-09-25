@@ -1,9 +1,12 @@
 <template>
   <div @click="goBack" class="navigation">
     <img src="@/assets/svg/back.svg" alt="back" />
-    <p v-if="$route.params.client">Вернуться в админку</p>
+    <p v-if="$route.params.client">
+      <span>Вернуться в админку</span>
+    </p>
     <p v-else>
-      <span class="navigation--underline">Вернуться на сайт</span>
+      <!-- <span class="navigation--underline">Вернуться на сайт</span> -->
+      <span>Вернуться на главную</span>
       <span class="navigation--muted"
         >&nbsp;&nbsp;&nbsp;(выход из кабинета)</span
       >
@@ -32,9 +35,9 @@ export default {
     color: #212529;
   }
 
-  &--underline {
-    text-decoration: underline;
-  }
+  // &--underline {
+  //   text-decoration: underline;
+  // }
 
   max-width: $max-site-content-width;
 

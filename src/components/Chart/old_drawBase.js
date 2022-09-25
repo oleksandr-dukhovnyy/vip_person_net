@@ -1,7 +1,7 @@
 import drawLine from './drawLine.js';
 import drawPoint from './drawPoint.js';
 import getPoint from './getPoint.js';
-import state from './state.js';
+// import state from './state.js';
 
 const drawBaseMarkup = (XCount = 13, titles = []) => {
   const top = [0, 100];
@@ -13,7 +13,7 @@ const drawBaseMarkup = (XCount = 13, titles = []) => {
 
   /* draw y points */
   // bold
-  drawPoint([0, 0], { type: 'y-point', size: 2, title: '0%' });
+  drawPoint([0, 0], { type: 'y-point', size: 2, title: '' });
   let counter = 0;
   const YStep = 100 / 11;
   for (let i = 0; i <= 100; i += YStep) {

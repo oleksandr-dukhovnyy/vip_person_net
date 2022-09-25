@@ -11,8 +11,9 @@ $color-error: #ff3131;
 $base-padding: 10px;
 
 // sizes
-$header-height: (50px + ($base-padding * 2));
-$footer-height: 50px;
+// $header-height: (50px + ($base-padding * 2));
+$header-height: (35px + ($base-padding * 2));
+$footer-height: 45px;
 $border-radius: 7px;
 
 $max-site-content-width: 1400px;

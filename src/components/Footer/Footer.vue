@@ -1,8 +1,15 @@
 <template>
   <div class="footer__wrapper" v-if="showFullFooter">
     <footer class="footer">
-      <router-link :to="{ name: 'vip-login' }" class="footer__link">
+      <router-link
+        v-if="!USER_AUTHED"
+        :to="{ name: 'vip-login' }"
+        class="footer__link"
+      >
         Вход для резидентов
+      </router-link>
+      <router-link v-else :to="{ name: 'main' }" class="footer__link c-red">
+        Выход
       </router-link>
       <span class="footer__copyright"> SCRIPT developers studio © </span>
     </footer>
@@ -22,7 +29,7 @@ export default {
 
 <style lang="scss" scoped>
 .footer {
-  // position: relative;
+  position: fixed;
   height: $footer-height;
   width: 100%;
   display: flex;
@@ -58,6 +65,7 @@ export default {
     // position: absolute;
     left: padding(3.5);
     // line-height: 10px;
+    cursor: pointer;
   }
 }
 </style>

@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     clientPercents() {
-      const actions = copy(this.client.actions).map((a) => {
+      const actions = copy(this.client.actions)[0].map((a) => {
         const dateObj = new Date(a.date);
 
         return {
@@ -49,7 +49,7 @@ export default {
         .filter((a) => a.year === maxYear)
         .sort((a, b) => a.month - b.month);
 
-      const inYear = (curentYear.at(-1).value / curentYear.length) * 12;
+      const inYear = (curentYear.at(-1)?.value / curentYear.length) * 12;
 
       return {
         year: inYear,

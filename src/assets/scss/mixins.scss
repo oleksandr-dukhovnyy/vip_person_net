@@ -51,7 +51,8 @@
   font-weight: 400;
   font-size: $font-size-navigation;
   // line-height: 11px;
-  text-decoration-line: underline;
+  // text-decoration-line: underline;
+  text-decoration: none;
 
   color: $color-link;
 }

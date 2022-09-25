@@ -4,10 +4,10 @@ const webpack = require('webpack');
 const isDev = process.VUE_CLI_SERVICE.mode === 'development';
 
 const plugins = [
-	new webpack.NormalModuleReplacementPlugin(
-		/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/,
-		'element-ui/lib/locale/lang/en'
-	),
+  new webpack.NormalModuleReplacementPlugin(
+    /element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/,
+    'element-ui/lib/locale/lang/en'
+  ),
 ];
 
 // if (!isDev) {
@@ -20,24 +20,24 @@ const plugins = [
 // }
 
 module.exports = {
-	// publicPath: 'vip-person',
-	css: {
-		loaderOptions: {
-			sass: {
-				prependData: `@import '@/assets/scss/imports.scss';`,
-				sourceMap: isDev,
-			},
-		},
-	},
-	configureWebpack: {
-		plugins,
-		// module: {
-		// 	rules: [
-		// 		{
-		// 			test: /\.scss$/,
-		// 			use: ['sass-loader', 'group-css-media-queries-loader'],
-		// 		},
-		// 	],
-		// },
-	},
+  // publicPath: 'vip-person',
+  css: {
+    loaderOptions: {
+      sass: {
+        prependData: `@use 'sass:math'; @import '@/assets/scss/imports.scss';`,
+        sourceMap: isDev,
+      },
+    },
+  },
+  configureWebpack: {
+    plugins,
+    // module: {
+    // 	rules: [
+    // 		{
+    // 			test: /\.scss$/,
+    // 			use: ['sass-loader', 'group-css-media-queries-loader'],
+    // 		},
+    // 	],
+    // },
+  },
 };

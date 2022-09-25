@@ -33,11 +33,18 @@ export default {
     // this.width = width;
     // this.height = width * this.raito;
 
+    window.matchMedia('(orientation: portrait)').addListener(() => {
+      this.draw();
+    });
+
     this.draw();
   },
   watch: {
-    actions() {
-      this.draw();
+    actions: {
+      handler() {
+        this.draw();
+      },
+      deep: true,
     },
   },
   methods: {
@@ -47,12 +54,25 @@ export default {
     draw() {
       const canvas = document.createElement('canvas');
 
-      const width = this.$refs.chart.clientWidth; // 36 - padding
+      const width = this.$refs.chart.clientWidth;
+      // const pRatio = window.devicePixelRatio || 1;
 
-      canvas.width = width;
+      canvas.width = width - 10;
       canvas.height = width * this.raito;
+
+      // if (pRatio) {
+      // canvas.width = width / pRatio;
+      // canvas.height = width * (this.raito / pRatio);
+      // } else {
+      // canvas.width = width;
+      // canvas.width = width / this.raito;
+      // }
+
+      // console.log({ width: canvas.width, height: canvas.height, pRatio });
+
       // canvas.setAttribute('style', 'outline: 1px dotted coral;');
       this.ctx = canvas.getContext('2d');
+      // this.ctx.scale(this.raito, this.raito);
 
       this.$refs.chart.innerHTML = null;
       this.$refs.chart.appendChild(canvas);
@@ -65,10 +85,11 @@ export default {
 
 <style lang="scss" scoped>
 .chart {
-  padding: 0;
+  padding: 10px 10px 0 0;
   display: flex;
   // justify-content: center;
   width: 100%;
+  transition: 0.5s;
 
   canvas {
     width: 100%;

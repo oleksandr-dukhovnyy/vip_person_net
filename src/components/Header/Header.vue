@@ -1,13 +1,11 @@
 <template>
-  <div v-if="showFullHeader">
-    <div
-      class="header__wrapper"
-      :class="{
+  <div>
+    <div class="header__wrapper">
+      <!-- :class="{
         'show-full-header': !showFullHeader,
-      }"
-    >
+      }" -->
       <div class="space"></div>
-      <header class="header" v-if="showFullHeader">
+      <header class="header">
         <div class="header__group header__group--left">
           <router-link
             :to="{
@@ -42,7 +40,7 @@
               </div>
               <div
                 class="header__dropdown--container animate__animated"
-                v-show="dropdown || dropdownOutAnimationOn"
+                v-show="(dropdown || dropdownOutAnimationOn) && IS_ADMIN"
                 :class="{
                   animate__fadeIn: dropdown,
                   animate__fadeOut: dropdownOutAnimationOn,
@@ -177,6 +175,11 @@ export default {
   justify-content: space-between;
   max-width: $max-site-content-width;
 
+  @include container(1, 2.4);
+  @include media-down('m') {
+    @include container(1, 0);
+  }
+
   &__wrapper {
     height: $header-height;
     background-color: #fff;
@@ -231,7 +234,7 @@ export default {
         cursor: pointer;
 
         img {
-          $size: 22px;
+          $size: 20px;
           width: $size;
           height: $size;
         }
@@ -279,8 +282,6 @@ export default {
       }
     }
   }
-
-  @include container(1, 2.4);
 }
 
 .user {

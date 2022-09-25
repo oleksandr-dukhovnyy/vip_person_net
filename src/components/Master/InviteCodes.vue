@@ -18,7 +18,7 @@
             :class="{ loading: code.loading }"
           >
             <td scope="row">{{ i + 1 }}</td>
-            <td>{{ code.code }}</td>
+            <td class="code">{{ code.code }}</td>
             <td>{{ code.comment }}</td>
             <td>{{ code.created_at | timeFromISO8601 }}</td>
             <td>
@@ -70,7 +70,9 @@ export default {
       this.inviteCodesToRender = n.map((c) => ({ ...c, loading: false }));
     },
     removeCode(i) {
-      this.$emit('removeCode', i);
+      if (confirm(`Удалить код (${this.inviteCodes[i].code})?`)) {
+        this.$emit('removeCode', i);
+      }
     },
     createCode() {
       const comment = prompt('Введите комментарий', '');
@@ -102,6 +104,10 @@ export default {
   td {
     font-size: 13px;
     text-align: center;
+
+    &.code {
+      width: 139px;
+    }
   }
 
   .table--contain {

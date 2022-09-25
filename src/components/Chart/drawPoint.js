@@ -62,13 +62,16 @@ const drawPoint = (
 
   const textCords = [...point];
   const offsetByType = {
-    round: [0, 0],
+    round: [10, 0],
     'y-point': [40, 4],
-    'x-point': [0, 17],
+    'x-point': [7, 17],
   }[type];
 
   textCords[0] -= offsetByType[0];
   textCords[1] += offsetByType[1];
+
+  // textCords[0] = ~~textCords[0] + 0.5;
+  // textCords[1] = ~~textCords[1] + 0.5;
 
   if (position && type === 'round') {
     const shift = 11;
@@ -80,8 +83,11 @@ const drawPoint = (
   state.ctx.strokeStyle = textColor;
   state.ctx.fillStyle = textColor;
 
-  state.ctx.font = '0.9em serif';
+  state.ctx.font = 'normal normal 400 13px Roboto';
   state.ctx.fillText(title, ...textCords);
 };
 
+// sans-serif
+// Helvetica
+// Cambria
 export default drawPoint;

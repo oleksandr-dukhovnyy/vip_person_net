@@ -1,11 +1,11 @@
 <template>
-  <div class="clients-list">
+  <div class="clients-list" v-if="!CLIENTS_LOADING">
     <div
-      v-for="(client, index) in clients"
+      v-for="(client, index) in CLIENTS || []"
       :key="index"
       class="clients-list__client"
       :class="{
-        'clients-list__client--selected': index === selected,
+        'clients-list__client--selected': client.id === CURRENT_CLIENT_ID,
       }"
       @click="$emit('choose', index)"
     >
@@ -21,19 +21,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+const vuexGetters = ['CLIENTS', 'CLIENTS_LOADING', 'actions/CURRENT_CLIENT'];
+
 export default {
   name: 'ClientsList',
-  props: {
-    clients: {
-      type: Array,
-    },
-    selected: {
-      type: Number,
-    },
-  },
   computed: {
-    selectedClient() {
-      return this.clients[this.selected];
+    ...mapGetters(vuexGetters),
+    CURRENT_CLIENT_ID() {
+      return this['actions/CURRENT_CLIENT']?.id || -1;
     },
   },
 };

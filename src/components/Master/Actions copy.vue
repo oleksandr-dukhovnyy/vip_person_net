@@ -20,11 +20,11 @@
               :actionNames="actionNames"
               :editorOn="editor.show"
               @setActionToEditor="
-                (index) => setActionToEditor(index, actionList)
+                (index) => setActionToEditor(index, actionList.data)
               "
-              @moveAction="(index) => moveAction(index, actionList)"
-              @deleteAction="(index) => deleteAction(index, actionList)"
-              @copyAction="(index) => copyAction(index, actionList)"
+              @moveAction="(index) => moveAction(index, actionList.data)"
+              @deleteAction="(index) => deleteAction(index, actionList.data)"
+              @copyAction="(index) => copyAction(index, actionList.data)"
             />
           </el-tab-pane>
         </el-tabs>
@@ -79,23 +79,16 @@
       </div>
     </div>
     <div class="actions__new-action" v-if="!SAVE_USER_DATA_LOADING">
-      <div
-        v-for="(actionsList, index) in actionsChunks[selectedChunk]"
-        :key="index"
-      >
+      <div v-for="(chunk, index) in actionsChunks[selectedChunk]" :key="index">
         <button
           type="button"
           class="btn btn-success actions__new-action--button"
-          @click="newAction(actionsList)"
+          @click="newAction(index)"
           :title="`Создать новый экшн. Он появится свеху списка действий`"
         >
           <img src="@/assets/svg/plus_icon.svg" alt="+" />
         </button>
-        <el-color-picker
-          show-alpha
-          v-model="actionsList.color"
-          color-format="hex"
-        />
+        <el-color-picker show-alpha v-model="chunk.color" color-format="hex" />
       </div>
 
       <!-- <button
@@ -134,7 +127,7 @@
       <button
         type="button"
         class="btn btn-success"
-        :disabled="!HAS_UNSAVED_CLIENTS_DATA"
+        :disabled="!clientDataChanged"
         @click="saveChanges"
         title="Отправить изменения на сервер. Это действие нельзя отменить!"
       >
@@ -145,7 +138,7 @@
       <button
         type="button"
         class="btn btn-dark"
-        :disabled="!HAS_UNSAVED_CLIENTS_DATA"
+        :disabled="!clientDataChanged"
         @click="resetChanges"
         title="Сбросить не сохраненные изменения."
       >
@@ -160,31 +153,29 @@
 // import Pagination from '@/components/Pagination/Pagination.vue';
 import ClientTable from '../ClientTable.vue';
 import ActionsList from './ActionsList.vue';
-import cloneObject from '@/utils/cloneObject.js';
+import move from '@/utils/moveItemInArray.js';
+import {
+  copyAction,
+  deleteAction,
+  insertAction,
+  moveAction,
+  editAction,
+} from '../../utils/ActionListTools/index';
 
 import { mapActions, mapGetters } from 'vuex';
-const vuexActions = [
-  'SAVE_USER_DATA',
-  'UPDATE_CLIENT_ACTIONS',
-  'ADD_CLIENT_ACTION',
-  'MOVE_ACTION',
-  'DELETE_ACTION',
-  'RESET_CHANGES',
-];
-const vuexGetters = [
-  'SAVE_USER_DATA_LOADING',
-  'actions/CURRENT_CLIENT',
-  'actions/CURRENT_CLIENT_ID',
-  'HAS_UNSAVED_CLIENTS_DATA',
-];
+const vuexActions = ['SAVE_USER_DATA'];
+const vuexGetters = ['SAVE_USER_DATA_LOADING'];
 
-function editorChange() {
-  this.editor.edited = true;
-}
+const cloneObject = (o) => JSON.parse(JSON.stringify(o));
 
 export default {
   name: 'Actions',
   components: { ClientTable, ActionsList /* Pagination */ },
+  props: {
+    client: {
+      type: Object,
+    },
+  },
   data() {
     return {
       editor: {
@@ -206,16 +197,27 @@ export default {
       currentActionID: -1,
       selectedActionsList: 0,
       selectedChunk: 0,
-      chunkPage: 0,
+      chunkPage: '0',
     };
   },
   watch: {
+    'editor.name'() {
+      this.editor.edited = true;
+    },
+    'editor.date'() {
+      this.editor.edited = true;
+    },
+    'editor.value'() {
+      this.editor.edited = true;
+    },
+    // editorName: editedTrue,
+    // editorDate: editedTrue,
+    // editorValue: editedTrue,
+    // currentActionID: setDataToEditor,
+    // selectedActionsList: setDataToEditor,
     chunkPage(n) {
       this.selectedChunk = +n;
     },
-    'editor.name': editorChange,
-    'editor.date': editorChange,
-    'editor.value': editorChange,
   },
   methods: {
     ...mapActions(vuexActions),
@@ -227,8 +229,6 @@ export default {
         date,
         value,
       };
-
-      this.editor.edited = false;
     },
     closeEditor() {
       this.editor = {
@@ -236,20 +236,18 @@ export default {
         name: '',
         date: '',
         value: '',
+        commit() {},
         edited: false,
         show: false,
       };
     },
     setActionToEditor(actionIndex, actionsList) {
-      this.openEditor(actionsList.data[actionIndex]);
+      this.openEditor(actionsList[actionIndex]);
 
       this.editor.commit = (newActionData) => {
-        this.UPDATE_CLIENT_ACTIONS({
-          clientID: this['actions/CURRENT_CLIENT_ID'],
-          actionsListID: actionsList.id,
-          newActionData,
-          actionIndex,
-        });
+        console.log('commit');
+        editAction(actionIndex, actionsList, newActionData);
+        this.$emit('setClientActions', cloneObject(this.client.actions));
       };
     },
     editorSave() {
@@ -262,52 +260,44 @@ export default {
       this.editor = {
         ...this.editor,
         edited: false,
+        show: false,
       };
+
+      // this.editor.show = true;
     },
     moveAction(actionIndex, actionsList) {
-      const to = prompt('На какую позицию перемещать?');
-
-      if (to === null || to === '' || !/^[0-9]{0,10}$/.test(to)) return;
-
-      this.MOVE_ACTION({
-        actionsListID: actionsList.id,
-        actionIndex,
-        to: +to,
-      });
+      // console.log('moveAction');
+      moveAction.call(this, actionIndex, actionsList);
     },
     copyAction(actionIndex, actionsList) {
-      this.ADD_CLIENT_ACTION({
-        actionsListID: actionsList.id,
-        newAction: cloneObject(actionsList.data[actionIndex]),
-      });
+      // console.log('copyAction');
+      copyAction.call(this, actionIndex, actionsList);
+    },
+    insertAction(actionIndex, actionsList) {
+      insertAction.call(this, actionIndex, actionsList);
+      console.log('insertAction');
     },
     deleteAction(actionIndex, actionsList) {
-      this.DELETE_ACTION({
-        actionIndex,
-        actionsListID: actionsList.id,
-      });
+      deleteAction.call(this, actionIndex, actionsList);
     },
-    resetChanges() {
-      this.RESET_CHANGES();
-    },
+    resetChanges() {},
     saveChanges() {
-      this.SAVE_USER_DATA(
-        JSON.parse(JSON.stringify(this['actions/CURRENT_CLIENT']))
-      );
+      // this.SAVE_USER_DATA(JSON.parse(JSON.stringify(this.client)));
+      console.log('123');
     },
-    newAction(actionsList) {
-      this.ADD_CLIENT_ACTION({
-        actionsListID: actionsList.id,
-        newAction: { date: new Date().toISOString(), value: '', name: '' },
+    newAction(listIndex = 0) {
+      this.insertAction(listIndex, {
+        date: new Date().toISOString(),
+        value: '',
+        name: '',
       });
-
-      this.setActionToEditor(0, actionsList);
+      this.setActionToEditor(0, listIndex);
     },
   },
   computed: {
     ...mapGetters(vuexGetters),
     actions() {
-      return this['actions/CURRENT_CLIENT'].actions || [];
+      return this.client.actions || [];
     },
     clientDataChanged() {
       return false;

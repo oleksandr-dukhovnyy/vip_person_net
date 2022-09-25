@@ -62,8 +62,9 @@ class _API {
   }
 
   logout() {
-    localStorage.removeItem('supabase.auth.token');
-    location.reload();
+    return this.client.auth.signOut();
+    // localStorage.removeItem('supabase.auth.token');
+    // location.reload();
   }
   register({
     email,
@@ -160,7 +161,7 @@ class _API {
         .from(config.DB.usersData)
         .insert([user])
         .then((res) => {
-          console.log('insertUserToUsersDataTabble: res', res);
+          // console.log('insertUserToUsersDataTabble: res', res);
           resolve(res);
         })
         .catch((err) => {

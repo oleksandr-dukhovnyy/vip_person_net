@@ -15,7 +15,7 @@ export default {
   props: {
     size: {
       type: Number,
-      default: 25,
+      default: 20,
     },
   },
 };
@@ -28,8 +28,8 @@ $color: $cta-color;
   width: 100%;
   height: 100%;
 
-  min-width: 30px;
-  min-height: 30px;
+  min-width: 10px;
+  min-height: 10px;
 
   max-width: 100px;
   max-height: 100px;
@@ -43,8 +43,8 @@ $color: $cta-color;
   width: var(--loader-size);
   height: var(--loader-size);
 
-  min-width: 30px;
-  min-height: 30px;
+  min-width: 10px;
+  min-height: 10px;
 
   max-width: 100px;
   max-height: 100px;
@@ -59,15 +59,18 @@ $color: $cta-color;
   0% {
     transform: rotate(0deg);
     border-radius: 50%;
+    // transform: scale(1);
   }
 
   50% {
-    border-radius: $border-radius;
+    border-radius: 5px;
+    // transform: scale(0.5);
   }
 
   100% {
     transform: rotate(-180deg);
     border-radius: 50%;
+    // transform: scale(1);
   }
 }
 </style>

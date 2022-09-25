@@ -2,14 +2,14 @@
   <div class="client-info--wrapper">
     <div class="client-info" v-if="!CLIENTS_LOADING">
       <div class="client-info__client">
-        {{ client.data.name | text }} &nbsp;<span
-          >({{ client.data.email | text }})</span
+        {{ CLIENT.data.name | text }} &nbsp;<span
+          >({{ CLIENT.data.email | text }})</span
         >
       </div>
 
       <div class="client-info__line">
         <p class="client-info__title">
-          регист.&nbsp;&nbsp;{{ client.created_at | timeFromISO8601 }}
+          регист.&nbsp;&nbsp;{{ CLIENT.created_at | timeFromISO8601 }}
         </p>
       </div>
       <!-- <div class="dropdown-divider"></div> -->
@@ -18,7 +18,7 @@
         :to="{
           name: 'cabinet',
           params: {
-            client,
+            CLIENT,
           },
         }"
       >
@@ -39,16 +39,18 @@
 <script>
 import { mapGetters } from 'vuex';
 import Loader from '../global/Loader.vue';
-const vuexGetters = ['CLIENTS_LOADING'];
+const vuexGetters = ['CLIENTS_LOADING', 'actions/CURRENT_CLIENT'];
 
 export default {
   name: 'ClientData',
   components: {
     Loader,
   },
-  props: ['client'],
   computed: {
     ...mapGetters(vuexGetters),
+    CLIENT() {
+      return this['actions/CURRENT_CLIENT'];
+    },
   },
 };
 </script>

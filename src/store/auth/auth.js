@@ -1,14 +1,27 @@
 import API from '@/utils/API/API.js';
 import { AppRouter } from '@/main';
 import notificate from '@/utils/notification.js';
+import moveItemInArray from '@/utils/moveItemInArray.js';
+import cloneObject from '@/utils/cloneObject.js';
 
 let client = new API();
+
+const changeClientData = (clients, clientID, callback) => {
+  return clients.map((client) => {
+    if (client.id === clientID) {
+      return callback(client);
+    }
+
+    return client;
+  });
+};
 
 // 99-57
 // lohowac237@ovout.com
 // lohowac237@ovout.com
 
 export default {
+  /* TODO: split state to modules */
   actions: {
     AUTO_AUTH({ commit, dispatch }) {
       client.autoAuth().then((user) => {
@@ -22,17 +35,29 @@ export default {
         //}
       });
     },
-    SAVE_USER_DATA({ commit }, _client) {
+    SAVE_USER_DATA({ commit, dispatch, rootGetters }) {
       commit('SET_LOADER', {
         loaderName: 'SAVE_USER_DATA',
         loaderCondition: true,
       });
+      const _client = cloneObject(rootGetters['actions/CURRENT_CLIENT']);
 
       client
         .updateClientData(_client)
         .then((res) => {
           if (res.status === 200) {
             notificate('Сохранение данных пользователя', 'Успешно!');
+            dispatch('FIXATE_OLD_DATA');
+          } else {
+            console.log(res);
+            notificate(
+              'Сохранение данных пользователя',
+              `Error ${res.status} [${res.error?.code || '???'}]: ${
+                res.error?.message || 'Неизвестная ошибка'
+              }`,
+              'error',
+              false
+            );
           }
         })
         .catch(console.error)
@@ -130,13 +155,17 @@ export default {
 
             console.log('LOGIN end: res', res);
 
+            if (res.user.role === 'supabase_admin') {
+              return AppRouter.push({ name: 'master' });
+            }
+
             if (!res.error) {
               AppRouter.push({ name: next });
             } else {
               if (res.error.message === 'Invalid login credentials') {
                 notificate(
                   'Неверный Email или пароль',
-                  `Пожалуйста, проверьте правильность ввода`,
+                  'Пожалуйста, проверьте правильность ввода',
                   'error'
                 );
               }
@@ -152,11 +181,23 @@ export default {
             });
           });
       } else {
-        console.log(`LOGIN user authed`);
+        console.log('LOGIN user authed');
       }
     },
-    LOGOUT() {
-      client.logout();
+    LOGOUT({ commit }) {
+      client
+        .logout()
+        .then(() => commit('CLEAR_STATE'))
+        .catch((err) => {
+          console.error(err);
+          notificate(
+            'Ошибка',
+            `Не удалось выполнить выход из учётной записи. ${
+              err.code ? `Код ошибки: ${err.code}` : ''
+            }`,
+            'error'
+          );
+        });
     },
     LOAD_CLIENTS({ commit }) {
       commit('SET_LOADER', {
@@ -183,12 +224,11 @@ export default {
           });
         });
     },
-    REGISTER({ commit, dispatch }, data) {
+    REGISTER({ commit }, data) {
       commit('SET_LOADER', {
         loaderName: 'register',
         loaderCondition: true,
       });
-
       client
         .register(data)
         .then(({ user }) => {
@@ -199,7 +239,12 @@ export default {
           client
             .insertUserToUsersDataTabble({
               user_id: user.id,
-              actions: [],
+              actions: [
+                { id: 1, data: [], color: '#ccc' },
+                { id: 2, data: [], color: '#ccc' },
+                { id: 3, data: [], color: '#ccc' },
+                { id: 4, data: [], color: '#ccc' },
+              ],
               role: user.user_metadata.role,
               data: {
                 name: user.user_metadata.name || 'unnamed',
@@ -216,7 +261,7 @@ export default {
                   name: 'login',
                   params: {
                     forceEmail: data.email,
-                    forcePassword: data.password,
+                    forcePassword: '', //data.password,
                   },
                 });
               }
@@ -235,7 +280,7 @@ export default {
           if (error.status === 403 && error.msg === 'invalide code') {
             notificate(
               'Пригласительный код не найден',
-              `Проверьте его правильность и попробуйте ещё раз`,
+              'Проверьте его правильность и попробуйте ещё раз',
               'error'
             );
           }
@@ -246,6 +291,33 @@ export default {
             loaderCondition: false,
           });
         });
+    },
+    FIXATE_OLD_DATA({ commit }) {
+      commit('FIXATE_OLD_DATA');
+    },
+    UPDATE_CLIENT_ACTIONS({ commit }, payload) {
+      commit('UPDATE_CLIENT_ACTIONS', payload);
+    },
+    ADD_CLIENT_ACTION({ commit, rootGetters }, payload) {
+      commit('ADD_CLIENT_ACTION', {
+        ...payload,
+        clientID: rootGetters['actions/CURRENT_CLIENT']?.id,
+      });
+    },
+    MOVE_ACTION({ commit, rootGetters }, payload) {
+      commit('MOVE_ACTION', {
+        ...payload,
+        clientID: rootGetters['actions/CURRENT_CLIENT']?.id,
+      });
+    },
+    DELETE_ACTION({ commit, rootGetters }, payload) {
+      commit('DELETE_ACTION', {
+        ...payload,
+        clientID: rootGetters['actions/CURRENT_CLIENT']?.id,
+      });
+    },
+    RESET_CHANGES({ commit }) {
+      commit('RESET_CHANGES');
     },
   },
   mutations: {
@@ -264,14 +336,128 @@ export default {
     REMOVE_CODE(state, code) {
       state.inviteCodes = state.inviteCodes.filter((c) => c.code !== code);
     },
-    SET_CLIENTS(state, arr) {
-      state.clients = arr.map((user) => ({
-        ...user,
-        oldData: JSON.parse(JSON.stringify(user)),
-      }));
+    SET_CLIENTS(state, clients) {
+      state.clients = clients;
+
+      state.oldData = JSON.stringify(state.clients);
     },
     SET_USER(state, user) {
       state.user = user;
+    },
+    CLEAR_STATE(state) {
+      state.user = {};
+      state.userData = null;
+      state.loaders = {
+        login: false,
+        register: false,
+        loadClients: false,
+        SAVE_USER_DATA: false,
+      };
+      state.errors = {
+        login: null,
+        register: null,
+      };
+      state.inviteCodes = [];
+      state.clients = [];
+      state.oldData = '';
+    },
+    FIXATE_OLD_DATA(state) {
+      state.oldData = JSON.stringify(state.clients);
+    },
+    UPDATE_CLIENT_ACTIONS(state, payload) {
+      const { clientID, actionsListID, newActionData, actionIndex } = payload;
+
+      if (
+        [clientID, actionsListID, newActionData, actionIndex].some(
+          (e) => e === null || e === undefined
+        )
+      ) {
+        return console.error(payload);
+      }
+
+      state.clients = state.clients.map((client, index) => {
+        if (clientID === index) {
+          return {
+            ...client,
+            actions: client.actions.map((actionList) => {
+              if (actionsListID === actionList.id) {
+                return {
+                  ...actionList,
+                  data: actionList.data.map(
+                    (actionListDataItem, actionListDataIndex) => {
+                      if (actionListDataIndex === actionIndex) {
+                        return newActionData;
+                      }
+
+                      return actionListDataItem;
+                    }
+                  ),
+                };
+              }
+
+              return actionList;
+            }),
+          };
+        }
+
+        return client;
+      });
+
+      // state.oldData = JSON.stringify(state.clients);
+    },
+    ADD_CLIENT_ACTION(state, payload) {
+      const { actionsListID, clientID, newAction } = payload;
+
+      state.clients = changeClientData(state.clients, clientID, (client) => {
+        return {
+          ...client,
+          actions: client.actions.map((actionsList) => {
+            if (actionsList.id === actionsListID) {
+              actionsList.data.unshift(newAction);
+            }
+
+            return actionsList;
+          }),
+        };
+      });
+    },
+    MOVE_ACTION(state, payload) {
+      const { clientID, actionsListID, to, actionIndex } = payload;
+
+      state.clients = changeClientData(state.clients, clientID, (client) => {
+        return {
+          ...client,
+          actions: client.actions.map((actionsList) => {
+            if (actionsList.id === actionsListID) {
+              const clone = actionsList.data;
+              moveItemInArray(actionsList.data, actionIndex, to);
+
+              actionsList.data = clone;
+            }
+
+            return actionsList;
+          }),
+        };
+      });
+    },
+    DELETE_ACTION(state, payload) {
+      const { clientID, actionsListID, actionIndex } = payload;
+
+      state.clients = changeClientData(state.clients, clientID, (client) => {
+        return {
+          ...client,
+          actions: client.actions.map((actionsList) => {
+            if (actionsList.id === actionsListID) {
+              actionsList.data.splice(actionIndex, 1);
+            }
+
+            return actionsList;
+          }),
+        };
+      });
+    },
+    RESET_CHANGES(state) {
+      state.clients = JSON.parse(state.oldData);
     },
   },
   state: {
@@ -287,28 +473,24 @@ export default {
       login: null,
       register: null,
     },
-    inviteCodes: [],
     clients: [],
+    oldData: '',
+    inviteCodes: [],
   },
   getters: {
-    AUTH_LOGIN_LOADING: (s) => s.loaders.login,
-    SAVE_USER_DATA_LOADING: (s) => s.loaders.SAVE_USER_DATA,
     CLIENT: (s) => s.user,
+    CLIENTS: (s) => s.clients,
+    IS_ADMIN: (s) => s.userData?.role === 'admin',
+    OLD_DATA: (s) => s.oldData,
+    USER_NAME: (s) => s.userData?.data?.name || s.user?.email || 'Гость',
     CLIENT_DATA: (s) => s.userData,
     USER_AUTHED: (s) => s.user?.aud === 'authenticated',
-    IS_ADMIN: (s) => s.userData?.role === 'admin',
-    INVITE_CODES: (s) => s.inviteCodes,
-    CLIENTS: (s) => s.clients,
-    CLIENTS_LOADING: (s) => s.loaders.loadClients,
-    USER_NAME: (s) => s.userData?.data?.name || s.user?.email || 'Гость',
     IS_RESIDENT: (s) => s.userData?.role === 'resident',
-    HAS_UNSAVED_CLIENTS_DATA: (s) =>
-      s.clients.some((c) => {
-        const clearClient = JSON.parse(JSON.stringify(c));
-        delete clearClient.oldData;
-
-        return JSON.stringify(clearClient) !== JSON.stringify(c.oldData);
-      }),
+    INVITE_CODES: (s) => s.inviteCodes,
+    CLIENTS_LOADING: (s) => s.loaders.loadClients,
     REGISTER_LOADING: (s) => s.loaders.register || false,
+    AUTH_LOGIN_LOADING: (s) => s.loaders.login,
+    SAVE_USER_DATA_LOADING: (s) => s.loaders.SAVE_USER_DATA,
+    HAS_UNSAVED_CLIENTS_DATA: (s) => JSON.stringify(s.clients) !== s.oldData,
   },
 };

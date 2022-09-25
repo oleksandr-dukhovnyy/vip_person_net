@@ -1,23 +1,21 @@
 <template>
   <section class="cabinet--contain">
     <div v-if="!AUTH_LOGIN_LOADING" class="cabinet content-data">
-      <div>
+      <!-- <div>
         <Navigation />
-      </div>
-      <div class="clocks">
+      </div> -->
+      <!-- <div class="clocks">
         <Clocks />
-      </div>
+      </div> -->
       <div>
         <ClientData :client="client" />
       </div>
       <div class="cabinet__chart">
         <Chart :actions="client.actions" :raito="0.5625" />
       </div>
-      <!-- <div class="cabinet__table">
-				<ClientTable
-					:client="client"
-				/>
-			</div> -->
+      <div class="cabinet__table">
+        <ClientTable :client="client" />
+      </div>
     </div>
     <loader v-else />
   </section>

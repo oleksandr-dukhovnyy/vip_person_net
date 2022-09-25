@@ -248,11 +248,11 @@ export default {
           name: 'phone',
         },
         {
-          valide: /.{6,100}/.test(this.pass1),
+          valide: /.{1,300}/.test(this.pass1),
           name: 'pass1',
         },
         {
-          valide: /.{6,100}/.test(this.pass2),
+          valide: /.{1,300}/.test(this.pass2),
           name: 'pass2',
         },
         {
