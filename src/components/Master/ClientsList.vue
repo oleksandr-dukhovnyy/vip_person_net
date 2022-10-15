@@ -10,6 +10,7 @@
       @click="$emit('choose', index)"
     >
       {{ client.data.name | text }}
+      <br />
       <span
         class="c-small"
         v-if="client.data.name.length < 8 && client.data.email.length < 25"

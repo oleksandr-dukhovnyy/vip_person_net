@@ -1,7 +1,7 @@
 import API from '@/utils/API/API.js';
 import { AppRouter } from '@/main';
 import notificate from '@/utils/notification.js';
-import moveItemInArray from '@/utils/moveItemInArray.js';
+// import moveItemInArray from '@/utils/moveItemInArray.js';
 import cloneObject from '@/utils/cloneObject.js';
 
 let client = new API();
@@ -19,6 +19,23 @@ const changeClientData = (clients, clientID, callback) => {
 // 99-57
 // lohowac237@ovout.com
 // lohowac237@ovout.com
+
+/*
+Почти каждая статья - это труд.
+Автор, как правило, такие статьи пишет для того, чтобы поделится ценным, необычным опытом.
+То, что для автора статьи является откровеннием и хорошей идеей, то зачастую для опытного специалиста является, в лучшем случае, базовым явлением, а в худшем - прямым антипаттерном. Потому, что %холодная аргументация%.
+Поэтому получается ситуация, когда человек старался и даже частично что-то умное сделал, но в общем объективная ценность его труда стремится к нулю.
+
+Особенно это касается таких ниш, как универсальные инструменты для Front-end разработки, где среди большого количесвта стандартов обитают помимо мастадонтов Google, Meta, Netflix, Amazon и др. ещё и миллионы опытных разработчиков.
+
+Что по тексту статьи, то после дисклеймера:
+В статье не используются современные решения и стандарты.
+
+Интерес к предмету статьи пропал, т. к. серьёзно использовать его невозможно. Разработка будет затруднена, там, где можно было проще - будет сделано сложнее. Т. е. ни с образовательной ни с практической стороны пользы, скорее всего, нет.
+Отклонятся от стандартов можно после того, как эти стандарты изучены подробно.
+
+
+*/
 
 export default {
   /* TODO: split state to modules */
@@ -209,7 +226,26 @@ export default {
         .loadClients()
         .then((res) => {
           if (res.data) {
-            commit('SET_CLIENTS', res.data);
+            const sorted = res.data.map((client) => {
+              return {
+                ...client,
+                actions: client.actions.map((actionsList) => {
+                  const clone = cloneObject(actionsList);
+
+                  return {
+                    ...clone,
+                    data: clone.data.sort((actionA, actionB) => {
+                      const dateA = new Date(actionA.date).getTime();
+                      const dateB = new Date(actionB.date).getTime();
+
+                      return dateB - dateA;
+                    }),
+                  };
+                }),
+              };
+            });
+
+            commit('SET_CLIENTS', sorted);
           } else {
             console.error(res);
           }
@@ -304,12 +340,12 @@ export default {
         clientID: rootGetters['actions/CURRENT_CLIENT']?.id,
       });
     },
-    MOVE_ACTION({ commit, rootGetters }, payload) {
-      commit('MOVE_ACTION', {
-        ...payload,
-        clientID: rootGetters['actions/CURRENT_CLIENT']?.id,
-      });
-    },
+    // MOVE_ACTION({ commit, rootGetters }, payload) {
+    //   commit('MOVE_ACTION', {
+    //     ...payload,
+    //     clientID: rootGetters['actions/CURRENT_CLIENT']?.id,
+    //   });
+    // },
     DELETE_ACTION({ commit, rootGetters }, payload) {
       commit('DELETE_ACTION', {
         ...payload,
@@ -421,25 +457,25 @@ export default {
         };
       });
     },
-    MOVE_ACTION(state, payload) {
-      const { clientID, actionsListID, to, actionIndex } = payload;
+    // MOVE_ACTION(state, payload) {
+    //   const { clientID, actionsListID, to, actionIndex } = payload;
 
-      state.clients = changeClientData(state.clients, clientID, (client) => {
-        return {
-          ...client,
-          actions: client.actions.map((actionsList) => {
-            if (actionsList.id === actionsListID) {
-              const clone = actionsList.data;
-              moveItemInArray(actionsList.data, actionIndex, to);
+    //   state.clients = changeClientData(state.clients, clientID, (client) => {
+    //     return {
+    //       ...client,
+    //       actions: client.actions.map((actionsList) => {
+    //         if (actionsList.id === actionsListID) {
+    //           const clone = actionsList.data;
+    //           moveItemInArray(actionsList.data, actionIndex, to);
 
-              actionsList.data = clone;
-            }
+    //           actionsList.data = clone;
+    //         }
 
-            return actionsList;
-          }),
-        };
-      });
-    },
+    //         return actionsList;
+    //       }),
+    //     };
+    //   });
+    // },
     DELETE_ACTION(state, payload) {
       const { clientID, actionsListID, actionIndex } = payload;
 

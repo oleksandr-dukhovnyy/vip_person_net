@@ -30,14 +30,14 @@
         </el-tabs>
       </div>
       <div class="actions__action-editor" v-if="editor.show">
-        <div class="actions__action-editor--close-contain">
+        <!-- <div class="actions__action-editor--close-contain">
           <button
             type="button"
             class="btn-close actions__action-editor--close"
             aria-label="close"
             @click="closeEditor"
           ></button>
-        </div>
+        </div> -->
         <div class="actions__action-editor--inpus">
           <select v-model="editor.name">
             <option value="" selected disabled>Действие</option>
@@ -167,7 +167,7 @@ const vuexActions = [
   'SAVE_USER_DATA',
   'UPDATE_CLIENT_ACTIONS',
   'ADD_CLIENT_ACTION',
-  'MOVE_ACTION',
+  // 'MOVE_ACTION',
   'DELETE_ACTION',
   'RESET_CHANGES',
 ];
@@ -264,17 +264,17 @@ export default {
         edited: false,
       };
     },
-    moveAction(actionIndex, actionsList) {
-      const to = prompt('На какую позицию перемещать?');
+    // moveAction(actionIndex, actionsList) {
+    //   const to = prompt('На какую позицию перемещать?');
 
-      if (to === null || to === '' || !/^[0-9]{0,10}$/.test(to)) return;
+    //   if (to === null || to === '' || !/^[0-9]{0,10}$/.test(to)) return;
 
-      this.MOVE_ACTION({
-        actionsListID: actionsList.id,
-        actionIndex,
-        to: +to,
-      });
-    },
+    //   this.MOVE_ACTION({
+    //     actionsListID: actionsList.id,
+    //     actionIndex,
+    //     to: +to,
+    //   });
+    // },
     copyAction(actionIndex, actionsList) {
       this.ADD_CLIENT_ACTION({
         actionsListID: actionsList.id,
@@ -426,7 +426,7 @@ button {
 
     padding: padding();
 
-    width: (235px + paddng(2));
+    // width: (235px + paddng(2));
     min-height: 250px;
     max-height: 400px;
     max-width: 255px;
@@ -434,7 +434,7 @@ button {
     border-radius: $border-radius;
 
     display: grid;
-    grid-template-rows: 14px (40px + 32px + 32px) 1fr;
+    grid-template-rows: 104px 1fr;
     grid-gap: padding();
 
     @include media-down('t-l') {

@@ -6,7 +6,7 @@
           <tr>
             <th scope="col">№</th>
             <th scope="col">Код</th>
-            <th scope="col">Коментарий</th>
+            <th scope="col">Заметка по резиденту</th>
             <th scope="col">Создан</th>
             <th scope="col"></th>
           </tr>

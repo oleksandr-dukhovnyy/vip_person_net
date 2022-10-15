@@ -61,16 +61,21 @@
             title="Дублировать действие. Копия появится вверху списка."
             @click="$emit('copyAction', i)"
           />
-          <img
+          <!-- <img
             src="@/assets/icons/move.png"
             alt="move"
             title="Переместить действие. В выпадающем окне укажите новый индекс действия. Экшн, который сейчас на заданном индексе, сдвинется вниз"
             @click="$emit('moveAction', i)"
-          />
+          /> -->
           <el-popconfirm
+            title="Удалить?"
+            @confirm="$emit('deleteAction', i)"
+            icon-color="#f00"
+          >
+            <!-- <el-popconfirm
             title="Подтверждаете удаление?"
             @confirm="$emit('deleteAction', i)"
-          >
+          > -->
             <button
               slot="reference"
               type="button"
@@ -169,9 +174,8 @@ $grid: $id-cs 1fr 0.5fr 1.3fr 1fr;
 
     &--item {
       display: grid;
-      grid-template-columns: repeat(4, 20px);
-      // grid-gap: padding();
-      justify-content: space-between;
+      grid-template-columns: repeat(3, 20px);
+      justify-content: space-evenly;
 
       img {
         width: 20px;

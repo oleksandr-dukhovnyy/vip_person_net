@@ -6,10 +6,10 @@
         :to="{ name: 'vip-login' }"
         class="footer__link"
       >
-        Вход для резидентов
+        для резидентов
       </router-link>
       <router-link v-else :to="{ name: 'main' }" class="footer__link c-red">
-        Выход
+        выход
       </router-link>
       <span class="footer__copyright"> SCRIPT developers studio © </span>
     </footer>

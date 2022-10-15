@@ -2,17 +2,12 @@
   <div class="client-info--wrapper">
     <div class="client-info" v-if="!CLIENTS_LOADING">
       <div class="client-info__client">
-        {{ CLIENT.data.name | text }} &nbsp;<span
-          >({{ CLIENT.data.email | text }})</span
-        >
+        {{ CLIENT.data.name | text }}
+      </div>
+      <div class="client-info__client client-info__client--last">
+        <span>{{ CLIENT.data.email | text }}</span>
       </div>
 
-      <div class="client-info__line">
-        <p class="client-info__title">
-          регист.&nbsp;&nbsp;{{ CLIENT.created_at | timeFromISO8601 }}
-        </p>
-      </div>
-      <!-- <div class="dropdown-divider"></div> -->
       <router-link
         class="client-info__show-cabinet"
         :to="{
@@ -24,12 +19,21 @@
       >
         Посмотреть кабинет клиента
       </router-link>
+
+      <div class="client-info__line">
+        <p class="client-info__title">
+          регист.&nbsp;&nbsp;{{ CLIENT.created_at | dateWithoutTime }}
+          <span>{{ CLIENT.created_at | dateWithoutDate }}</span>
+        </p>
+      </div>
+      <!-- <div class="dropdown-divider"></div> -->
+
       <!-- <div class="dropdown-divider"></div> -->
       <button type="button" class="btn btn-danger" disabled>
         Сброс пароля
       </button>
       <button type="button" class="btn btn-danger" disabled>
-        Удалить клиента
+        Удалить страницу
       </button>
     </div>
     <Loader v-else />
@@ -88,7 +92,8 @@ export default {
     // grid-gap: 10px;
     // grid-template-columns: 85px 1fr;
     font-size: 13px;
-    text-align: center;
+    // text-align: center;
+    padding: 0 0 padding();
 
     p {
       margin: 0;
@@ -104,23 +109,30 @@ export default {
   &__client {
     font-weight: 600;
     font-size: 14px;
-    text-align: center;
+    // text-align: center;
     line-height: 1;
 
     span {
       opacity: 0.5;
       font-size: 13px;
     }
+
+    &--last {
+      padding-bottom: 13px;
+    }
   }
 
   &__show-cabinet {
     @include link;
-    padding: 0 0 padding(2);
+
     line-height: 1;
   }
 
-  // &__title {
-  //   // font-size: 14px;
-  // }
+  &__title {
+    span {
+      opacity: 0.5;
+      font-size: 12px;
+    }
+  }
 }
 </style>
