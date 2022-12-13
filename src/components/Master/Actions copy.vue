@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     ...mapActions(vuexActions),
-    openEditor({ name, date, value } = {}) {
+    openEditor({ name, date, value = '' } = {}) {
       this.editor = {
         ...this.editor,
         show: true,

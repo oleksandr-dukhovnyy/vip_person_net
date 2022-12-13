@@ -38,6 +38,10 @@ import locale from 'element-ui/lib/locale';
 
 import 'animate.css';
 
+import easyVuex from './plugins/easyVuex.js';
+
+Vue.use(easyVuex);
+
 locale.use(lang);
 
 // Vue.component('eui-button', Button);
