@@ -24,7 +24,12 @@ import { API } from '@/utils/API/API.js';
 import { mapActions, mapGetters } from 'vuex';
 
 const vuexActions = ['ADD_GENERATED_INVITE_CODE', 'REMOVE_CODE'];
-const vuexGetters = ['INVITE_CODES'];
+const vuexGetters = [
+  'INVITE_CODES',
+  'USER_AUTHED',
+  'IS_ADMIN',
+  'AUTH_LOGIN_LOADING',
+];
 /*/
 needs:
 	generate invite codes
@@ -81,6 +86,19 @@ export default {
         });
     },
   },
+  watch: {
+    USER_AUTHED: {
+      immediate: true,
+      handler(n) {
+        if (
+          (n === false || this.IS_ADMIN === false) &&
+          this.AUTH_LOGIN_LOADING === false
+        ) {
+          this.$router.replace({ name: '404' });
+        }
+      },
+    },
+  },
 };
 </script>
 
@@ -89,6 +107,7 @@ export default {
   max-width: 1400px;
   margin: 0 auto;
   @include page;
+  min-height: 101vh;
 
   padding-left: 0;
   padding-right: 0;

@@ -129,3 +129,7 @@
     max-width: $max-site-content-width;
   }
 }
+
+@mixin muted {
+  color: #adadad;
+}

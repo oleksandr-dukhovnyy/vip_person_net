@@ -28,7 +28,9 @@ export default {
   },
   computed: {
     clientPercents() {
-      const actions = copy(this.client.actions)[0].map((a) => {
+      if (this.client.actions.length === 0) return { year: 0, month: 0 };
+
+      const actions = copy(this.client.actions)[0].data.map((a) => {
         const dateObj = new Date(a.date);
 
         return {
@@ -83,7 +85,7 @@ export default {
   &__month {
     font-size: $font-size-large;
     font-weight: 200;
-    // line-height: 1;
+    line-height: 1;
   }
 
   &__year {

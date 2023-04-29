@@ -12,7 +12,7 @@ export default {
     },
   },
   state: {
-    currentClient: +localStorage.getItem('master-currentClient') || -1,
+    currentClient: +localStorage.getItem('master-currentClient') || 0,
   },
   getters: {
     CURRENT_CLIENT(stateActions, _, __, gettersAuth) {

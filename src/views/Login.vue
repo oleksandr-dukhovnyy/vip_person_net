@@ -65,8 +65,10 @@ export default {
   name: 'Login',
   data() {
     return {
-      email: 'lebitoh943@ehstock.com',
-      password: 'ZSvWEYGtbbszwDHxdQRx',
+      // email: 'lebitoh943@ehstock.com',
+      // password: 'ZSvWEYGtbbszwDHxdQRx',
+      email: 'script@vip-person.net',
+      password: '123',
       // email: '',
       // password: '',
     };

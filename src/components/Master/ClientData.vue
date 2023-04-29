@@ -1,11 +1,11 @@
 <template>
   <div class="client-info--wrapper">
-    <div class="client-info" v-if="!CLIENTS_LOADING">
+    <div class="client-info" v-if="!CLIENTS_LOADING && CLIENT !== null">
       <div class="client-info__client">
-        {{ CLIENT.data.name | text }}
+        {{ clientName | text }}
       </div>
       <div class="client-info__client client-info__client--last">
-        <span>{{ CLIENT.data.email | text }}</span>
+        <span>{{ clientEmail | text }}</span>
       </div>
 
       <router-link
@@ -20,11 +20,15 @@
         Посмотреть кабинет клиента
       </router-link>
 
-      <div class="client-info__line">
+      <div class="client-info__line" v-if="clientCreatedAt !== null">
         <p class="client-info__title">
-          регист.&nbsp;&nbsp;{{ CLIENT.created_at | dateWithoutTime }}
-          <span>{{ CLIENT.created_at | dateWithoutDate }}</span>
+          регист.&nbsp;&nbsp;{{ clientCreatedAt | dateWithoutTime }}
+          <span>{{ clientCreatedAt | dateWithoutDate }}</span>
         </p>
+      </div>
+
+      <div v-else>
+        <p class="client-info__title">регист. -</p>
       </div>
       <!-- <div class="dropdown-divider"></div> -->
 
@@ -54,6 +58,15 @@ export default {
     ...mapGetters(vuexGetters),
     CLIENT() {
       return this['actions/CURRENT_CLIENT'];
+    },
+    clientName() {
+      return this.CLIENT?.data?.name || '-';
+    },
+    clientEmail() {
+      return this.CLIENT?.data?.email || '-';
+    },
+    clientCreatedAt() {
+      return this.CLIENT?.created_at || null;
     },
   },
 };

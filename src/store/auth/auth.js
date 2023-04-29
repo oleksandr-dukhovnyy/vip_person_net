@@ -138,7 +138,24 @@ export default {
                   `Пожалуйста, дотвердите свой Email, пройдя по ссылке в письме.`,
                   'warning'
                 );
+              } else if (
+                res.error.status === 400 &&
+                res.error.message === 'Invalid login credentials'
+              ) {
+                notificate(
+                  'Неверные данные для аутентификации',
+                  `Пара email - пароль не найдена. \n Проверьте правильность ввода`,
+                  'error'
+                );
+              } else {
+                notificate(
+                  `Ошибка - ${res.error.message}`,
+                  ' Пожалуйста, проверьте правильность ввода',
+                  'error'
+                );
               }
+
+              return;
             }
 
             commit('SET_USER', res?.user);

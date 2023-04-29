@@ -3,6 +3,18 @@ import { YYYY, MM } from '@/utils/timeParser.js';
 const normalizeNum = (n) => `${n < 10 ? '0' : ''}${n}`;
 
 const prepareData = (data) => {
+  if (typeof data !== 'object') {
+    console.error('[prepareData ERROR]: invalid data', data);
+
+    return {
+      base: {
+        maxValue: 100,
+        minValue: 0,
+      },
+      columns: [],
+    };
+  }
+
   data = JSON.parse(JSON.stringify(data));
   // console.log(data);
   // data = [

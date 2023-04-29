@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="table--contain">
-      <table class="table">
+      <table class="table" v-if="inviteCodesToRender.length > 0">
         <thead>
           <tr>
             <th scope="col">№</th>
@@ -34,6 +34,12 @@
           </tr>
         </tbody>
       </table>
+      <Loader v-else-if="!showEmpty" />
+      <div v-else class="muted">
+        Коды не найдены. Нажмите на кнопку "<span style="color: #000"
+          >Сгенерировать код приглашения</span
+        >" <br />для создания пригласительного кода
+      </div>
     </div>
     <button
       type="button"
@@ -56,14 +62,22 @@ export default {
   },
   data: () => ({
     inviteCodesToRender: [],
+    showEmpty: false,
   }),
   watch: {
     inviteCodes(n) {
+      this.showEmpty = false;
       this.setCodes(n);
     },
   },
   created() {
     this.setCodes(this.inviteCodes);
+
+    setTimeout(() => {
+      if (this.inviteCodes.length === 0) {
+        this.showEmpty = true;
+      }
+    }, 2000);
   },
   methods: {
     setCodes(n) {
@@ -123,6 +137,11 @@ export default {
   .btn-close {
     @include scaleble(1.2);
   }
+}
+
+.muted {
+  @include muted;
+  text-align: center;
 }
 
 .create-bttn {
