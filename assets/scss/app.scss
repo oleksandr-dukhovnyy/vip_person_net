@@ -1,0 +1,59 @@
+// libs
+@import 'bootstrap/scss/bootstrap.scss';
+@import 'adaptive-scss';
+@import 'animate.css/animate.css';
+
+// normalize
+@import 'normalize.css/normalize.css';
+
+// mixins
+@import './mixins.scss';
+
+// vars
+@import './vars.scss';
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body,
+html {
+  font-family: 'Roboto', sans-serif;
+  background-color: $background-color;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.empty {
+  opacity: 0.6;
+}
+
+.c {
+  &-link {
+    @include link;
+  }
+  &-small {
+    font-size: $font-size-small;
+    opacity: 0.5;
+  }
+  &-blur {
+    opacity: 0.5;
+  }
+  &-italic {
+    font-style: italic;
+  }
+  &-red {
+    color: #dc3545 !important;
+  }
+}
+
+/*
+$breakpoints: (
+	m-sm: 0px,
+	m: 576px,
+	t: 992px,
+	t-l: 1200px,
+	d: 1300px,
+	d-xl: 2000px,
+);
+*/

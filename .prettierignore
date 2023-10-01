@@ -1,0 +1,9 @@
+# Ignore artifacts:
+build
+coverage
+.nuxt
+.husky
+.output
+public
+# scripts
+*.min.*

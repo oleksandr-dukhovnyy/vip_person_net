@@ -1,5 +1,0 @@
-{
-  "allowJS": true,
-  "include": ["src/**/*"],
-  "compilerOptions": {}
-}

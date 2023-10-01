@@ -1,33 +1,36 @@
 {
-  "name": "vip_person_net",
-  "version": "0.1.0",
+  "name": "vip-person",
   "private": true,
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build && cd ./scripts && minify.sh"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^1.29.1",
-    "animate.css": "^4.1.1",
-    "bootstrap": "^5.1.3",
-    "chart.js": "^3.7.1",
-    "core-js": "^3.6.5",
-    "element-ui": "^2.15.6",
-    "register-service-worker": "^1.7.1",
-    "vue": "^2.6.11",
-    "vue-chartjs": "^3.5.1",
-    "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "lint": "npx eslint ./ --fix",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-pwa": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "sass-loader": "^8.0.2",
-    "sass": "^1.45.2",
-    "vue-template-compiler": "^2.6.11",
-    "webpack-bundle-analyzer": "^4.5.0"
+    "@nuxt/devtools": "latest",
+    "@nuxt/eslint-config": "^0.2.0",
+    "eslint": "^8.50.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "nuxt": "^3.7.4",
+    "prettier": "^3.0.3",
+    "sass": "^1.68.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.5"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.37.0",
+    "adaptive-scss": "^1.2.1",
+    "animate.css": "^4.1.1",
+    "bootstrap": "^5.3.2",
+    "click-outside-vue3": "^4.0.1",
+    "normalize.css": "^8.0.1",
+    "v-calendar": "^3.0.3",
+    "vuex": "^4.1.0"
   }
 }
