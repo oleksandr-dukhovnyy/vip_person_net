@@ -26,7 +26,7 @@
     props: {
       cities: {
         type: Array,
-        default: () => ['London', 'New York', 'Kyiv', 'Tokyo', 'Moscow'],
+        default: () => ['London', 'New York', 'Kyiv', 'Tokyo'],
       },
     },
     data() {

@@ -6,7 +6,7 @@
     <div class="client__chart">
       <Chart
         :actions="this['actions/CURRENT_CLIENT'].actions"
-        :raito="0.5625"
+        :ratio="0.5625"
       />
     </div>
     <div class="client__actions">

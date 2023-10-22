@@ -32,11 +32,12 @@
       name: {
         type: String,
         require: true,
-        // validator: value => /\.\./g.test(value)
+        default: '',
       },
       alt: {
         type: String,
         require: false,
+        default: '',
       },
     },
     computed: {
@@ -52,6 +53,8 @@
         if (this.elem) {
           return `@/assets/${this.elem.assetsFolder}/${this.name}`;
         }
+
+        return '';
       },
     },
   };

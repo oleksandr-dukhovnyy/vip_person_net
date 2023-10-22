@@ -42,15 +42,18 @@
         v-else
         class="muted"
       >
-        Коды не найдены. Нажмите на кнопку "<span style="color: #000"
+        Коды не найдены. Нажмите на кнопку "<span
+          style="color: #000; cursor: pointer"
+          @click="createCode"
           >Сгенерировать код приглашения</span
-        >" <br />для создания пригласительного кода
+        >
+        " <br />для создания пригласительного кода
       </div>
     </div>
     <button
       type="button"
       class="btn btn-primary create-bttn"
-      @click="createCode()"
+      @click="createCode"
     >
       Сгенерировать код приглашения
     </button>

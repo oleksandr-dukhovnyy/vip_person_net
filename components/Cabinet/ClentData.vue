@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  const copy = (obj) => JSON.parse(JSON.stringify(obj));
+  // const copy = (obj) => JSON.parse(JSON.stringify(obj));
 
   export default {
     name: 'ClientData',
@@ -29,11 +29,16 @@
     },
     computed: {
       clientPercents() {
-        if (this.client.actions?.length === 0) return { year: 0, month: 0 };
+        if (
+          !this.client ||
+          !this.client.actions ||
+          this.client.actions.length === 0
+        ) {
+          return { year: 0, month: 0 };
+        }
 
-        const actions = copy(this.client.actions)[0].data.map((a) => {
+        const actions = this.client.actions[0].data.map((a) => {
           const dateObj = new Date(a.date);
-
           return {
             ...a,
             dateObj,
@@ -44,15 +49,16 @@
 
         const maxYear = actions.reduce((acc, curr) => {
           const year = new Date(curr.date).getFullYear();
-
           return year > acc ? year : acc;
         }, 2000);
 
-        const curentYear = actions
+        const currentYear = actions
           .filter((a) => a.year === maxYear)
           .sort((a, b) => a.month - b.month);
 
-        const inYear = (curentYear.at(-1)?.value / curentYear.length) * 12;
+        const inYear =
+          (currentYear[currentYear.length - 1]?.value / currentYear.length) *
+          12;
 
         return {
           year: inYear,

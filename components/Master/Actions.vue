@@ -44,8 +44,9 @@
               value=""
               selected
               disabled
-              >Действие</option
             >
+              Действие
+            </option>
             <option value="put">Пополнение</option>
             <option value="withdrawal">Снятие</option>
             <option value="round-end">Окночание торгового раунда</option>

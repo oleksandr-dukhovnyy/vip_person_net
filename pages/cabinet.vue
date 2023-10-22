@@ -17,7 +17,7 @@
         <div class="cabinet__chart">
           <Chart
             :actions="client.actions"
-            :raito="0.5625"
+            :ratio="0.5625"
           />
         </div>
         <div class="cabinet__table">
