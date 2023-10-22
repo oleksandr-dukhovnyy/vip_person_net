@@ -10,6 +10,11 @@ export default defineNuxtConfig({
   webpack: {
     extractCSS: true,
   },
+  app: {
+    head: {
+      link: [{ rel: 'icon', type: 'image/svg', href: '/favicon.svg' }],
+    },
+  },
   ssr: false,
   vite: {
     // @ts-ignore
