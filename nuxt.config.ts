@@ -1,8 +1,9 @@
-// const SUPABASE_URL = process.env.SUPABASE_URL;
-// const SUPABASE_KEY = process.env.SUPABASE_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  modules: ['@pinia/nuxt'],
   devtools: { enabled: false },
   pages: true,
   css: ['~/assets/scss/app.scss'],
@@ -17,7 +18,6 @@ export default defineNuxtConfig({
   },
   ssr: false,
   vite: {
-    // @ts-ignore
     plugins: [{ src: '~/plugins/clickOutside.ts' }],
     css: {
       preprocessorOptions: {
@@ -26,10 +26,10 @@ export default defineNuxtConfig({
         },
       },
     },
-    // define: {
-    //   SUPABASE_URL: `'${SUPABASE_URL}'`,
-    //   SUPABASE_KEY: `'${SUPABASE_KEY}'`,
-    // },
+    define: {
+      SUPABASE_URL: `'${SUPABASE_URL}'`,
+      SUPABASE_KEY: `'${SUPABASE_KEY}'`,
+    },
   },
   router: {
     // @ts-ignore

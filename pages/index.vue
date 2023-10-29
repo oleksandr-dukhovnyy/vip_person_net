@@ -9,6 +9,14 @@
   </NuxtLayout>
 </template>
 
+<script lang="ts" setup>
+  import { useStore } from 'vuex';
+
+  const store = useStore();
+
+  console.log(store.getters['client/NAME']);
+</script>
+
 <style lang="scss" scoped>
   .main {
     @include page();

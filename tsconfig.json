@@ -2,7 +2,6 @@
   "extends": "./.nuxt/tsconfig.json",
   "target": "ESNext",
   "module": "ESNext",
-  "moduleResolution": "Node",
   "compilerOptions": {
     "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
     "strict": true,
@@ -10,6 +9,5 @@
       "~/*": ["./*"],
       "@/*": ["./components/*"]
     }
-  },
-  "exclude": ["node_modules"]
+  }
 }
