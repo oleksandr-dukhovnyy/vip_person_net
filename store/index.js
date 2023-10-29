@@ -1,13 +1,10 @@
 import Vuex from 'vuex';
 
-import auth from './auth/auth.js';
-import actions from './master/actions.js';
+import auth from './auth';
+import actions from './master';
 
 export default new Vuex.Store({
-  // state: {},
-  // mutations: {},
-  // actions: {},
-  // getters
+  strict: process.env.NODE_ENV !== 'production',
   modules: {
     auth,
     actions,

@@ -1,0 +1,16 @@
+export default {
+  CLIENT: (s) => s.user,
+  CLIENTS: (s) => s.clients,
+  IS_ADMIN: (s) => s.userData?.role === 'admin',
+  OLD_DATA: (s) => s.oldData,
+  USER_NAME: (s) => s.userData?.data?.name || s.user?.email || 'Гость',
+  CLIENT_DATA: (s) => s.userData,
+  USER_AUTHED: (s) => s.user?.aud === 'authenticated',
+  IS_RESIDENT: (s) => s.userData?.role === 'resident',
+  INVITE_CODES: (s) => s.inviteCodes,
+  CLIENTS_LOADING: (s) => s.loaders.loadClients,
+  REGISTER_LOADING: (s) => s.loaders.register || false,
+  AUTH_LOGIN_LOADING: (s) => s.loaders.login,
+  SAVE_USER_DATA_LOADING: (s) => s.loaders.SAVE_USER_DATA,
+  HAS_UNSAVED_CLIENTS_DATA: (s) => JSON.stringify(s.clients) !== s.oldData,
+};
