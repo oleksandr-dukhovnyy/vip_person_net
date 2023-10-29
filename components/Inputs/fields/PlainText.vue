@@ -8,7 +8,8 @@
 
 <script>
   export default {
-    name: 'Text',
+    name: 'TheText',
+    emits: ['input'],
     data() {
       return {
         value: '',

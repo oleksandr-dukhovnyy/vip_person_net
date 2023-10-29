@@ -1,6 +1,6 @@
 import drawLine from './drawLine.js';
 import drawPoint from './drawPoint.js';
-import getPoint from './getPoint.js';
+// import getPoint from './getPoint.js';
 // import state from './state.js';
 
 const drawBaseMarkup = (XCount = 13, titles = []) => {

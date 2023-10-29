@@ -11,10 +11,10 @@ export default (() => {
 
       return null;
 
-      return _cache[id] &&
-        performance.now() - _cache[id].stamp < _cache[id].time
-        ? _cache[id].data
-        : (_cache[id] = null);
+      // return _cache[id] &&
+      //   performance.now() - _cache[id].stamp < _cache[id].time
+      //   ? _cache[id].data
+      //   : (_cache[id] = null);
     },
     write(id, data, time = 1000) {
       _cache[id] = {

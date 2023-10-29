@@ -4,7 +4,7 @@
 
 <script>
   export default {
-    name: 'Form',
+    name: 'TheForm',
   };
 </script>
 

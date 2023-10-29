@@ -56,7 +56,7 @@
             v-model="editor.value"
             type="text"
             placeholder="Значение"
-            title='Новый процент клиента. Можно со знаком "%", можно без.'
+            title="Новый процент клиента. Можно со знаком %, можно без."
           />
           <!-- <eui-date
             v-model="editor.date"

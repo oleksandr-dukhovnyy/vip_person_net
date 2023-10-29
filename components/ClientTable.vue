@@ -35,9 +35,9 @@
         <h3>Простой процент</h3>
         <h3>Сложный процент</h3>
         <h3>
-          Сложный процент <br /><span style="font-size: 16px"
-            >+ пополнения</span
-          >
+          Сложный процент <br /><span style="font-size: 16px">
+            + пополнения
+          </span>
         </h3>
       </div>
       <div class="client-table__body">
@@ -54,11 +54,11 @@
               </div>
             </div>
             <div
-              v-for="(n, i) in c"
-              :key="i"
+              v-for="(n, j) in c"
+              :key="j"
               class="client-table__item"
             >
-              <div>{{ i < 9 ? '&nbsp;&nbsp;' : '' }}{{ i + 1 }}</div>
+              <div>{{ j < 9 ? '&nbsp;&nbsp;' : '' }}{{ j + 1 }}</div>
               <div>
                 {{ n.toFixed(2) }}
               </div>
@@ -76,6 +76,7 @@
     props: {
       client: {
         type: Object,
+        default: () => ({}),
       },
     },
     data: () => ({
@@ -102,20 +103,21 @@
           () => (lastSumm = lastSumm + getPercents(lastSumm))
         );
 
-        const med = (arr) => {
-          const arrayHalf = arr.length / 2;
-          const sorted = [].concat(arr).sort((a, b) => a - b);
+        // const med = (arr) => {
+        //   const arrayHalf = arr.length / 2;
+        //   const sorted = [].concat(arr).sort((a, b) => a - b);
 
-          return arr.length % 2 === 0
-            ? (sorted[arrayHalf] + sorted[arrayHalf + 1]) / 2
-            : sorted[~~arrayHalf];
-        };
+        //   return arr.length % 2 === 0
+        //     ? (sorted[arrayHalf] + sorted[arrayHalf + 1]) / 2
+        //     : sorted[~~arrayHalf];
+        // };
+
         lastSumm = deposit + additions * 11;
-        const complexPercWidthAdds = [...Array(this.tableSize)].map((_, i) => {
+        const complexPercWidthAdds = [...Array(this.tableSize)].map(() => {
           // console.group(i);
 
-          const adds = additions * 12;
-          const percent = getPercents(med(lastSumm, adds + lastSumm));
+          // const adds = additions * 12;
+          // const percent = getPercents(med(lastSumm, adds + lastSumm));
 
           // console.log('lastSumm', lastSumm);
           // console.log('adds', adds);

@@ -70,6 +70,9 @@
         ? localStorage.getItem('terminal-side')
         : 0,
     }),
+    computed: {
+      ...mapGetters(vuexGetters),
+    },
     watch: {
       show(n) {
         if (n) {
@@ -156,9 +159,6 @@
       });
 
       move.call(this, { log: () => {} }, [this.siide]);
-    },
-    computed: {
-      ...mapGetters(vuexGetters),
     },
   };
 </script>

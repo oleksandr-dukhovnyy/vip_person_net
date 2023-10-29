@@ -22,12 +22,12 @@
               "
               :action-names="actionNames"
               :editor-on="editor.show"
-              @setActionToEditor="
+              @set-action-to-editor="
                 (index) => setActionToEditor(index, actionList.data)
               "
-              @moveAction="(index) => moveAction(index, actionList.data)"
-              @deleteAction="(index) => deleteAction(index, actionList.data)"
-              @copyAction="(index) => copyAction(index, actionList.data)"
+              @move-action="(index) => moveAction(index, actionList.data)"
+              @delete-action="(index) => deleteAction(index, actionList.data)"
+              @copy-action="(index) => copyAction(index, actionList.data)"
             />
           </el-tab-pane>
         </el-tabs>
@@ -50,8 +50,9 @@
               value=""
               selected
               disabled
-              >Действие</option
             >
+              Действие
+            </option>
             <option value="put">Пополнение</option>
             <option value="withdrawal">Снятие</option>
             <option value="round-end">Окночание торгового раунда</option>
@@ -61,7 +62,7 @@
             v-model="editor.value"
             type="text"
             placeholder="Значение"
-            title="Новый процент клиента. Можно со знаком &quot;%&quot;, можно без."
+            title="Новый процент клиента. Можно со знаком %, можно без."
           />
           <eui-date
             v-model="editor.date"
@@ -182,9 +183,9 @@
 
 <script>
   // import Pagination from '~/components/Pagination/Pagination.vue';
-  import ClientTable from '../ClientTable.vue';
+  // import ClientTable from '../ClientTable.vue';
   import ActionsList from './ActionsList.vue';
-  import move from '@/utils/moveItemInArray.js';
+  // import move from '@/utils/moveItemInArray.js';
   import {
     copyAction,
     deleteAction,
@@ -201,12 +202,14 @@
 
   export default {
     name: 'Actions',
-    components: { ClientTable, ActionsList /* Pagination */ },
+    components: { ActionsList /* ClientTable,  Pagination */ },
     props: {
       client: {
         type: Object,
+        default: () => ({}),
       },
     },
+    emits: ['setClientActions'],
     data() {
       return {
         editor: {
@@ -230,6 +233,21 @@
         selectedChunk: 0,
         chunkPage: '0',
       };
+    },
+    computed: {
+      ...mapGetters(vuexGetters),
+      actions() {
+        return this.client.actions || [];
+      },
+      clientDataChanged() {
+        return false;
+      },
+      actionsChunks() {
+        return [
+          [this.actions[0] || {}, this.actions[1] || {}],
+          [this.actions[2] || {}, this.actions[3] || {}],
+        ];
+      },
     },
     watch: {
       'editor.name'() {
@@ -323,21 +341,6 @@
           name: '',
         });
         this.setActionToEditor(0, listIndex);
-      },
-    },
-    computed: {
-      ...mapGetters(vuexGetters),
-      actions() {
-        return this.client.actions || [];
-      },
-      clientDataChanged() {
-        return false;
-      },
-      actionsChunks() {
-        return [
-          [this.actions[0] || {}, this.actions[1] || {}],
-          [this.actions[2] || {}, this.actions[3] || {}],
-        ];
       },
     },
   };

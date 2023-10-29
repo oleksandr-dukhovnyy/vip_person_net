@@ -13,9 +13,9 @@
     <p v-else>
       <!-- <span class="navigation--underline">Вернуться на сайт</span> -->
       <span>Вернуться на главную</span>
-      <span class="navigation--muted"
-        >&nbsp;&nbsp;&nbsp;(выход из кабинета)</span
-      >
+      <span class="navigation--muted">
+        &nbsp;&nbsp;&nbsp;(выход из кабинета)
+      </span>
     </p>
   </div>
 </template>

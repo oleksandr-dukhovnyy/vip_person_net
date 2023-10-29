@@ -23,9 +23,9 @@
         <div class="register__row">
           <div class="register__title register__title--required">
             Логин
-            <span class="register__title--muted"
-              >&nbsp;&nbsp;&nbsp;(имя, ник)</span
-            >
+            <span class="register__title--muted">
+              &nbsp;&nbsp;&nbsp;(имя, ник)
+            </span>
           </div>
           <input
             ref="name"
@@ -183,6 +183,7 @@
         },
       };
     },
+    computed: { ...mapGetters(vuexGetters) },
     created() {
       const fields = [
         'code',
@@ -204,7 +205,7 @@
         });
       });
     },
-    computed: { ...mapGetters(vuexGetters) },
+
     methods: {
       ...mapActions(vuexActions),
       register() {

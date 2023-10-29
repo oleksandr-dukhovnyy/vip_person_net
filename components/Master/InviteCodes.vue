@@ -45,8 +45,9 @@
         Коды не найдены. Нажмите на кнопку "<span
           style="color: #000; cursor: pointer"
           @click="createCode"
-          >Сгенерировать код приглашения</span
         >
+          Сгенерировать код приглашения
+        </span>
         " <br />для создания пригласительного кода
       </div>
     </div>
@@ -71,6 +72,7 @@
         required: true,
       },
     },
+    emits: ['createCode', 'removeCode'],
     data: () => ({
       inviteCodesToRender: [],
       showEmpty: false,

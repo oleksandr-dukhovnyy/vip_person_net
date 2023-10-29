@@ -24,6 +24,7 @@
   export default {
     name: 'Email',
     mixins: [fieldMixin],
+    emits: ['emit'],
     methods: {
       input() {
         this.$emit('emit', 'input', {

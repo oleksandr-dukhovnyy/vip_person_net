@@ -114,30 +114,21 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex';
-  import Search from './Search.vue';
+  // import Search from './Search.vue';
 
   export default {
-    name: 'Header',
+    name: 'TheHeader',
     components: {
-      Search,
+      // Search,
+    },
+    beforeRouteUpdate() {
+      this.dropdown = false;
     },
     data: () => ({
       dropdown: false,
       dropdownOutAnimationOn: false, // false - hidden, true - animation out
       timeoutID: null,
     }),
-    watch: {
-      dropdown(n) {
-        clearTimeout(this.timeoutID);
-
-        if (!n) {
-          this.dropdownOutAnimationOn = true;
-          this.timeoutID = setTimeout(() => {
-            this.dropdownOutAnimationOn = false;
-          }, 400);
-        }
-      },
-    },
     computed: {
       ...mapGetters([
         'AUTH_LOGIN_LOADING',
@@ -155,8 +146,17 @@
       //     : 'Вернуться на сайт';
       // },
     },
-    beforeRouteUpdate() {
-      this.dropdown = false;
+    watch: {
+      dropdown(n) {
+        clearTimeout(this.timeoutID);
+
+        if (!n) {
+          this.dropdownOutAnimationOn = true;
+          this.timeoutID = setTimeout(() => {
+            this.dropdownOutAnimationOn = false;
+          }, 400);
+        }
+      },
     },
     methods: {
       ...mapActions(['LOGOUT']),

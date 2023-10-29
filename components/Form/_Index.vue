@@ -19,7 +19,7 @@
   import { supportedTypes, supportedTypeAlias } from '../Inputs/index.js';
 
   export default {
-    name: 'Form',
+    name: 'TheForm',
     props: {
       title: {
         type: Number,
@@ -31,6 +31,7 @@
         validate: (v) => v.every((f) => supportedTypes.includes(f.type)),
       },
     },
+    emits: ['submit'],
     data: () => ({
       formData: [],
       supportedTypeAlias,

@@ -107,7 +107,7 @@ export default function Terminal(contain, commands = {}) {
   }
 
   if (commands.clear === undefined) {
-    commands.clear = ({ log }, p) => {
+    commands.clear = (_, p) => {
       const clearOutput = p.includes('*') || p.includes('-o');
       const clearFlows = p.includes('*') || p.includes('-f');
 
