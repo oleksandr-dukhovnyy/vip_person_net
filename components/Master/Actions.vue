@@ -103,7 +103,7 @@
         <button
           type="button"
           class="btn btn-success actions__new-action--button"
-          :title="`Создать новый экшн. Он появится свеху списка действий`"
+          :title="`Создать новый экшн. Он появится сверху списка действий`"
           @click="newAction(actionsList)"
         >
           <img
@@ -175,6 +175,7 @@
   import ModeledTabs from '~/components/ModeledTabs.vue';
 
   import { mapActions, mapGetters } from 'vuex';
+
   const vuexActions = [
     'SAVE_USER_DATA',
     'UPDATE_CLIENT_ACTIONS',
