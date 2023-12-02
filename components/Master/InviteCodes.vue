@@ -31,7 +31,7 @@
                 class="btn-close"
                 aria-label="Close"
                 title="Удалить код. С этим кодом уже нельзя будет зарегистрироваться!"
-                @click="removeCode(i)"
+                @click="removeCode(code.code)"
               ></button>
             </td>
           </tr>
@@ -43,17 +43,15 @@
         class="muted"
       >
         Коды не найдены. Нажмите на кнопку "<span
-          style="color: #000; cursor: pointer"
+          class="action-btn"
           @click="createCode"
-        >
-          Сгенерировать код приглашения
-        </span>
-        " <br />для создания пригласительного кода
+          >Сгенерировать код приглашения</span
+        >" <br />для создания пригласительного кода
       </div>
     </div>
     <button
       type="button"
-      class="btn btn-primary create-bttn"
+      class="btn btn-primary create-btn"
       @click="createCode"
     >
       Сгенерировать код приглашения
@@ -61,65 +59,63 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
   import { DDMMYYYY_ttmm } from '~/utils/timeParser';
 
-  export default {
-    name: 'InviteCodes',
-    props: {
-      inviteCodes: {
-        type: Array,
-        required: true,
-      },
-    },
-    emits: ['createCode', 'removeCode'],
-    data: () => ({
-      inviteCodesToRender: [],
-      showEmpty: false,
-    }),
-    watch: {
-      inviteCodes(n) {
-        this.showEmpty = false;
-        this.setCodes(n);
-      },
-    },
-    created() {
-      this.setCodes(this.inviteCodes);
+  const props = defineProps<{
+    inviteCodes: Client.InviteCode[];
+  }>();
 
-      setTimeout(() => {
-        if (this.inviteCodes.length === 0) {
-          this.showEmpty = true;
-        }
-      }, 2000);
-    },
-    methods: {
-      setCodes(n) {
-        this.inviteCodesToRender = n.map((c) => ({
-          ...c,
-          loading: false,
-          created_at: DDMMYYYY_ttmm(c.created_at),
-        }));
-      },
-      removeCode(i) {
-        if (confirm(`Удалить код (${this.inviteCodes[i].code})?`)) {
-          this.$emit('removeCode', i);
-        }
-      },
-      createCode() {
-        const comment = prompt('Введите комментарий', '');
+  const emit = defineEmits<{
+    (e: 'create-code', comment: string): void;
+    (e: 'remove-code', code: string): void;
+  }>();
 
-        if (comment !== null) {
-          this.inviteCodesToRender.push({
-            code: 'loading...',
-            comment,
-            created_at: new Date().toISOString(),
-            loading: true,
-          });
-          this.$emit('createCode', comment);
-        }
-      },
-    },
-  };
+  const inviteCodes = computed(() => props.inviteCodes);
+
+  const showEmpty = ref(false);
+  const inviteCodesToRender = ref([] as Client.InviteCode[]);
+
+  watch(inviteCodes, (n) => {
+    showEmpty.value = false;
+    setCodes(n);
+  });
+
+  setCodes(inviteCodes.value);
+  setTimeout(() => {
+    if (inviteCodes.value.length === 0) {
+      showEmpty.value = true;
+    }
+  }, 2000);
+
+  function setCodes(n: Client.InviteCode[]) {
+    inviteCodesToRender.value = n.map((c) => ({
+      ...c,
+      loading: false,
+      created_at: DDMMYYYY_ttmm(c.created_at),
+    }));
+  }
+
+  function removeCode(code: Client.InviteCode['code']) {
+    if (confirm(`Удалить код (${code})?`)) {
+      emit('remove-code', code);
+    }
+  }
+
+  function createCode() {
+    const comment = prompt('Введите комментарий', '');
+
+    if (comment !== null) {
+      inviteCodesToRender.value.push({
+        code: 'loading...',
+        comment,
+        created_at: new Date().toISOString(),
+        loading: true,
+      });
+
+      emit('create-code', comment);
+    }
+  }
 </script>
 
 <style scoped lang="scss">
@@ -152,7 +148,7 @@
     }
 
     .btn-close {
-      @include scaleble(1.2);
+      @include scalable(1.2);
     }
   }
 
@@ -161,12 +157,18 @@
     text-align: center;
   }
 
-  .create-bttn {
+  .create-btn {
     margin: padding() auto 0;
     width: max-content;
 
     font-size: 15px;
 
-    @include scaleble(1.05);
+    @include scalable(1.05);
+  }
+
+  .action-btn {
+    color: #000;
+    cursor: pointer;
+    text-decoration: underline;
   }
 </style>

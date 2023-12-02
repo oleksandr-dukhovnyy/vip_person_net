@@ -6,7 +6,7 @@
         :key="item.key"
         class="tabs__top-item"
         :class="{
-          'tabs__top-item--active': modelValue === item.key,
+          'tabs__top-item--active': modelValue == item.key,
         }"
         @click="emit('update:model-value', item.key)"
       >
@@ -34,7 +34,7 @@
   }>();
 
   const selectedElem = computed(() =>
-    props.list.find((item) => item.key === props.modelValue)
+    props.list.find((item) => item.key == props.modelValue)
   );
 </script>
 

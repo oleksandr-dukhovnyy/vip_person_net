@@ -5,7 +5,7 @@
   >
     <div class="client__chart">
       <Chart
-        :actions="this['actions/CURRENT_CLIENT'].actions"
+        :actions="ACTIONS"
         :ratio="0.5625"
       />
     </div>
@@ -15,20 +15,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
   import Chart from '~/components/Chart/Chart.vue';
   import Actions from './Actions.vue';
-  import { mapGetters } from 'vuex';
+  import { useStore } from 'vuex';
 
-  export default {
-    name: 'Client',
-    components: { Chart, Actions },
-    computed: mapGetters([
-      'CLIENTS',
-      'CLIENTS_LOADING',
-      'actions/CURRENT_CLIENT',
-    ]),
-  };
+  const store = useStore();
+
+  const CLIENTS_LOADING = computed(() => store.getters['CLIENTS_LOADING']);
+  const ACTIONS = computed(
+    () => store.getters['actions/CURRENT_CLIENT'].actions
+  );
 </script>
 
 <style scoped lang="scss">

@@ -7,27 +7,32 @@
           :list="tabsList"
         >
           <template #default="{ data: actionsChunk }">
-            <div style="display: flex; gap: 8px; padding: 8px">
+            <div
+              v-if="actionsChunk"
+              style="display: flex; gap: 8px; padding: 8px"
+            >
               <ActionsList
                 v-for="(actionList, j) in actionsChunk.data"
                 :key="j"
                 :actions="actionList"
                 :current-action-id="j === 0 ? currentActionID : -1"
                 :action-names="actionNames"
-                :editor-on="editor.show"
+                :editor-on="editor.show.value"
                 @set-action-to-editor="
-                  (index) => setActionToEditor(index, actionList)
+                  (index: number) => setActionToEditor(index, actionList)
                 "
-                @move-action="(index) => moveAction(index, actionList)"
-                @delete-action="(index) => deleteAction(index, actionList)"
-                @copy-action="(index) => copyAction(index, actionList)"
+                @delete-action="
+                  (index: number) => deleteAction(index, actionList)
+                "
+                @copy-action="(index: number) => copyAction(index, actionList)"
               />
+              <!-- @move-action="(index: number) => moveAction(index, actionList)" -->
             </div>
           </template>
         </ModeledTabs>
       </div>
       <div
-        v-if="editor.show"
+        v-if="editor.show.value"
         class="actions__action-editor"
       >
         <!-- <div class="actions__action-editor--close-contain">
@@ -39,7 +44,7 @@
           ></button>
         </div> -->
         <div class="actions__action-editor--inpus">
-          <select v-model="editor.name">
+          <select v-model="editor.name.value">
             <option
               value=""
               selected
@@ -53,7 +58,7 @@
             <option value="open">Открытие счёта</option>
           </select>
           <input
-            v-model="editor.value"
+            v-model="editor.value.value"
             type="text"
             placeholder="Значение"
             title="Новый процент клиента. Можно со знаком %, можно без."
@@ -68,7 +73,7 @@
           >
           </eui-date> -->
           <DatePicker
-            v-model="editor.date"
+            v-model="editor.date.value"
             placeholder="Укажите дату и/или время"
           />
         </div>
@@ -77,7 +82,7 @@
           <button
             type="button"
             class="btn btn-success"
-            :disabled="!editor.edited"
+            :disabled="!editor.edited.value"
             @click="editorSave"
           >
             Сохранить
@@ -166,186 +171,199 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
   // import Pagination from '~/components/Pagination/Pagination.vue';
   // import ClientTable from '../ClientTable.vue';
   import ActionsList from './ActionsList.vue';
-  import cloneObject from '@/utils/cloneObject.js';
+  import cloneObject from '~/utils/cloneObject.js';
   import DatePicker from '../DatePicker.vue';
   import ModeledTabs from '~/components/ModeledTabs.vue';
 
-  import { mapActions, mapGetters } from 'vuex';
+  import { useStore } from 'vuex';
+  const store = useStore();
 
-  const vuexActions = [
-    'SAVE_USER_DATA',
-    'UPDATE_CLIENT_ACTIONS',
-    'ADD_CLIENT_ACTION',
-    // 'MOVE_ACTION',
-    'DELETE_ACTION',
-    'RESET_CHANGES',
-  ];
-  const vuexGetters = [
-    'SAVE_USER_DATA_LOADING',
-    'actions/CURRENT_CLIENT',
-    'actions/CURRENT_CLIENT_ID',
-    'HAS_UNSAVED_CLIENTS_DATA',
-  ];
+  const actionNames = {
+    put: 'Пополнение',
+    withdrawal: 'Вывод',
+    'round-end': 'Ролловер',
+    open: 'Открытие счёта',
+  };
 
-  function editorChange() {
-    this.editor.edited = true;
-  }
+  const editor = {
+    name: ref<Client.Action['name']>('put'),
+    date: ref(''),
+    value: ref(''),
+    show: ref(false),
+    edited: ref(false),
+    promise: ref<Promise<void> | null>(null),
 
-  export default {
-    name: 'Actions',
-    components: {
-      // ClientTable,
-      ActionsList,
-      DatePicker,
-      ModeledTabs,
-      /* Pagination */
-    },
-    data() {
-      return {
-        editor: {
-          name: '',
-          date: '',
-          value: '',
-          show: false,
-          edited: false,
-          promise: null,
-          commit() {},
-        },
-        // selectedPage: 1,
-        actionNames: {
-          put: 'Пополнение',
-          withdrawal: 'Вывод',
-          'round-end': 'Ролловер',
-          open: 'Открытие счёта',
-        },
-        currentActionID: -1,
-        selectedActionsList: 0,
-        selectedChunk: '0',
-        chunkPage: 0,
-      };
-    },
-    computed: {
-      ...mapGetters(vuexGetters),
-      actions() {
-        return this['actions/CURRENT_CLIENT'].actions || [];
-      },
-      clientDataChanged() {
-        return false;
-      },
-      actionsChunks() {
-        return [
-          [this.actions[0] || {}, this.actions[1] || {}],
-          [this.actions[2] || {}, this.actions[3] || {}],
-        ];
-      },
-      tabsList() {
-        return (this.actionsChunks || []).map((chunks, i) => ({
-          key: '' + i,
-          data: chunks,
-          title: '' + (i + 1),
-        }));
-      },
-    },
-    watch: {
-      chunkPage(n) {
-        this.selectedChunk = +n;
-      },
-      'editor.name': editorChange,
-      'editor.date': editorChange,
-      'editor.value': editorChange,
-    },
-    methods: {
-      ...mapActions(vuexActions),
-      openEditor({ name, date, value } = {}) {
-        this.editor = {
-          ...this.editor,
-          show: true,
-          name,
-          date,
-          value,
-        };
-
-        this.editor.edited = false;
-      },
-      closeEditor() {
-        this.editor = {
-          ...this.editor,
-          name: '',
-          date: '',
-          value: '',
-          edited: false,
-          show: false,
-        };
-      },
-      setActionToEditor(actionIndex, actionsList) {
-        this.openEditor(actionsList.data[actionIndex]);
-
-        this.editor.commit = (newActionData) => {
-          this.UPDATE_CLIENT_ACTIONS({
-            clientID: this['actions/CURRENT_CLIENT_ID'],
-            actionsListID: actionsList.id,
-            newActionData,
-            actionIndex,
-          });
-        };
-      },
-      editorSave() {
-        this.editor.commit({
-          name: this.editor.name,
-          date: this.editor.date,
-          value: this.editor.value,
-        });
-
-        this.editor = {
-          ...this.editor,
-          edited: false,
-        };
-      },
-      // moveAction(actionIndex, actionsList) {
-      //   const to = prompt('На какую позицию перемещать?');
-
-      //   if (to === null || to === '' || !/^[0-9]{0,10}$/.test(to)) return;
-
-      //   this.MOVE_ACTION({
-      //     actionsListID: actionsList.id,
-      //     actionIndex,
-      //     to: +to,
-      //   });
-      // },
-      copyAction(actionIndex, actionsList) {
-        this.ADD_CLIENT_ACTION({
-          actionsListID: actionsList.id,
-          newAction: cloneObject(actionsList.data[actionIndex]),
-        });
-      },
-      deleteAction(actionIndex, actionsList) {
-        this.DELETE_ACTION({
-          actionIndex,
-          actionsListID: actionsList.id,
-        });
-      },
-      resetChanges() {
-        this.RESET_CHANGES();
-      },
-      saveChanges() {
-        this.SAVE_USER_DATA(
-          JSON.parse(JSON.stringify(this['actions/CURRENT_CLIENT']))
-        );
-      },
-      newAction(actionsList) {
-        this.ADD_CLIENT_ACTION({
-          actionsListID: actionsList.id,
-          newAction: { date: new Date().toISOString(), value: '', name: '' },
-        });
-
-        this.setActionToEditor(0, actionsList);
-      },
+    // Dynamic method
+    commit(arg: Client.Action) {
+      console.log('commit', arg);
     },
   };
+
+  // State
+  const currentActionID = ref(-1);
+  // const selectedActionsList = ref(0);
+  const selectedChunk = ref(0);
+  const chunkPage = ref(0);
+
+  // Computed
+  const actions = computed(
+    () => store.getters['actions/CURRENT_CLIENT'].actions || []
+  );
+
+  const actionsChunks = computed(() => {
+    return [
+      [actions.value[0] || {}, actions.value[1] || {}],
+      [actions.value[2] || {}, actions.value[3] || {}],
+    ];
+  });
+
+  const SAVE_USER_DATA_LOADING = computed(
+    () => store.getters['SAVE_USER_DATA_LOADING']
+  );
+  const HAS_UNSAVED_CLIENTS_DATA = computed(
+    () => store.getters['HAS_UNSAVED_CLIENTS_DATA']
+  );
+
+  // const clientDataChanged = ref(false);
+
+  const tabsList = computed(() => {
+    return (actionsChunks.value || []).map((chunks, i) => ({
+      key: '' + i,
+      data: chunks,
+      title: '' + (i + 1),
+    }));
+  });
+
+  // Watchers
+  watch(chunkPage, (n) => (selectedChunk.value = +n));
+  watch(editor.name, onEditorChange);
+  watch(editor.date, onEditorChange);
+  watch(editor.value, onEditorChange);
+
+  function onEditorChange() {
+    editor.edited.value = true;
+  }
+
+  // Methods
+  function openEditor(
+    {
+      name,
+      date,
+      value,
+    }: { name: Client.Action['name']; date: string; value: string } = {
+      name: 'put',
+      date: '',
+      value: '',
+    }
+  ) {
+    editor.show.value = true;
+    editor.name.value = name;
+    editor.date.value = date;
+    editor.value.value = value;
+    editor.edited.value = false;
+  }
+
+  function closeEditor() {
+    // TODO: refactor candidate
+
+    // May be just
+    editor.show.value = false;
+    // is enough
+
+    editor.name.value = 'put';
+    editor.date.value = '';
+    editor.value.value = '';
+    editor.edited.value = false;
+  }
+
+  function setActionToEditor(
+    actionIndex: number,
+    actionsList: Client.ActionsList
+  ) {
+    openEditor(actionsList.data[actionIndex]);
+
+    editor.commit = (newActionData: Client.Action) => {
+      store.dispatch('UPDATE_CLIENT_ACTIONS', {
+        clientID: store.getters['actions/CURRENT_CLIENT_ID'],
+        actionsListID: actionsList.id,
+        newActionData,
+        actionIndex,
+      });
+    };
+  }
+
+  // function moveAction(actionIndex: number, actionsList: Client.ActionsList) {
+  //   const to = prompt('На какую позицию перемещать?');
+
+  //   if (to === null || to === '' || !/^[0-9]{0,10}$/.test(to)) return;
+
+  //   store.dispatch('MOVE_ACTION', {
+  //     actionsListID: actionsList.id,
+  //     actionIndex,
+  //     to: +to,
+  //   });
+
+  //   // store.dispatch('UPDATE_CLIENT_ACTIONS', {
+  //   //   clientID: store.getters['actions/CURRENT_CLIENT_ID'],
+  //   //   actionsListID: actionsList.id,
+  //   //   newActionData: {
+  //   //     ...actionsList.data[actionIndex],
+  //   //     date: actionsList.data[actionIndex].date,
+  //   //     name: actionsList.data[actionIndex].name,
+  //   //   },
+  //   //   actionIndex: +to,
+  //   // });
+  // }
+
+  function editorSave() {
+    editor.commit({
+      name: editor.name.value,
+      date: editor.date.value,
+      value: editor.value.value,
+    });
+
+    editor.edited.value = false;
+  }
+
+  function copyAction(actionIndex: number, actionsList: Client.ActionsList) {
+    store.dispatch('ADD_CLIENT_ACTION', {
+      actionsListID: actionsList.id,
+      newAction: cloneObject(actionsList.data[actionIndex]),
+    });
+  }
+
+  function deleteAction(actionIndex: number, actionsList: Client.ActionsList) {
+    store.dispatch('DELETE_ACTION', {
+      actionsListID: actionsList.id,
+      actionIndex,
+    });
+  }
+
+  function resetChanges() {
+    store.dispatch('RESET_CHANGES', {
+      clientID: store.getters['actions/CURRENT_CLIENT_ID'],
+    });
+  }
+
+  function saveChanges() {
+    store.dispatch(
+      'SAVE_USER_DATA',
+      JSON.parse(JSON.stringify(store.getters['actions/CURRENT_CLIENT']))
+    );
+  }
+
+  function newAction(actionsList: Client.ActionsList) {
+    store.dispatch('ADD_CLIENT_ACTION', {
+      actionsListID: actionsList.id,
+      newAction: { date: new Date().toISOString(), value: '', name: '' },
+    });
+
+    setActionToEditor(0, actionsList);
+  }
 </script>
 
 <style scoped lang="scss">
@@ -355,8 +373,6 @@
   $name-cs-small: 92px;
   $value-cs: 80px;
   $date-cs: 125px;
-  $controlls-cs: 100px;
-
   $green-btn-color: #388d66;
   $black-btn-color: #373e45;
 
@@ -399,11 +415,6 @@
       grid-template-columns: 1fr 1fr;
       grid-gap: padding();
       justify-items: flex-start;
-
-      // @include media-down('m-s') {
-      //   justify-items: center;
-      //   grid-template-columns: 1fr 1fr;
-      // }
 
       & > div {
         display: flex;

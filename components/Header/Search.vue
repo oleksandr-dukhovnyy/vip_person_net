@@ -6,49 +6,34 @@
       class="search__icon"
     />
     <input
+      v-model="searchQuery"
       type="text"
       class="search__input"
       placeholder="search..."
     />
-    <!-- <div class="search__rezults">
-			<div class="search__rezult">
-				<a href="#">
-					Scri<span class="search__rezult--shot">pt</span> dev studio
-				</a>
-			</div>
-		</div> -->
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'Search',
-    data() {
-      return {
-        searchQuery: '',
-        searchRezults: [],
-        lastRequest: 0,
-        debounceMinWaitMs: 1000,
-        timerId: null,
-      };
-    },
-    watch: {
-      searchQuery() {
-        const diff = performance.now() - this.lastRequest;
+<script lang="ts" setup>
+  const searchQuery = ref('');
+  const lastRequest = ref(0);
+  const debounceMinWaitMs = ref(1000);
+  const timerId = ref<ReturnType<typeof setTimeout> | undefined>();
 
-        if (diff >= this.debounceMinWaitMs) {
-          this.makeRequest();
-        } else {
-          clearTimeout(this.timerId);
-          this.timerId = setTimeout(this.makeRequest, diff);
-        }
-      },
-      makeRequest() {
-        // this.lastRequest = performance.now();
-        // API.search(this.searchQuery).then(r => { this.searchRezults = res.data.rezults })
-      },
-    },
-  };
+  watch(searchQuery, () => {
+    const diff = performance.now() - lastRequest.value;
+
+    if (diff >= debounceMinWaitMs.value) {
+      makeRequest();
+    } else {
+      clearTimeout(timerId.value);
+      timerId.value = setTimeout(makeRequest, diff);
+    }
+  });
+
+  function makeRequest() {
+    console.log('searchQuery', searchQuery.value);
+  }
 </script>
 
 <style scoped lang="scss">

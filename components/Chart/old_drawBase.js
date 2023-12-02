@@ -1,5 +1,5 @@
-import drawLine from './drawLine.js';
-import drawPoint from './drawPoint.js';
+import drawLine from './drawLine';
+import { drawPoint } from './drawPoint';
 // import getPoint from './getPoint.js';
 // import state from './state.js';
 

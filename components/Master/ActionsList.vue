@@ -53,13 +53,13 @@
             src="@/assets/icons/edit.svg"
             alt="edit"
             title="Редактировать действие"
-            @click="$emit('setActionToEditor', i)"
+            @click="$emit('set-action-to-editor', i)"
           />
           <img
             src="@/assets/icons/copy.png"
             alt="copy"
             title="Дублировать действие. Копия появится вверху списка."
-            @click="$emit('copyAction', i)"
+            @click="emit('copy-action', i)"
           />
           <!-- <img
             src="@/assets/icons/move.png"
@@ -97,45 +97,39 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
   import { DDMMYYYY_ttmm as dateParser } from '~/utils/timeParser';
 
-  export default {
-    name: 'ActionsList',
-    props: {
-      actions: {
-        type: Object,
-        required: true,
-      },
-      actionNames: {
-        type: Object,
-        required: true,
-      },
-      currentActionId: {
-        type: Number,
-        required: true,
-      },
-      editorOn: {
-        type: Boolean,
-        required: true,
-      },
-    },
-    emits: ['setActionToEditor', 'copyAction', 'deleteAction'],
-    methods: {
-      dateWithoutTime(time) {
-        if (!time) return '-';
+  defineProps<{
+    editorOn: boolean;
+    actions: Client.ActionsList;
+    currentActionId: number;
+    actionNames: {
+      [key: string]: string;
+    };
+  }>();
 
-        return dateParser(time).replace(/\d{2}:\d{2}/g, '');
-      },
-      dateWithoutDate(time) {
-        if (!time) return '-';
-        return dateParser(time).replace(/\d{1,2}\.\d{1,2}\.\d{4}/g, '');
-      },
-      removeItem(index) {
-        if (confirm('Удалить?')) this.$emit('deleteAction', index);
-      },
-    },
-  };
+  const emit = defineEmits<{
+    (e: 'set-action-to-editor', id: number): void;
+    (e: 'copy-action', id: number): void;
+    (e: 'delete-action', id: number): void;
+  }>();
+
+  function dateWithoutTime(time: string) {
+    if (!time) return '-';
+
+    return dateParser(time).replace(/\d{2}:\d{2}/g, '');
+  }
+
+  function dateWithoutDate(time: string) {
+    if (!time) return '-';
+
+    return dateParser(time).replace(/\d{1,2}\.\d{1,2}\.\d{4}/g, '');
+  }
+
+  function removeItem(index: number) {
+    if (confirm('Удалить?')) emit('delete-action', index);
+  }
 </script>
 
 <style scoped lang="scss">
@@ -200,7 +194,7 @@
           opacity: 0.9;
           cursor: pointer;
 
-          @include scaleble(1.2);
+          @include scalable(1.2);
 
           &:hover {
             opacity: 1;

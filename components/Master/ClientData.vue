@@ -13,9 +13,7 @@
 
       <nuxt-link
         class="client-info__show-cabinet"
-        :to="{
-          name: 'cabinet',
-        }"
+        :to="`/cabinet?client=${CLIENT?.id}`"
       >
         Посмотреть кабинет клиента
       </nuxt-link>
@@ -55,46 +53,37 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters } from 'vuex';
+<script lang="ts" setup>
   import { DDMMYYYY_ttmm as dateParser } from '~/utils/timeParser';
   import Loader from '../global/Loader.vue';
-  const vuexGetters = ['CLIENTS_LOADING', 'actions/CURRENT_CLIENT'];
+  import { useStore } from 'vuex';
 
-  export default {
-    name: 'ClientData',
-    components: {
-      Loader,
-    },
-    computed: {
-      ...mapGetters(vuexGetters),
-      CLIENT() {
-        return this['actions/CURRENT_CLIENT'];
-      },
-      clientName() {
-        return this.CLIENT?.data?.name || '-';
-      },
-      clientEmail() {
-        return this.CLIENT?.data?.email || '-';
-      },
-      clientCreatedAt() {
-        return this.CLIENT?.created_at || '';
-      },
-      clientCreatedAtWithoutTime() {
-        if (!this.clientCreatedAt) return '';
+  const store = useStore();
 
-        return dateParser(this.clientCreatedAt).replace(/\d{2}:\d{2}/g, '');
-      },
-      clientCreatedAtWithoutDate() {
-        if (!this.clientCreatedAt) return '';
+  const CLIENTS_LOADING = computed(() => store.getters['CLIENTS_LOADING']);
+  const CLIENT = computed(() => store.getters['actions/CURRENT_CLIENT']);
+  const clientName = computed(() => CLIENT.value?.name || '-');
+  const clientEmail = computed(
+    () => store.getters['actions/CURRENT_CLIENT']?.email || '-'
+  );
+  const clientCreatedAt = computed(
+    () => store.getters['actions/CURRENT_CLIENT']?.created_at || null
+  );
 
-        return dateParser(this.clientCreatedAt).replace(
-          /\d{1,2}\.\d{1,2}\.\d{4}/g,
-          ''
-        );
-      },
-    },
-  };
+  const clientCreatedAtWithoutTime = computed(() => {
+    if (!clientCreatedAt.value) return '';
+
+    return dateParser(clientCreatedAt.value).replace(/\d{2}:\d{2}/g, '');
+  });
+
+  const clientCreatedAtWithoutDate = computed(() => {
+    if (!clientCreatedAt.value) return '';
+
+    return dateParser(clientCreatedAt.value).replace(
+      /\d{1,2}\.\d{1,2}\.\d{4}/g,
+      ''
+    );
+  });
 </script>
 
 <style scoped lang="scss">

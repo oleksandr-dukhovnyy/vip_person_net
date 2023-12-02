@@ -9,16 +9,15 @@
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'Loader',
-    props: {
-      size: {
-        type: Number,
-        default: 20,
-      },
-    },
-  };
+<script lang="ts" setup>
+  withDefaults(
+    defineProps<{
+      size?: number;
+    }>(),
+    {
+      size: 20,
+    }
+  );
 </script>
 
 <style lang="scss" scoped>

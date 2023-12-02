@@ -13,53 +13,36 @@
       </div>
       <Client
         v-if="showClient"
-        :client-i-d="CURRENT_CLIENT_ID"
+        :client-id="CURRENT_CLIENT_ID"
       />
     </div>
     <Loader v-else />
   </div>
 </template>
 
-<script>
-  import { mapActions, mapGetters } from 'vuex';
+<script lang="ts" setup>
+  import { useStore } from 'vuex';
   import Client from './Client.vue';
   import ClientData from './ClientData.vue';
   import ClientsList from './ClientsList.vue';
 
-  const vuexActions = ['LOAD_CLIENTS', 'actions/SET_CURRENT_CLIENT'];
-  const vuexGetters = [
-    'CLIENTS',
-    'CLIENTS_LOADING',
-    'actions/CURRENT_CLIENT_ID',
-    'actions/CURRENT_CLIENT',
-  ];
+  const store = useStore();
 
-  export default {
-    name: 'Clients',
-    components: { Client, ClientData, ClientsList },
-    computed: {
-      ...mapGetters(vuexGetters),
-      CURRENT_CLIENT_ID() {
-        return this['actions/CURRENT_CLIENT_ID'];
-      },
-      CURRENT_CLIENT() {
-        return this['actions/CURRENT_CLIENT'];
-      },
-      showClient() {
-        return !!this.CURRENT_CLIENT;
-      },
-    },
-    created() {
-      // TODO: add refresh data button or add cache to LOAD_CLIENTS
-      if (!this.CLIENTS?.length) this.LOAD_CLIENTS();
-    },
-    methods: {
-      ...mapActions(vuexActions),
-      changeCurrentClient(index) {
-        this['actions/SET_CURRENT_CLIENT'](index);
-      },
-    },
-  };
+  const CLIENTS_LOADING = computed(() => store.getters['CLIENTS_LOADING']);
+  const CURRENT_CLIENT_ID = computed(
+    () => store.getters['actions/CURRENT_CLIENT_ID']
+  );
+  const CURRENT_CLIENT = computed(
+    () => store.getters['actions/CURRENT_CLIENT']
+  );
+  const showClient = computed(() => !!CURRENT_CLIENT.value);
+  const CLIENTS = computed(() => store.getters['CLIENTS']);
+
+  if (!CLIENTS.value?.length) store.dispatch('LOAD_CLIENTS');
+
+  function changeCurrentClient(index: number) {
+    store.dispatch('actions/SET_CURRENT_CLIENT', index);
+  }
 </script>
 
 <style scoped lang="scss">

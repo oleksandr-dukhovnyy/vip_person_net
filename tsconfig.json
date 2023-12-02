@@ -6,6 +6,7 @@
   "compilerOptions": {
     "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
     "strict": true,
+    "allowJs": false,
     "paths": {
       "~/*": ["./*"],
       "@/*": ["./components/*"]

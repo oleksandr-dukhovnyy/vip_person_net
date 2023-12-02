@@ -5,7 +5,7 @@
   >
     <footer class="footer">
       <nuxt-link
-        v-if="!USER_AUTHED"
+        v-if="!USER_AUTHENTICATED"
         to="/vip-login"
         class="footer__link"
       >
@@ -24,20 +24,21 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters, mapActions } from 'vuex';
+<script lang="ts" setup>
+  import { useStore } from 'vuex';
 
-  export default {
-    name: 'TheFooter',
-    computed: {
-      ...mapGetters(['USER_AUTHED']),
-      showFullFooter() {
-        return !['cabinet', 'master'].includes(this.$route.name);
-      },
-    },
-    methods: {
-      ...mapActions(['LOGOUT']),
-    },
+  const store = useStore();
+  const route = useRoute();
+
+  const USER_AUTHENTICATED = computed(
+    () => store.getters['USER_AUTHENTICATED']
+  );
+  const showFullFooter = computed(
+    () => !['cabinet', 'master'].includes(route.name)
+  );
+
+  const LOGOUT = () => {
+    store.dispatch('LOGOUT');
   };
 </script>
 

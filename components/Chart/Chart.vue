@@ -5,74 +5,46 @@
   ></div>
 </template>
 
-<script>
-  import draw from './draw.js';
+<script lang="ts" setup>
+  import draw from './draw';
 
-  export default {
-    name: 'Chart',
-    props: {
-      actions: {
-        type: Array,
-        default: () => [],
-      },
-      ratio: {
-        type: Number,
-        default: 2,
-      },
-    },
-    data: () => ({
-      width: 0,
-      height: 0,
-      ctx: null,
-    }),
-    // computed: {
-    //   // ctx() {
-    //   //   return this.$refs.canvas.getContext('2d');
-    //   // },
-    // },
-    watch: {
-      actions: {
-        handler() {
-          this.draw();
-        },
-        deep: true,
-      },
-    },
-    mounted() {
-      // const width = this.$refs.chart.clientWidth;
-      // console.log(width);
+  const props = defineProps<{
+    actions: Client.Info['actions'];
+    ratio: number;
+  }>();
 
-      // this.width = width;
-      // this.height = width * this.ratio;
+  const actions = computed(() => props.actions);
+  const chart = ref<Element | null>(null);
+  const ctx = ref<CanvasRenderingContext2D | null>(null);
 
-      window
-        .matchMedia('(orientation: portrait)')
-        .addEventListener('change', () => this.draw());
+  watch(actions, () => _draw(), { deep: true });
 
-      this.draw();
-    },
+  onMounted(() => {
+    window
+      .matchMedia('(orientation: portrait)')
+      .addEventListener('change', () => _draw());
 
-    methods: {
-      clear() {
-        this.ctx.clearRect(0, 0, this.width, this.height);
-      },
-      draw() {
-        const canvas = document.createElement('canvas');
+    _draw();
+  });
 
-        const width = this.$refs.chart.clientWidth;
+  function _draw() {
+    if (!chart.value) return;
 
-        canvas.width = width - 10;
-        canvas.height = width * this.ratio;
+    const canvas = document.createElement('canvas');
+    const width = chart.value.clientWidth;
 
-        this.ctx = canvas.getContext('2d');
+    canvas.width = width - 10;
+    canvas.height = width * props.ratio;
 
-        this.$refs.chart.innerHTML = null;
-        this.$refs.chart.appendChild(canvas);
+    ctx.value = canvas.getContext('2d');
 
-        draw(this.ctx, this.actions);
-      },
-    },
-  };
+    if (!ctx.value) return;
+
+    chart.value.innerHTML = '';
+    chart.value.appendChild(canvas);
+
+    draw(ctx.value, actions.value);
+  }
 </script>
 
 <style lang="scss" scoped>

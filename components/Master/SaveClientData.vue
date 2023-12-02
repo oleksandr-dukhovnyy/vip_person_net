@@ -10,10 +10,16 @@
   </button>
 </template>
 
-<script>
-  export default {
-    name: 'SaveUserData',
-    vuexActions: ['HAS_UNSAVED_CLIENTS_DATA', 'SAVE_USER_DATA'],
+<script lang="ts" setup>
+  import { useStore } from 'vuex';
+
+  const store = useStore();
+
+  const HAS_UNSAVED_CLIENTS_DATA = computed(
+    () => store.getters['HAS_UNSAVED_CLIENTS_DATA']
+  );
+  const SAVE_USER_DATA = () => {
+    store.dispatch('SAVE_USER_DATA');
   };
 </script>
 

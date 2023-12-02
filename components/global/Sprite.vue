@@ -1,15 +1,15 @@
 <template>
   <img
-    v-if="elem.htmlElem === 'img'"
+    v-if="elem && elem.htmlElem === 'img'"
     :src="src"
     :alt="alt"
   />
-  <svg v-else-if="elem.htmlElem === 'svg'">
+  <svg v-else-if="elem && elem.htmlElem === 'svg'">
     <use :href="src"></use>
   </svg>
 </template>
 
-<script>
+<script lang="ts" setup>
   const typeDetails = {
     svg: {
       assetsFolder: 'svg',
@@ -21,41 +21,33 @@
     },
   };
 
-  export default {
-    name: 'Sprite',
-    props: {
-      type: {
-        type: String,
-        default: 'svg',
-        require: false,
-      },
-      name: {
-        type: String,
-        require: true,
-        default: '',
-      },
-      alt: {
-        type: String,
-        require: false,
-        default: '',
-      },
-    },
-    computed: {
-      elem() {
-        if (typeDetails[this.type] !== undefined) {
-          return typeDetails[this.type];
-        } else {
-          console.error(`cannot find asset rule for type [${this.type}]`);
-          return null;
-        }
-      },
-      src() {
-        if (this.elem) {
-          return `@/assets/${this.elem.assetsFolder}/${this.name}`;
-        }
+  const props = withDefaults(
+    defineProps<{
+      type: 'svg' | 'img';
+      name: string;
+      alt: string;
+    }>(),
+    {
+      type: 'svg',
+      name: '',
+      alt: '',
+    }
+  );
 
-        return '';
-      },
-    },
-  };
+  const elem = computed(() => {
+    if (typeDetails[props.type] !== undefined) {
+      return typeDetails[props.type];
+    } else {
+      console.error(`cannot find asset rule for type [${props.type}]`);
+      return null;
+    }
+  });
+
+  const src = computed(() => {
+    if (elem.value) {
+      return `~/assets/${elem.value.assetsFolder}/${props.name}`;
+    }
+
+    return '';
+  });
 </script>

@@ -1,8 +1,5 @@
 <template>
-  <nav
-    aria-label="Page navigation example"
-    class="pagination--contain"
-  >
+  <nav class="pagination--contain">
     <ul class="pagination">
       <li class="page-item">
         <span
@@ -19,7 +16,7 @@
       >
         <button
           class="page-link"
-          @click="emit('pageSelected', item)"
+          @click="emit('page-selected', item)"
         >
           {{ item }}
         </button>
@@ -37,35 +34,29 @@
   </nav>
 </template>
 
-<script>
-  export default {
-    name: 'Pagination',
-    props: {
-      perPage: {
-        type: Number,
-        default: 10,
-      },
-      page: {
-        type: Number,
-        default: 1,
-      },
-      items: {
-        type: Number,
-        default: 0,
-      },
-    },
-    computed: {
-      range() {
-        return [
-          this.page - 2,
-          this.page - 1,
-          this.page,
-          this.page + 1,
-          this.page + 2,
-        ].filter((item) => item > 0 && item <= this.items);
-      },
-    },
-  };
-</script>
+<script lang="ts" setup>
+  const props = withDefaults(
+    defineProps<{
+      perPage: number;
+      page: number;
+      items: number;
+    }>(),
+    {
+      perPage: 10,
+      page: 1,
+      items: 0,
+    }
+  );
 
-<style scoped lang="scss"></style>
+  const emit = defineEmits<{
+    (e: 'page-selected', page: number): void;
+  }>();
+
+  const range = computed(() => {
+    const page = props.page;
+
+    return [page - 2, page - 1, page, page + 1, page + 2].filter(
+      (item) => item > 0 && item <= props.items
+    );
+  });
+</script>

@@ -20,14 +20,9 @@
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'CabinetNavigation',
-    methods: {
-      goBack() {
-        this.$router.push(this.$route.params.client ? '/master' : '/');
-      },
-    },
+<script lang="ts" setup>
+  const goBack = async () => {
+    await navigateTo('/');
   };
 </script>
 
@@ -38,10 +33,6 @@
       font-style: italic;
       color: #212529;
     }
-
-    // &--underline {
-    //   text-decoration: underline;
-    // }
 
     max-width: $max-site-content-width;
 
@@ -54,15 +45,13 @@
     @include container(1.75, 3.5);
 
     img {
-      @include scaleble;
+      @include scalable;
     }
 
     p {
       margin: 0;
-      // font-size: $font-size-navigation;
       font-weight: 400;
       font-size: 15px;
-      // text-decoration-line: underline;
       color: #dc3545;
       opacity: 0.65;
     }

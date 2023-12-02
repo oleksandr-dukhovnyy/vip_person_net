@@ -16,10 +16,10 @@
         <div class="login__row">
           <div class="login__title login__title">Email</div>
           <input
-            ref="code"
+            ref="email"
             v-model="email"
             type="text"
-            @keydown.enter="$refs.password.focus()"
+            @keydown.enter="password?.focus()"
           />
         </div>
 
@@ -29,13 +29,13 @@
             ref="password"
             v-model="password"
             type="password"
-            @keydown.enter="$refs.send.focus()"
+            @keydown.enter="send?.focus()"
           />
         </div>
 
         <!-- <div class="dropdown-divider"></div> -->
 
-        <div class="login__controlls">
+        <div class="login__controls">
           <div class="login__reg-link">
             <nuxt-link
               :to="{
@@ -49,8 +49,9 @@
           <div>
             <button
               v-if="!AUTH_LOGIN_LOADING"
+              ref="send"
               class="btn btn-success login__enter"
-              :disabled="password === '' || email === ''"
+              :disabled="form.password === '' || form.email === ''"
               @click="login"
             >
               Войти
@@ -64,66 +65,66 @@
   </NuxtLayout>
 </template>
 
-<script>
-  import { mapActions, mapGetters } from 'vuex';
-  const vuexActions = ['LOGIN'];
-  const vuexGetters = ['AUTH_LOGIN_LOADING', 'CLIENT'];
+<script lang="ts" setup>
+  import { useStore } from 'vuex';
 
-  export default {
-    name: 'Login',
-    data() {
-      return {
-        // email: 'lebitoh943@ehstock.com',
-        // password: 'ZSvWEYGtbbszwDHxdQRx',
-        // email: 'script@vip-person.net',
-        // password: '123456',
-        email: '',
-        password: '',
-      };
-    },
-    computed: {
-      ...mapGetters(vuexGetters),
-      formTitle() {
-        return this.$route.meta.isVipLogin ? 'Вход для резидентов' : 'Вход';
-      },
-    },
-    watch: {
-      CLIENT() {
-        if (
-          this.CLIENT !== null &&
-          this.CLIENT.id !== undefined &&
-          this.$route.query.next
-        ) {
-          this.$router.push(`/${this.$route.query.next}`);
-        } else if (this.CLIENT !== null) {
-          this.$router.push('/');
-        }
-      },
-    },
-    mounted() {
-      if (Object.keys(this.CLIENT).length && this.$route.query.next) {
-        return this.$router.push(`/${this.$route.query.next}`);
-      } else if (Object.keys(this.CLIENT).length) {
-        return this.$router.push('/cabinet');
-      }
+  const store = useStore();
+  const route = useRoute();
 
-      if (this.$route.query.email !== undefined) {
-        this.email = this.$route.query.email;
-      }
-    },
-    methods: {
-      ...mapActions(vuexActions),
-      login() {
-        this.LOGIN({
-          email: this.email,
-          password: this.password,
-          // next: 'cabinet',
-        }).then((logOk) => {
-          logOk && this.$router.push('/cabinet');
-        });
-      },
-    },
-  };
+  const email = ref<HTMLInputElement | null>(null);
+  const password = ref<HTMLInputElement | null>(null);
+  const send = ref<HTMLButtonElement | null>(null);
+
+  const form = reactive({
+    email: '',
+    password: '',
+  });
+
+  const formTitle = computed(() => {
+    return route.meta.isVipLogin ? 'Вход для резидентов' : 'Вход';
+  });
+
+  const CLIENT = computed(() => store.getters['CLIENT']);
+  const AUTH_LOGIN_LOADING = computed(
+    () => store.getters['AUTH_LOGIN_LOADING']
+  );
+
+  watch(CLIENT, () => {
+    // TODO: refactor candidate
+    if (
+      CLIENT.value !== null &&
+      CLIENT.value.id !== undefined &&
+      route.query.next
+    ) {
+      navigateTo(`/${route.query.next}`);
+    } else if (CLIENT.value !== null) {
+      navigateTo('/');
+    }
+  });
+
+  onMounted(() => {
+    // TODO: refactor candidate
+    if (Object.keys(CLIENT.value).length && route.query.next) {
+      return navigateTo(`/${route.query.next}`);
+    } else if (Object.keys(CLIENT.value).length) {
+      return navigateTo('/cabinet');
+    }
+
+    if (route.query.email) {
+      form.email = route.query.email;
+    }
+  });
+
+  function login() {
+    store
+      .dispatch('LOGIN', {
+        email: form.email,
+        password: form.password,
+      })
+      .then((logOk) => {
+        logOk && navigateTo('/cabinet');
+      });
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -168,7 +169,7 @@
           width: 190px;
           height: 40px;
 
-          @include scaleble(1.04);
+          @include scalable(1.04);
 
           &:focus {
             border: 1px solid #838383;
@@ -207,7 +208,7 @@
         @include link;
       }
 
-      &__controlls {
+      &__controls {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-gap: padding();
@@ -224,7 +225,7 @@
 
         button {
           // width: 100%;
-          @include scaleble(1.02);
+          @include scalable(1.02);
           cursor: pointer;
         }
       }

@@ -3,21 +3,23 @@
     <div class="error">
       <div class="error__title">
         <div class="error__title--code">
-          {{ code }}
+          {{ errorCode || route.query.code || '404' }}
         </div>
         <div class="error__title--title">
-          {{ title }}
+          {{ description.title }}
         </div>
       </div>
       <p class="error__description">
-        {{ longDescription }}
+        {{ description.description }}
       </p>
     </div>
   </NuxtLayout>
 </template>
 
-<script>
-  const descriptions = {
+<script lang="ts" setup>
+  const descriptions: {
+    [key: number | string]: { title: string; description: string };
+  } = {
     404: {
       title: 'Страница не найдена',
       description:
@@ -28,46 +30,30 @@
       description:
         'У вас недостаточно прав для просмотра этой страницы. Проверьте статус аккаунта',
     },
-  };
-
-  export default {
-    name: 'ErrorPage',
-    props: {
-      errorCode: {
-        type: Number,
-        default: null,
-      },
-    },
-    data: () => ({
-      code: 404,
-    }),
-    computed: {
-      description() {
-        return descriptions[this.code] !== undefined
-          ? descriptions[this.code]
-          : {
-              title: 'Ошибка',
-              long: '',
-            };
-      },
-      title() {
-        return this.description.title;
-      },
-      longDescription() {
-        return this.description.description;
-      },
-    },
-    created() {
-      // Если код передан по парамсам роута - то выводить его.
-      // Если передан код в пропсах - то его выводить, игнорируя параметр из роута.
-
-      if (this.errorCode === null) {
-        this.code = this.$route.params.errorCode || 404;
-      } else {
-        this.code = this.errorCode;
-      }
+    default: {
+      title: 'Ошибка',
+      description: '',
     },
   };
+
+  const props = withDefaults(
+    defineProps<{
+      errorCode: number | null;
+    }>(),
+    {
+      errorCode: null,
+    }
+  );
+
+  const route = useRoute();
+
+  const description = computed(() => {
+    const code = props.errorCode;
+
+    if (!code || !(code in descriptions)) return descriptions.default;
+
+    return descriptions[code];
+  });
 </script>
 
 <style scoped lang="scss">

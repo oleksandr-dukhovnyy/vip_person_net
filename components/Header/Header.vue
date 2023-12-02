@@ -12,14 +12,19 @@
           <!-- <Search /> -->
           <div class="user">
             <div
-              v-if="!AUTH_LOGIN_LOADING"
+              v-if="!store.getters.AUTH_LOGIN_LOADING"
               class="header__dropdown"
             >
               <!-- v-click-outside="() => (dropdown = false)" -->
               <div class="user__link">
+                <div
+                  class="network-status"
+                  :title="networkStatus.label"
+                  :class="`network-status--${networkStatus.status}`"
+                ></div>
                 <div class="user">
                   <img
-                    v-if="USER_AUTHED"
+                    v-if="store.getters.USER_AUTHENTICATED"
                     src="@/assets/svg/user-icon-logged.svg"
                     alt="user-icon"
                     @click="dropdown = !dropdown"
@@ -33,7 +38,9 @@
                 </div>
               </div>
               <div
-                v-show="(dropdown || dropdownOutAnimationOn) && IS_ADMIN"
+                v-show="
+                  (dropdown || dropdownOutAnimationOn) && store.getters.IS_ADMIN
+                "
                 ref="dropdown_container"
                 class="header__dropdown--container animate__animated"
                 :class="{
@@ -43,18 +50,18 @@
                 @click.stop="dropdownClick($event)"
               >
                 <span>
-                  {{ USER_NAME }}
+                  {{ store.getters.USER_NAME }}
                 </span>
                 <div class="dropdown-divider"></div>
                 <nuxt-link
-                  v-if="IS_RESIDENT || IS_ADMIN"
+                  v-if="store.getters.IS_RESIDENT || store.getters.IS_ADMIN"
                   :to="{ name: 'cabinet' }"
                   class="header__dropdown--link"
                 >
                   Кабинет
                 </nuxt-link>
                 <nuxt-link
-                  v-if="IS_ADMIN"
+                  v-if="store.getters.IS_ADMIN"
                   :to="{ name: 'master' }"
                   class="header__dropdown--link"
                 >
@@ -63,10 +70,10 @@
                 <span class="header__dropdown--link mutted"> Магазин </span>
                 <div class="dropdown-divider"></div>
                 <button
-                  v-if="USER_AUTHED"
+                  v-if="store.getters.USER_AUTHENTICATED"
                   type="button"
                   class="btn btn-danger header__dropdown--logout"
-                  @click="LOGOUT"
+                  @click="logout"
                 >
                   Выйти
                 </button>
@@ -82,8 +89,8 @@
                   v-else
                   type="button"
                   class="btn btn-link c-link header__dropdown--link mutted"
-                  disabled="disabled"
-                  @click="LOGOUT"
+                  disabled
+                  @click="store.getters.LOGOUT"
                 >
                   Войти
                 </button>
@@ -96,77 +103,73 @@
           </div>
         </div>
       </header>
-      <!-- <header class="header__hidden__container" v-else>
-        <div @click="goBack" class="header__hidden">
-          <img src="@/assets/svg/back.svg" alt="back" />
-          <p v-if="$route.params.client">Вернуться в админку</p>
-          <p v-else>
-            <span class="header__hidden--underline">Вернуться на сайт</span>
-            <span class="header__hidden--muted"
-              >&nbsp;&nbsp;&nbsp;(выход из кабинета)</span
-            >
-          </p>
-        </div>
-      </header> -->
     </div>
   </div>
 </template>
 
-<script>
-  import { mapActions, mapGetters } from 'vuex';
-  // import Search from './Search.vue';
+<script lang="ts" setup>
+  import { useStore } from 'vuex';
 
-  export default {
-    name: 'TheHeader',
-    components: {
-      // Search,
-    },
-    beforeRouteUpdate() {
-      this.dropdown = false;
-    },
-    data: () => ({
-      dropdown: false,
-      dropdownOutAnimationOn: false, // false - hidden, true - animation out
-      timeoutID: null,
-    }),
-    computed: {
-      ...mapGetters([
-        'AUTH_LOGIN_LOADING',
-        'USER_AUTHED',
-        'USER_NAME',
-        'IS_RESIDENT',
-        'IS_ADMIN',
-      ]),
-      showFullHeader() {
-        return this.$route.name !== 'cabinet';
-      },
-      // goBackText() {
-      //   return this.$route.params.client
-      //     ? 'Вернуться в админку'
-      //     : 'Вернуться на сайт';
-      // },
-    },
-    watch: {
-      dropdown(n) {
-        clearTimeout(this.timeoutID);
+  const store = useStore();
+  const isOnline = ref<boolean | null>(false);
 
-        if (!n) {
-          this.dropdownOutAnimationOn = true;
-          this.timeoutID = setTimeout(() => {
-            this.dropdownOutAnimationOn = false;
-          }, 400);
-        }
-      },
-    },
-    methods: {
-      ...mapActions(['LOGOUT']),
-      dropdownClick(e) {
-        if (e.target !== this.$refs.dropdown_container) {
-          this.dropdown = false;
-        }
-      },
-    },
+  const dropdown = ref(false);
+  const dropdownOutAnimationOn = ref(false);
+  const timeoutID = ref<ReturnType<typeof setInterval> | undefined>();
+  const dropdown_container = ref<Element | null>(null);
+
+  const networkStatus = computed<{
+    status: 'online' | 'offline' | 'unknown';
+    label: string;
+  }>(() => {
+    if (isOnline.value === true) {
+      return {
+        status: 'online',
+        label: 'В сети',
+      };
+    }
+
+    if (isOnline.value === false) {
+      return {
+        status: 'offline',
+        label: 'Не в сети',
+      };
+    }
+
+    return {
+      status: 'unknown',
+      label: 'Ожидание статуса сети...',
+    };
+  });
+
+  onBeforeRouteUpdate(() => {
+    dropdown.value = false;
+  });
+
+  watch(dropdown, (v) => {
+    clearTimeout(timeoutID.value);
+
+    if (!v) {
+      dropdownOutAnimationOn.value = true;
+      timeoutID.value = setTimeout(() => {
+        dropdownOutAnimationOn.value = false;
+      }, 400);
+    }
+  });
+
+  const dropdownClick = (e: MouseEvent) => {
+    if (e.target !== dropdown_container.value) {
+      dropdown.value = false;
+    }
   };
+
+  const logout = async () => {
+    await store.dispatch('LOGOUT');
+
+    navigateTo('/');
+  };
+
+  useIsOnline(isOnline);
 </script>
 
 <style lang="scss" scoped>
@@ -245,6 +248,27 @@
 
           &__link {
             display: flex;
+            gap: 14px;
+
+            .network-status {
+              margin: auto 0;
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              background-color: #b5b5b5;
+
+              &--online {
+                background-color: #2fe519;
+              }
+
+              &--offline {
+                background-color: #dd4545;
+              }
+
+              &--unknown {
+                background-color: #b5b5b5;
+              }
+            }
           }
         }
       }
@@ -290,7 +314,7 @@
 
   .user {
     img {
-      @include scaleble;
+      @include scalable;
     }
   }
 </style>

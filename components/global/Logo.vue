@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <img
-      src="@/assets/images/logo.svg"
+      src="~/assets/images/logo.svg"
       width=""
       height="22"
       alt="logo"
@@ -14,7 +14,7 @@
     img {
       height: 22px;
       outline: 1px solid coral;
-      @include scaleble(1.1);
+      @include scalable(1.1);
     }
   }
 </style>

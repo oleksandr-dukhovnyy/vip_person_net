@@ -18,98 +18,75 @@
   </NuxtLayout>
 </template>
 
-<script>
+<script lang="ts" setup>
   import InviteCodes from '~/components/Master/InviteCodes.vue';
   import Clients from '~/components/Master/Clients.vue';
   import Tabs from '~/components/Master/Tabs.vue';
-  import API from '@/utils/API/API.js';
-  import { mapActions, mapGetters } from 'vuex';
+  import API from '~/utils/API/API';
+  import { useStore } from 'vuex';
 
-  const vuexActions = ['ADD_GENERATED_INVITE_CODE', 'REMOVE_CODE'];
-  const vuexGetters = [
-    'INVITE_CODES',
-    'USER_AUTHED',
-    'IS_ADMIN',
-    'AUTH_LOGIN_LOADING',
+  const store = useStore();
+
+  const tabs = [
+    {
+      key: 'inviteCodes',
+      title: 'Коды регистрации',
+    },
+    {
+      title: 'Клиенты',
+      key: 'clients',
+    },
+    {
+      title: 'Магазин',
+      key: 'shop',
+    },
+    {
+      title: 'Тесты',
+      key: 'tests',
+    },
+    {
+      title: 'Настройки',
+      key: 'settings',
+    },
   ];
 
-  export default {
-    name: 'Master',
-    components: {
-      InviteCodes,
-      Tabs,
-      Clients,
-    },
-    data() {
-      return {
-        tabs: [
-          {
-            key: 'inviteCodes',
-            title: 'Коды регистрации',
-          },
-          {
-            title: 'Клиенты',
-            key: 'clients',
-          },
-          {
-            title: 'Магазин',
-            key: 'shop',
-          },
-          {
-            title: 'Тесты',
-            key: 'tests',
-          },
-          {
-            title: 'Настройки',
-            key: 'settings',
-          },
-        ],
-      };
-    },
-    computed: mapGetters(vuexGetters),
-    // watch: {
-    //   USER_AUTHED: {
-    //     immediate: true,
-    //     handler(n) {
-    //       if (
-    //         (n === false || this.IS_ADMIN === false) &&
-    //         this.AUTH_LOGIN_LOADING === false
-    //       ) {
-    //         this.$router.replace('/404');
-    //       }
-    //     },
-    //   },
-    // },
-    methods: {
-      ...mapActions(vuexActions),
-      removeCode(i) {
-        // console.log('removeCode', i, this.INVITE_CODES[i].code);
-        this.REMOVE_CODE(this.INVITE_CODES[i].code);
-      },
-      createCode(comment) {
-        const date = new Date();
+  const INVITE_CODES = computed(() => store.getters['INVITE_CODES']);
+  const USER_AUTHENTICATED = computed(
+    () => store.getters['USER_AUTHENTICATED']
+  );
 
-        API.generateInviteCode(comment)
-          .then((res) => {
-            console.log({
-              createCode: res,
-            });
+  onMounted(() => {
+    store.dispatch('LOAD_INVITE_CODES');
+  });
 
-            this.ADD_GENERATED_INVITE_CODE({
-              code: res.code,
-              comment: res.comment,
-              loading: false,
-              created_at: date,
-            });
+  watch(USER_AUTHENTICATED, (n) => {
+    if (store.getters['AUTH_LOGIN_LOADING']) return;
 
-            // this.ADD_GENERATED_INVITE_CODE(res.data[0]);
-          })
-          .catch((err) => {
-            console.log('generateInviteCode failed', err);
-          });
-      },
-    },
-  };
+    if (n === false || store.getters['IS_ADMIN'] === false) {
+      navigateTo('/404');
+    }
+  });
+
+  function removeCode(code: string) {
+    store.dispatch('REMOVE_CODE', code);
+  }
+
+  function createCode(comment: string) {
+    const date = new Date();
+
+    API.generateInviteCode(comment)
+      .then((res: { code: string; comment: string }) => {
+        store.dispatch('ADD_GENERATED_INVITE_CODE', {
+          code: res.code,
+          comment: res.comment,
+          loading: false,
+          created_at: date,
+        });
+      })
+      .catch((err: any) => {
+        console.log('generateInviteCode failed', err);
+      });
+  }
 </script>
 
 <style lang="scss">

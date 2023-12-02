@@ -70,75 +70,38 @@
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'ClientTable',
-    props: {
-      client: {
-        type: Object,
-        default: () => ({}),
-      },
-    },
-    data: () => ({
-      showTable: true,
-      deposit: 0,
-      percent: 0,
-      additions: 0,
-      tableSize: 30,
-    }),
-    computed: {
-      table() {
-        const deposit = Number(this.deposit);
-        const additions = Number(this.additions);
-        const percent = Number(this.percent);
+<script lang="ts" setup>
+  const props = defineProps<{
+    client: Client.Info;
+  }>();
 
-        const getPercents = (n) => (n / 100) * percent;
+  const deposit = ref(props.client.depo);
+  const percent = ref(+props.client.percent);
+  const additions = ref(props.client.adds);
+  const tableSize = ref(30);
+  const showTable = ref(true);
 
-        const painPerc = Array(this.tableSize)
-          .fill(deposit)
-          .map((n, i) => n + getPercents(n) * (i + 1));
+  const table = computed(() => {
+    const painPercent = Array(tableSize.value)
+      .fill(deposit.value)
+      .map((n, i) => n + getPercents(n) * (i + 1));
 
-        let lastSumm = deposit;
-        const complexPerc = [...Array(this.tableSize)].map(
-          () => (lastSumm = lastSumm + getPercents(lastSumm))
-        );
+    let lastSum = deposit.value;
 
-        // const med = (arr) => {
-        //   const arrayHalf = arr.length / 2;
-        //   const sorted = [].concat(arr).sort((a, b) => a - b);
+    const complexPercent = [...Array(tableSize.value)].map(
+      () => (lastSum = lastSum + getPercents(lastSum))
+    );
 
-        //   return arr.length % 2 === 0
-        //     ? (sorted[arrayHalf] + sorted[arrayHalf + 1]) / 2
-        //     : sorted[~~arrayHalf];
-        // };
+    return [
+      painPercent,
+      complexPercent,
+      complexPercent.map((n) => n + additions.value),
+    ];
+  });
 
-        lastSumm = deposit + additions * 11;
-        const complexPercWidthAdds = [...Array(this.tableSize)].map(() => {
-          // console.group(i);
-
-          // const adds = additions * 12;
-          // const percent = getPercents(med(lastSumm, adds + lastSumm));
-
-          // console.log('lastSumm', lastSumm);
-          // console.log('adds', adds);
-          // console.log('percent', percent);
-
-          const rez = lastSumm + 612;
-
-          // console.groupEnd(i);
-
-          return (lastSumm = rez);
-        });
-
-        return [painPerc, complexPerc, complexPercWidthAdds];
-      },
-    },
-    created() {
-      this.deposit = 4000; //this.client.table.deposit;
-      this.percent = 12; //this.client.table.percent;
-      this.additions = 200; //this.client.table.additions;
-    },
-  };
+  function getPercents(n: number): number {
+    return (n / 100) * percent.value;
+  }
 </script>
 
 <style scoped lang="scss">

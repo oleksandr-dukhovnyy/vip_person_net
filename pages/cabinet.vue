@@ -29,40 +29,28 @@
   </NuxtLayout>
 </template>
 
-<script>
-  import { mapGetters } from 'vuex';
-  // import Clocks from '~/components/Cabinet/Clocks.vue';
+<script lang="ts" setup>
   import Chart from '~/components/Chart/Chart.vue';
   import ClientTable from '~/components/ClientTable.vue';
-  import ClientData from '~/components/Cabinet/ClentData.vue';
-  // import Navigation from '~/components/Cabinet/Navigation.vue';
+  import ClientData from '~/components/Cabinet/ClientData.vue';
+  import { useStore } from 'vuex';
 
-  export default {
-    name: 'Cabinet',
-    components: {
-      Chart,
-      // Clocks,
-      ClientTable,
-      ClientData,
-      // Navigation,
-    },
-    computed: {
-      ...mapGetters(['AUTH_LOGIN_LOADING', 'CLIENT_DATA', 'CLIENT']),
-      client() {
-        return this.$route.params.client !== undefined
-          ? this.$route.params.client
-          : this.CLIENT_DATA !== null && this.CLIENT_DATA !== undefined
-          ? this.CLIENT_DATA
-          : {
-              data: {},
-              actions: [],
-            };
-      },
-    },
-    mounted() {
-      // if (!this.CLIENT_DATA) this.$router.push('/login');
-    },
-  };
+  const store = useStore();
+
+  const AUTH_LOGIN_LOADING = computed(
+    () => store.getters['AUTH_LOGIN_LOADING']
+  );
+  const CLIENT_DATA = computed(() => store.getters['CLIENT_DATA']);
+  const CLIENT = computed(() => store.getters['CLIENT']);
+
+  const client = computed(() => {
+    return CLIENT_DATA.value !== null && CLIENT_DATA.value !== undefined
+      ? CLIENT_DATA.value
+      : {
+          data: {},
+          actions: [],
+        };
+  });
 </script>
 
 <style lang="scss" scoped>

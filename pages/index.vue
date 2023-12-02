@@ -21,7 +21,7 @@
       width: 200px;
       height: 200px;
 
-      @include scaleble(1.4);
+      @include scalable(1.4);
     }
   }
 </style>

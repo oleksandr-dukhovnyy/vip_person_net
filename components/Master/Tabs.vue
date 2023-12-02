@@ -15,7 +15,7 @@
     </div>
     <div class="tabs__bottom">
       <div
-        v-show="$slots[activeTab] !== ''"
+        v-if="!!$slots[activeTab]"
         class="tabs__bottom--item"
       >
         <slot :name="activeTab" />
@@ -30,26 +30,19 @@
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'Tabs',
-    props: {
-      tabs: {
-        type: Array,
-        required: true,
-      },
-    },
-    data() {
-      return {
-        activeTab: localStorage.getItem('tabs-activeTab') || '',
-      };
-    },
-    watch: {
-      activeTab(n) {
-        localStorage.setItem('tabs-activeTab', n);
-      },
-    },
-  };
+<script lang="ts" setup>
+  defineProps<{
+    tabs: {
+      title: string;
+      key: string;
+    }[];
+  }>();
+
+  const activeTab = ref(localStorage.getItem('tabs-activeTab') || '');
+
+  watch(activeTab, () => {
+    localStorage.setItem('tabs-activeTab', activeTab.value);
+  });
 </script>
 
 <style lang="scss" scoped>

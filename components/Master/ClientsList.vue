@@ -8,42 +8,38 @@
       :key="index"
       class="clients-list__client"
       :class="{
-        'clients-list__client--selected': client.id === CURRENT_CLIENT_ID,
+        'clients-list__client--selected': client.id == CURRENT_CLIENT_ID,
       }"
-      @click="$emit('choose', index)"
+      @click="emit('choose', index)"
     >
-      {{ client.data.name || '-' }}
+      {{ client.name || '-' }}
       <br />
-      <span
-        v-if="client.data.name.length < 8 && client.data.email.length < 25"
-        class="c-small"
-      >
-        ({{ client.data.email }})
-      </span>
+      <span class="c-small"> ({{ client.email }}) </span>
     </div>
   </div>
 </template>
 
-<script>
-  import { mapGetters } from 'vuex';
-  const vuexGetters = ['CLIENTS', 'CLIENTS_LOADING', 'actions/CURRENT_CLIENT'];
+<script lang="ts" setup>
+  import { useStore } from 'vuex';
 
-  export default {
-    name: 'ClientsList',
-    emits: ['choose'],
-    computed: {
-      ...mapGetters(vuexGetters),
-      CURRENT_CLIENT_ID() {
-        return this['actions/CURRENT_CLIENT']?.id || -1;
-      },
-    },
-  };
+  const emit = defineEmits<{
+    (e: 'choose', index: number): void;
+  }>();
+
+  const store = useStore();
+
+  const CLIENTS = computed(() => store.getters['CLIENTS']);
+  const CLIENTS_LOADING = computed(() => store.getters['CLIENTS_LOADING']);
+  const CURRENT_CLIENT_ID = computed(
+    () => store.getters['actions/CURRENT_CLIENT']?.id
+  );
 </script>
 
 <style scoped lang="scss">
   .clients-list {
     margin-top: 10px;
     @include container(0.5);
+    width: 230px;
 
     border: 1px solid #c2c2c2;
     border-radius: $border-radius;

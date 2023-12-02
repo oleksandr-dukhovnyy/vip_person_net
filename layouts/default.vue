@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   // import { mapActions } from 'vuex';
   // import Terminal from '~/components/Terminal/Terminal.vue';
   import TheHeader from '~/components/Header/Header.vue';
