@@ -1,26 +1,22 @@
-import { YYYY, MM } from '@/utils/timeParser.js';
+// @ts-nocheck
+import { YYYY, MM } from '~/utils/timeParser';
 
-const getPoints = (data, canvasWidth) => {
+interface ModifiedAction extends Client.Action {
+  title: string;
+  pointY: number;
+  month: number;
+  yName: string;
+}
+
+const getPoints = (data: Client.Action[], canvasWidth: number) => {
   const rez = {
-    years: {},
-    lastYear: null,
-    currentYear: null,
+    years: {} as { [key: string]: ModifiedAction[] },
+    lastYear: null as number | null,
+    currentYear: null as ModifiedAction[] | null,
     maxValue: 100,
     minValue: 0,
     points: [],
   };
-
-  // data.forEach((item) => {
-  //   item.value = +item.value;
-
-  //   if (item.value > rez.maxValue) {
-  //     rez.maxValue = item.value;
-  //   }
-
-  //   if (item.value < rez.minValue) {
-  //     rez.minValue = item.value;
-  //   }
-  // });
 
   data.forEach((item) => {
     const year = YYYY(item.date);
@@ -31,28 +27,32 @@ const getPoints = (data, canvasWidth) => {
 
     rez.years[year].push({
       value: item.value,
-      pointY: (100 * item.value) / rez.maxValue,
+      pointY: (100 * +item.value) / rez.maxValue,
       month: +MM(item.date),
-    });
+    } as ModifiedAction);
   });
 
   // rez.height = rez.maxValue - rez.minValue;
-  rez.lastYear = +Math.max(...Object.keys(rez.years));
+  rez.lastYear = Math.max(...Object.keys(rez.years).map(Number));
 
   const currentYear = new Date().getFullYear();
 
-  for (let year in rez.years) {
+  for (const year in rez.years) {
     if (currentYear === +year) {
       rez.currentYear = rez.years[year].sort((a, b) => a.month - b.month);
     } else {
-      rez.years[year] = rez.years[year].at(-1);
+      const last = rez.years[year].at(-1);
+
+      if (last) {
+        rez.years[year] = [last];
+      }
     }
   }
 
   delete rez.years[currentYear];
 
   const months = Array(12)
-    .fill()
+    .fill(undefined)
     .map((_, i) => {
       const month = i + 1;
 
@@ -78,7 +78,7 @@ const getPoints = (data, canvasWidth) => {
       yName: curr,
       pointY: rez.years[curr].pointY,
       value: rez.years[curr].value,
-    });
+    } as ModifiedAction);
 
     return acc;
   }, []);
