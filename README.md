@@ -1,4 +1,8 @@
-# Nuxt 3 Minimal Starter
+# vip-person-net
+
+(Nuxt, Vue.js, Vuex, TypeScript, Vue-Router, Vite, SCSS, Supabase, Babel, Figma)
+
+## Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
