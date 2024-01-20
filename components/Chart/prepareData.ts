@@ -73,6 +73,7 @@ const prepareData = (data: Client.Info['actions']): Chart.DataToRender => {
     rez.columns.push({
       points,
       yName,
+      x: 0,
     });
   }
 

@@ -13,6 +13,9 @@ const drawCharts = (data: Chart.DataToRender) => {
   const lines: Record<number, Chart.PointData[]> = {};
 
   columns.forEach((column, i) => {
+    console.log(column.points);
+
+    // @ts-ignore
     clearDataset(column.points.map((i) => ({ ...i, value: +i.value }))).forEach(
       (point) => {
         const coords = [column.x, Number(point.value)] as Chart.Point;
@@ -38,6 +41,8 @@ const drawCharts = (data: Chart.DataToRender) => {
     let before: Chart.Point | null = null;
 
     lines[pints].forEach((item) => {
+      if (typeof item.y !== 'number') return;
+
       if (before !== null) {
         drawLine(before, [item.x, item.y], {
           color: item.color,

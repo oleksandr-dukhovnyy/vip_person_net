@@ -1,17 +1,7 @@
 import { drawPoint } from './drawPoint';
 import drawLine from './drawLine';
 
-const drawBaseMarkup = (
-  data: Chart.DataToRender
-  // columns: {
-  //   points: [
-  //     { id: 1; color: string; value: 5 },
-  //     { id: 2; color: string; value: 3 },
-  //   ];
-  //   x: number;
-  //   yName: string;
-  // }[];
-) => {
+export default function drawBaseMarkup(data: Chart.DataToRender) {
   // x y lines
   drawLine([0, 110], [0, 0]);
   drawLine([0, 0], [100, 0]);
@@ -39,6 +29,4 @@ const drawBaseMarkup = (
   });
 
   return data;
-};
-
-export default drawBaseMarkup;
+}

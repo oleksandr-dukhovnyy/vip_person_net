@@ -55,14 +55,14 @@ declare namespace Chart {
     color: string;
     value: number;
     x: number;
-    y: number;
+    y?: number;
   };
 
   export interface YearColumn {
     points: Client.Action[];
     yName: string; // '01'
     x: number;
-    y: number;
+    y?: number;
   }
 
   export interface DataToRender {

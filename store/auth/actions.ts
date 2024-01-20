@@ -2,12 +2,12 @@ import { API } from '~/helpers/API/API';
 import notify from '~/helpers/notification.js';
 import cloneObject from '~/helpers/cloneObject.js';
 
-import type { AuthSession, AuthError } from '@supabase/supabase-js';
+// import type { AuthSession, AuthError } from '@supabase/supabase-js';
 
-interface RegistrationResponse {
-  user: AuthSession;
-  error?: AuthError;
-}
+// interface RegistrationResponse {
+//   user: AuthSession;
+//   error?: AuthError;
+// }
 
 export default {
   /**
@@ -49,28 +49,33 @@ export default {
     const _client = cloneObject(rootGetters['actions/CURRENT_CLIENT']);
 
     API.updateClientData(_client)
-      .then((res) => {
-        if (res.status >= 200 && res.status < 300) {
-          // notify('Сохранение данных пользователя', 'Успешно!');
-          notify('Данные пользователей сохранены!');
-          dispatch('FIXATE_OLD_DATA');
-        } else {
-          console.log(res);
-          notify(
-            `Ошибка! ${res.status} [${res.error?.code || '???'}]: ${
-              res.error?.message || 'Неизвестная ошибка'
-            }`
-          );
-          // notify(
-          //   'Сохранение данных пользователя',
-          //   `Error ${res.status} [${res.error?.code || '???'}]: ${
-          //     res.error?.message || 'Неизвестная ошибка'
-          //   }`,
-          //   'error',
-          //   false
-          // );
+      .then(
+        (res: {
+          status: number;
+          error?: { code: number; message: string };
+        }) => {
+          if (res.status >= 200 && res.status < 300) {
+            // notify('Сохранение данных пользователя', 'Успешно!');
+            notify('Данные пользователей сохранены!');
+            dispatch('FIXATE_OLD_DATA');
+          } else {
+            console.log(res);
+            notify(
+              `Ошибка! ${res.status} [${res.error?.code || '???'}]: ${
+                res.error?.message || 'Неизвестная ошибка'
+              }`
+            );
+            // notify(
+            //   'Сохранение данных пользователя',
+            //   `Error ${res.status} [${res.error?.code || '???'}]: ${
+            //     res.error?.message || 'Неизвестная ошибка'
+            //   }`,
+            //   'error',
+            //   false
+            // );
+          }
         }
-      })
+      )
       .catch(console.error)
       .finally(() => {
         commit('SET_LOADER', {
@@ -89,7 +94,7 @@ export default {
    */
   // @ts-ignore
   REMOVE_CODE({ commit }, code) {
-    API.removeCode(code).then((res) => {
+    API.removeCode(code).then((res: { status: number }) => {
       if (res.status >= 200 && res.status < 300) {
         commit('REMOVE_CODE', code);
       }
@@ -188,75 +193,67 @@ export default {
       commit('SET_LOADER', { loaderName: 'login' });
 
       return API.login(email, password)
-        .then(
-          ({
-            data: res,
-            error,
-          }: {
-            data: RegistrationResponse;
-            error: any;
-          }) => {
-            // console.log('LOGIN:res', res);
+        .then(({ data: res, error }: { data: any; error: any }) => {
+          // console.log('LOGIN:res', res);
 
-            if (error) {
-              const message = error.toJSON().message;
+          if (error) {
+            const message = error.toJSON().message;
 
-              if (message === 'Email not confirmed') {
-                notify(
-                  'Email не подтвержден!\nПожалуйста, потвердите свой Email, перейдя по ссылке в письме.',
-                  'warning'
-                );
-              } else if (message === 'Invalid login credentials') {
-                notify(
-                  'Неверные данные для аутентификации! Пара email - пароль не найдена. \n Проверьте правильность ввода',
-                  'error'
-                );
-              } else {
-                notify(
-                  `Ошибка - ${message}! Пожалуйста, проверьте правильность ввода`,
-                  'error'
-                );
-              }
-
-              return;
-            }
-
-            commit('SET_USER', res?.user);
-            dispatch('LOAD_USER_DATA');
-
-            if (getters.IS_ADMIN) {
-              dispatch('LOAD_CLIENTS');
-            }
-
-            commit('SET_LOADER', {
-              loaderName: 'login',
-              loaderCondition: false,
-            });
-
-            // console.log('LOGIN end: res', res);
-
-            if (res.user.role === 'supabase_admin') {
-              // return AppRouter.push({ name: 'master' });
-              console.log('NAVIGATE TO', 'master');
-            }
-
-            if (!res.error) {
-              // eslint-disable-next-line
-              // navigateTo(`/${next || 'cabinet'}`);
-              // AppRouter.push({ name: next });
-
-              return true;
+            if (message === 'Email not confirmed') {
+              notify(
+                'Email не подтвержден!\nПожалуйста, потвердите свой Email, перейдя по ссылке в письме.',
+                'warning'
+              );
+            } else if (message === 'Invalid login credentials') {
+              notify(
+                'Неверные данные для аутентификации! Пара email - пароль не найдена. \n Проверьте правильность ввода',
+                'error'
+              );
             } else {
-              if (res.error.message === 'Invalid login credentials') {
-                notify(
-                  'Неверный Email или пароль',
-                  'Пожалуйста, проверьте правильность ввода',
-                  'error'
-                );
-              }
+              notify(
+                `Ошибка - ${message}! Пожалуйста, проверьте правильность ввода`,
+                'error'
+              );
+            }
+
+            return;
+          }
+
+          commit('SET_USER', res?.user);
+          dispatch('LOAD_USER_DATA');
+
+          if (getters.IS_ADMIN) {
+            dispatch('LOAD_CLIENTS');
+          }
+
+          commit('SET_LOADER', {
+            loaderName: 'login',
+            loaderCondition: false,
+          });
+
+          // console.log('LOGIN end: res', res);
+
+          if (res.user.role === 'supabase_admin') {
+            // return AppRouter.push({ name: 'master' });
+            console.log('NAVIGATE TO', 'master');
+          }
+
+          if (!res.error) {
+            // eslint-disable-next-line
+            // navigateTo(`/${next || 'cabinet'}`);
+            // AppRouter.push({ name: next });
+
+            return true;
+          } else {
+            if (res.error.message === 'Invalid login credentials') {
+              notify(
+                'Неверный Email или пароль',
+                'Пожалуйста, проверьте правильность ввода',
+                'error'
+              );
             }
           }
-        )
+        })
         .catch((err: any) => {
           console.error(err);
 

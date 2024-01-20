@@ -3,11 +3,8 @@ export default {
   actions: {
     /**
      * Sets the current client.
-     *
-     * @param {Object} commit - The commit object.
-     * @param {string} id - The ID of the client.
      */
-    SET_CURRENT_CLIENT({ commit }, id) {
+    SET_CURRENT_CLIENT({ commit }: any, id: string) {
       commit('SET_CURRENT_CLIENT', id);
     },
   },
@@ -18,29 +15,29 @@ export default {
      * @param {object} state - The state object.
      * @param {number} id - The ID of the client.
      */
-    SET_CURRENT_CLIENT(state, id) {
+    SET_CURRENT_CLIENT(state: any, id: number) {
       state.currentClient = id;
 
       if (globalThis?.localStorage) {
-        localStorage.setItem('master-currentClient', id);
+        localStorage.setItem('master-currentClient', '' + id);
       }
     },
   },
   state: {
-    currentClient:
-      +globalThis?.localStorage?.getItem('master-currentClient') || 0,
+    currentClient: +(
+      globalThis?.localStorage?.getItem?.('master-currentClient') || 0
+    ),
   },
   getters: {
     /**
      * Returns the current client object from the stateActions object, if it exists.
-     *
-     * @param {Object} stateActions - The stateActions object.
-     * @param {Object} _ - Unused parameter.
-     * @param {Object} __ - Unused parameter.
-     * @param {Object} gettersAuth - The gettersAuth object.
-     * @return {Object} The current client object, or an empty object if it does not exist.
      */
-    CURRENT_CLIENT(stateActions, _, __, gettersAuth) {
+    CURRENT_CLIENT(
+      stateActions: any,
+      _: object,
+      __: object,
+      gettersAuth: any
+    ): object {
       if (
         gettersAuth.CLIENTS &&
         gettersAuth.CLIENTS[stateActions.currentClient]
@@ -59,7 +56,8 @@ export default {
      * @param {Object} stateActions - The stateActions object containing the current client ID.
      * @return {string} The current client ID.
      */
-    CURRENT_CLIENT_ID(stateActions) {
+    // @ts-ignore
+    CURRENT_CLIENT_ID(stateActions: any): string {
       return stateActions.currentClient;
     },
   },
