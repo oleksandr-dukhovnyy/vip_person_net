@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { YYYY, MM } from '~/utils/timeParser';
+import { YYYY, MM } from '~/helpers/timeParser';
 
 interface ModifiedAction extends Client.Action {
   title: string;

@@ -146,7 +146,7 @@
 <script lang="ts" setup>
   import { useStore } from 'vuex';
   // @ts-ignore
-  import notify from '@/utils/notification.js';
+  import notify from '@/helpers/notification.js';
   import { useFieldFactory } from '~/composables/useValidator';
   import type { AuthSession, AuthError } from '@supabase/supabase-js';
 

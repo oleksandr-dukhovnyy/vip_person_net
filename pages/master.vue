@@ -22,7 +22,7 @@
   import InviteCodes from '~/components/Master/InviteCodes.vue';
   import Clients from '~/components/Master/Clients.vue';
   import Tabs from '~/components/Master/Tabs.vue';
-  import API from '~/utils/API/API';
+  import API from '~/helpers/API/API';
   import { useStore } from 'vuex';
 
   const store = useStore();

@@ -1,7 +1,13 @@
-import { API } from '~/utils/API/API';
-import notify from '~/utils/notification.js';
-import cloneObject from '~/utils/cloneObject.js';
-// import type { AuthSession, AuthError } from '@supabase/supabase-js';
+import { API } from '~/helpers/API/API';
+import notify from '~/helpers/notification.js';
+import cloneObject from '~/helpers/cloneObject.js';
+
+import type { AuthSession, AuthError } from '@supabase/supabase-js';
+
+interface RegistrationResponse {
+  user: AuthSession;
+  error?: AuthError;
+}
 
 export default {
   /**
@@ -10,6 +16,7 @@ export default {
    * @param {Object} commit - The commit object from Vuex.
    * @param {Object} dispatch - The dispatch object from Vuex.
    */
+  // @ts-ignore
   AUTO_AUTH({ commit, dispatch }) {
     // console.log('AUTO_AUTH');
     API.autoAuth().then((user) => {
@@ -33,6 +40,7 @@ export default {
    * @param {Object} rootGetters - Vuex rootGetters object
    * @return {void}
    */
+  // @ts-ignore
   SAVE_USER_DATA({ commit, dispatch, rootGetters }) {
     commit('SET_LOADER', {
       loaderName: 'SAVE_USER_DATA',
@@ -79,6 +87,7 @@ export default {
    * @param {string} code - The code to be removed.
    * @return {void}
    */
+  // @ts-ignore
   REMOVE_CODE({ commit }, code) {
     API.removeCode(code).then((res) => {
       if (res.status >= 200 && res.status < 300) {
@@ -95,6 +104,7 @@ export default {
    * @param {string} code - The generated invite code to be added.
    * @return {void}
    */
+  // @ts-ignore
   ADD_GENERATED_INVITE_CODE({ commit, state }, code) {
     commit('SET_INVITE_CODES', [...state.inviteCodes, code]);
   },
@@ -105,8 +115,9 @@ export default {
    * @param {Object} commit - The Vuex commit function.
    * @return {void}
    */
+  // @ts-ignore
   LOAD_INVITE_CODES({ commit }) {
-    API.loadInviteCodes().then((res) => {
+    API.loadInviteCodes().then((res: { data: any }) => {
       if (res.data !== null && res.data.length) {
         commit('SET_INVITE_CODES', res.data);
       }
@@ -121,6 +132,7 @@ export default {
    * @param {Object} dispatch - Vuex dispatch function
    * @return {void}
    */
+  // @ts-ignore
   LOAD_USER_DATA({ commit, getters, dispatch }) {
     commit('SET_LOADER', {
       loaderName: 'login',
@@ -166,73 +178,86 @@ export default {
    * @param {Object} password - The password of the user.
    * @return {Promise} A promise that resolves to true if the login is successful.
    */
-  async LOGIN({ commit, getters, dispatch }, { email, password }) {
+
+  async LOGIN(
+    // @ts-ignore
+    { commit, getters, dispatch },
+    { email, password }: { email: string; password: string }
+  ) {
     if (!getters.USER_AUTHENTICATED) {
       commit('SET_LOADER', { loaderName: 'login' });
 
       return API.login(email, password)
-        .then(({ data: res, error }) => {
-          // console.log('LOGIN:res', res);
+        .then(
+          ({
+            data: res,
+            error,
+          }: {
+            data: RegistrationResponse;
+            error: any;
+          }) => {
+            // console.log('LOGIN:res', res);
 
-          if (error) {
-            const message = error.toJSON().message;
+            if (error) {
+              const message = error.toJSON().message;
 
-            if (message === 'Email not confirmed') {
-              notify(
-                'Email не подтвержден!\nПожалуйста, потвердите свой Email, перейдя по ссылке в письме.',
-                'warning'
-              );
-            } else if (message === 'Invalid login credentials') {
-              notify(
-                'Неверные данные для аутентификации! Пара email - пароль не найдена. \n Проверьте правильность ввода',
-                'error'
-              );
+              if (message === 'Email not confirmed') {
+                notify(
+                  'Email не подтвержден!\nПожалуйста, потвердите свой Email, перейдя по ссылке в письме.',
+                  'warning'
+                );
+              } else if (message === 'Invalid login credentials') {
+                notify(
+                  'Неверные данные для аутентификации! Пара email - пароль не найдена. \n Проверьте правильность ввода',
+                  'error'
+                );
+              } else {
+                notify(
+                  `Ошибка - ${message}! Пожалуйста, проверьте правильность ввода`,
+                  'error'
+                );
+              }
+
+              return;
+            }
+
+            commit('SET_USER', res?.user);
+            dispatch('LOAD_USER_DATA');
+
+            if (getters.IS_ADMIN) {
+              dispatch('LOAD_CLIENTS');
+            }
+
+            commit('SET_LOADER', {
+              loaderName: 'login',
+              loaderCondition: false,
+            });
+
+            // console.log('LOGIN end: res', res);
+
+            if (res.user.role === 'supabase_admin') {
+              // return AppRouter.push({ name: 'master' });
+              console.log('NAVIGATE TO', 'master');
+            }
+
+            if (!res.error) {
+              // eslint-disable-next-line
+              // navigateTo(`/${next || 'cabinet'}`);
+              // AppRouter.push({ name: next });
+
+              return true;
             } else {
-              notify(
-                `Ошибка - ${message}! Пожалуйста, проверьте правильность ввода`,
-                'error'
-              );
-            }
-
-            return;
-          }
-
-          commit('SET_USER', res?.user);
-          dispatch('LOAD_USER_DATA');
-
-          if (getters.IS_ADMIN) {
-            dispatch('LOAD_CLIENTS');
-          }
-
-          commit('SET_LOADER', {
-            loaderName: 'login',
-            loaderCondition: false,
-          });
-
-          // console.log('LOGIN end: res', res);
-
-          if (res.user.role === 'supabase_admin') {
-            // return AppRouter.push({ name: 'master' });
-            console.log('NAVIGATE TO', 'master');
-          }
-
-          if (!res.error) {
-            // eslint-disable-next-line
-            // navigateTo(`/${next || 'cabinet'}`);
-            // AppRouter.push({ name: next });
-
-            return true;
-          } else {
-            if (res.error.message === 'Invalid login credentials') {
-              notify(
-                'Неверный Email или пароль',
-                'Пожалуйста, проверьте правильность ввода',
-                'error'
-              );
+              if (res.error.message === 'Invalid login credentials') {
+                notify(
+                  'Неверный Email или пароль',
+                  'Пожалуйста, проверьте правильность ввода',
+                  'error'
+                );
+              }
             }
           }
-        })
-        .catch((err) => {
+        )
+        .catch((err: any) => {
           console.error(err);
 
           commit('SET_LOADER', {
@@ -259,10 +284,11 @@ export default {
    * @param {object} commit - The commit function from Vuex store.
    * @return {Promise} A promise that resolves when the logout is successful and rejects when there is an error.
    */
+  // @ts-ignore
   LOGOUT({ commit }) {
     API.logout()
       .then(() => commit('CLEAR_STATE'))
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
         notify(
           'Ошибка',
@@ -280,6 +306,7 @@ export default {
    * @param {Object} commit - The Vuex commit function.
    * @return {void}
    */
+  // @ts-ignore
   LOAD_CLIENTS({ commit }) {
     commit('SET_LOADER', {
       loaderName: 'loadClients',
@@ -287,9 +314,9 @@ export default {
     });
 
     API.loadClients()
-      .then((res) => {
+      .then((res: any) => {
         if (res.data) {
-          const sorted = res.data.map((client) => {
+          const sorted = res.data.map((client: Client.Info) => {
             return {
               ...client,
               actions: client.actions.map((actionsList) => {
@@ -321,7 +348,7 @@ export default {
           console.error(res);
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       })
       .finally(() => {
@@ -385,6 +412,7 @@ export default {
    * @param {Object} commit - The commit object.
    * @return {void}
    */
+  // @ts-ignore
   FIXATE_OLD_DATA({ commit }) {
     commit('FIXATE_OLD_DATA');
   },
@@ -395,6 +423,7 @@ export default {
    * @param {Object} commit - The commit object.
    * @param {Object} payload - The payload object.
    */
+  // @ts-ignore
   UPDATE_CLIENT_ACTIONS({ commit }, payload) {
     commit('UPDATE_CLIENT_ACTIONS', payload);
   },
@@ -406,6 +435,7 @@ export default {
    * @param {Object} rootGetters - The root getters object from Vuex.
    * @param {Object} payload - The payload object containing the client action data.
    */
+  // @ts-ignore
   ADD_CLIENT_ACTION({ commit, rootGetters }, payload) {
     commit('ADD_CLIENT_ACTION', {
       ...payload,
@@ -426,6 +456,7 @@ export default {
    * @param {Object} rootGetters - The root getters object.
    * @param {Object} payload - The payload object.
    */
+  // @ts-ignore
   DELETE_ACTION({ commit, rootGetters }, payload) {
     commit('DELETE_ACTION', {
       ...payload,
@@ -439,6 +470,7 @@ export default {
    * @param {Object} commit - The commit object used to commit changes to the state.
    * @return {void}
    */
+  // @ts-ignore
   RESET_CHANGES({ commit }) {
     commit('RESET_CHANGES');
   },

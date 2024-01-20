@@ -175,7 +175,7 @@
   // import Pagination from '~/components/Pagination/Pagination.vue';
   // import ClientTable from '../ClientTable.vue';
   import ActionsList from './ActionsList.vue';
-  import cloneObject from '~/utils/cloneObject.js';
+  import cloneObject from '~/helpers/cloneObject.js';
   import DatePicker from '../DatePicker.vue';
   import ModeledTabs from '~/components/ModeledTabs.vue';
 

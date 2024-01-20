@@ -98,7 +98,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { DDMMYYYY_ttmm as dateParser } from '~/utils/timeParser';
+  import { DDMMYYYY_ttmm as dateParser } from '~/helpers/timeParser';
 
   defineProps<{
     editorOn: boolean;

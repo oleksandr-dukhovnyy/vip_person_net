@@ -1,6 +1,4 @@
-// import Notification from 'element-ui/lib/notification';
-
-export default (title: string, message: string, logLevel: string = 'INFO') => {
+export default (title: string, message = '', logLevel: string = 'INFO') => {
   // const obj = {
   //   title,
   //   message,

@@ -1,7 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import getUniqueCode from './getUniqueCode.js';
-import checkUserStructure from './checkUserStructure.js';
-
 import type { AuthSession, AuthError } from '@supabase/supabase-js';
 
 interface RegistrationResponse {
@@ -72,7 +70,7 @@ class _API {
     phone = '',
     inviteCode = '',
     checkCode = true,
-  }): Promise<AuthSession | AuthError> {
+  }): Promise<AuthSession | AuthError | RegistrationResponse> {
     if (!inviteCode) {
       return {
         message: 'Invite code is required',

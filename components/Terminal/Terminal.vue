@@ -10,7 +10,7 @@
 
 <script>
   import Terminal from './core/js/terminal_core.js';
-  import api from '@/utils/API/API';
+  import api from '@/helpers/API/API';
   import { mapGetters } from 'vuex';
 
   const vuexGetters = ['USER_NAME'];

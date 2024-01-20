@@ -1,4 +1,4 @@
-import { YYYY, MM } from '~/utils/timeParser';
+import { YYYY, MM } from '~/helpers/timeParser';
 
 const normalizeNum = (n: number) => `${n < 10 ? '0' : ''}${n}`;
 

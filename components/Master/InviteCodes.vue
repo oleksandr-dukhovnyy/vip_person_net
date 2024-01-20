@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { DDMMYYYY_ttmm } from '~/utils/timeParser';
+  import { DDMMYYYY_ttmm } from '~/helpers/timeParser';
 
   const props = defineProps<{
     inviteCodes: Client.InviteCode[];

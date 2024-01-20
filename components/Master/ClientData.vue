@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { DDMMYYYY_ttmm as dateParser } from '~/utils/timeParser';
+  import { DDMMYYYY_ttmm as dateParser } from '~/helpers/timeParser';
   import Loader from '../global/Loader.vue';
   import { useStore } from 'vuex';
 

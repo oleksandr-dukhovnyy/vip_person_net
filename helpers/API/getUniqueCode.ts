@@ -1,4 +1,4 @@
-import random from '~/utils/random';
+import random from '~/helpers/random';
 
 const generateCode = () => {
   const side = random(10) > 5;
