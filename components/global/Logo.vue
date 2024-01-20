@@ -2,8 +2,8 @@
   <div class="logo">
     <img
       src="~/assets/images/logo.svg"
-      width=""
-      height="22"
+      width="84"
+      height="36"
       alt="logo"
     />
   </div>
@@ -12,8 +12,9 @@
 <style lang="scss" scoped>
   .logo {
     img {
-      height: 22px;
-      outline: 1px solid coral;
+      width: 84px;
+      height: 36px;
+      // outline: 1px solid coral;
       @include scalable(1.1);
     }
   }
