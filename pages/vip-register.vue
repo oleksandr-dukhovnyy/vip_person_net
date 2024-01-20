@@ -303,7 +303,7 @@
 
 <style lang="scss">
   .page {
-    @include page();
+    @include page;
 
     display: flex;
     justify-content: center;
@@ -313,8 +313,8 @@
       &__form {
         width: 450px;
         padding: padding(3.5);
-        background-color: #fff;
         border-radius: $border-radius;
+        background-color: #fff;
 
         @include shadow;
 
@@ -328,8 +328,8 @@
       }
 
       &__row {
-        padding: padding() 0 padding(0.5);
         display: flex;
+        padding: padding() 0 padding(0.5);
 
         @include media-down(m) {
           flex-direction: column;
@@ -337,28 +337,21 @@
 
         input {
           @include input;
-          font-size: 13px;
-          transition: 0.3s;
 
           width: 190px;
           height: 40px;
+          font-size: 13px;
+          transition: 0.3s;
 
           @include scalable(1.04);
-
-          &:focus {
-            border: 1px solid #838383;
-            transition: 0.3s;
-
-            transform: none;
-          }
         }
       }
 
       &__title {
+        display: flex;
+        align-items: center;
         width: 500px;
         font-size: 14px;
-        align-items: center;
-        display: flex;
 
         @include media-down(m) {
           width: 100%;
@@ -371,16 +364,16 @@
         // }
 
         &--muted {
-          opacity: 0.5;
           font-style: italic;
+          opacity: 0.5;
         }
       }
 
       &__form-title {
-        font-size: 20px;
-        text-align: center;
         margin-top: 0;
         margin-bottom: padding(2.5);
+        font-size: 20px;
+        text-align: center;
       }
 
       &__controls {
@@ -392,8 +385,8 @@
         // padding: 0;
 
         @include media-down(m) {
-          grid-template-columns: 1fr;
           grid-template-rows: 1fr 1fr;
+          grid-template-columns: 1fr;
         }
 
         // padding: padding() 0 0;
@@ -401,19 +394,20 @@
         button {
           // width: 100%;
           @include scalable(1.02);
+
           cursor: pointer;
         }
       }
 
       &__enter {
-        font-size: 15px;
         width: 190px;
         height: 40px;
+        font-size: 15px;
       }
 
       &__controls-policy {
-        font-size: 13px;
         display: flex;
+        font-size: 13px;
 
         &.error {
           color: $color-error;
@@ -431,6 +425,12 @@
 
           input {
             cursor: pointer;
+
+            &:focus {
+              border: 1px solid #838383;
+              transition: 0.3s;
+              transform: none;
+            }
           }
         }
       }

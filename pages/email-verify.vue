@@ -22,7 +22,7 @@
 
 <style lang="scss" scoped>
   .page {
-    @include page();
+    @include page;
 
     display: flex;
     justify-content: center;

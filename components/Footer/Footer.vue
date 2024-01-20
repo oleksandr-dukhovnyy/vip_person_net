@@ -45,31 +45,28 @@
 <style lang="scss" scoped>
   .footer {
     position: fixed;
-    height: $footer-height;
-    width: 100%;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    line-height: 1;
-
+    align-items: center;
+    width: 100%;
     max-width: $max-site-content-width;
+    height: $footer-height;
+    line-height: 1;
 
     &__copyright {
       font-size: 12px;
-
       opacity: 0.5;
     }
 
     &__wrapper {
-      // margin-top: padding(2);
-      background-color: #fff;
-      height: $footer-height;
-      width: 100%;
-      bottom: 0;
       position: fixed;
-
+      bottom: 0;
       display: flex;
       justify-content: center;
+      width: 100%;
+      height: $footer-height;
+      background-color: #fff;
+
       @include shadow;
     }
 
@@ -77,9 +74,8 @@
 
     &__link {
       @include link;
-      // position: absolute;
+
       left: padding(3.5);
-      // line-height: 10px;
       cursor: pointer;
     }
   }

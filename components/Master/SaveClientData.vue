@@ -25,7 +25,7 @@
 
 <style lang="scss" scoped>
   button {
-    background-color: $green-btn-color;
     border: 1px solid $green-btn-color;
+    background-color: $green-btn-color;
   }
 </style>

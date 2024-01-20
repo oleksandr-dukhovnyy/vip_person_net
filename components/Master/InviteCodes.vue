@@ -154,13 +154,13 @@
 
   .muted {
     @include muted;
+
     text-align: center;
   }
 
   .create-btn {
-    margin: padding() auto 0;
     width: max-content;
-
+    margin: padding() auto 0;
     font-size: 15px;
 
     @include scalable(1.05);
@@ -168,7 +168,7 @@
 
   .action-btn {
     color: #000;
-    cursor: pointer;
     text-decoration: underline;
+    cursor: pointer;
   }
 </style>

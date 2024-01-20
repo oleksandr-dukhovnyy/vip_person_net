@@ -47,19 +47,19 @@
 
 <style lang="scss" scoped>
   $tabs-top-height: 40px;
+  $border: 1px solid $cta-color;
 
   .tabs {
     &__top {
       display: grid;
+      grid-template-rows: $tabs-top-height;
+
       // grid-auto-flow: column;
       grid-template-columns: repeat(5, 190px);
-      justify-content: center;
-      grid-template-rows: $tabs-top-height;
-      align-items: center;
-
       grid-column-gap: padding(0.5);
+      justify-content: center;
+      align-items: center;
       padding: 0 padding();
-
       border-bottom: 1px solid #fff;
 
       @include media-down('m-s') {
@@ -67,31 +67,27 @@
       }
 
       &--item {
-        width: 100%;
-        height: $tabs-top-height;
-
-        padding: padding();
-        font-size: 12px;
-
         display: flex;
         justify-content: center;
         align-items: center;
-
-        border-radius: $border-radius $border-radius 0 0;
-
-        $border: 1px solid $cta-color;
+        width: 100%;
+        height: $tabs-top-height;
+        padding: padding();
         border-top: $border;
-        border-left: $border;
         border-right: $border;
+        border-left: $border;
+        border-radius: $border-radius $border-radius 0 0;
+        font-size: 12px;
         font-weight: 600;
+        cursor: pointer;
 
         // letter-spacing: 2px;
         transition: 0.3s;
-        cursor: pointer;
       }
 
       &--active {
         background-color: $cta-color;
+
         // color: #fff;
 
         transition: 0.3s;
@@ -101,8 +97,8 @@
     &__bottom {
       border-radius: $border-radius;
       background-color: #fff;
-      @include shadow;
 
+      @include shadow;
       @include container(1);
 
       @include media-down('m') {

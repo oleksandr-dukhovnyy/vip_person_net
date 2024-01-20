@@ -106,7 +106,6 @@
 
 <style scoped lang="scss">
   $border: 1px solid $gray-light;
-
   $column-max-width: 230px;
 
   .client-table {
@@ -118,26 +117,23 @@
         grid-template-rows: repeat(3, 40px);
         grid-template-columns: repeat(180px, 150px);
         grid-gap: padding();
-        padding: padding();
 
         // width: 33%;
         width: max-content;
-
-        //outline: 1px solid coral;
-
-        border-radius: $border-radius;
-        border: $border;
-
         margin-bottom: padding(4);
+        padding: padding();
+        border: $border;
+        border-radius: $border-radius;
       }
 
       &--title {
-        font-size: $font-size-micro;
         display: flex;
         align-items: center;
+        font-size: $font-size-micro;
       }
 
       @include input;
+
       padding: padding();
     }
 
@@ -153,22 +149,20 @@
       justify-items: center;
 
       h3 {
-        border-top: $border;
-        border-left: $border;
-        border-right: $border;
-        padding: padding();
-        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         width: 100%;
         max-width: $column-max-width;
+        margin-bottom: 0;
+        padding: padding();
+        border-top: $border;
+        border-right: $border;
+        border-left: $border;
         border-radius: $border-radius $border-radius 0 0;
-
         font-size: 20px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
         text-align: center;
-        flex-direction: column;
       }
     }
 
@@ -180,81 +174,64 @@
     &__item {
       display: flex;
       width: 100%;
+
       // line-height: 1;
       padding: padding(0.125) padding(1.5);
-
       border-top: $border;
-      border-left: $border;
       border-right: $border;
+      border-left: $border;
 
-      &:first-of-type {
-        border-right: $border;
-        padding-right: 0;
-        padding-left: 0;
+      &--header {
+        @include bold;
+
+        padding: padding(0.5) padding();
+        text-align: center;
+
+        & > div {
+          justify-content: center !important;
+          width: 44% !important;
+          padding: 0 !important;
+          font-size: 13px !important;
+        }
+
+        & > div + div {
+          width: 56% !important;
+          padding-right: 0 !important;
+          text-align: right;
+        }
       }
 
-      & > div {
-        // width: 50%;
-        font-size: 13px;
+      &:first-of-type {
+        padding-right: 0;
+        padding-left: 0;
+        border-right: $border;
       }
 
       & > div:first-of-type {
-        text-align: left;
-        font-size: 11px;
         display: flex;
-        align-items: center;
         justify-content: flex-start;
-        line-height: 1;
-
+        align-items: center;
         width: 44%;
-
         padding-left: 5px;
-      }
-
-      & > div + div {
-        text-align: right;
-        padding-right: 5px;
-
-        width: 56%;
+        font-size: 11px;
+        line-height: 1;
+        text-align: left;
       }
 
       &-contain {
         & > div:last-of-type {
-          border-radius: 0 0 $border-radius $border-radius;
           border-bottom: $border;
+          border-radius: 0 0 $border-radius $border-radius;
         }
-      }
-
-      &--header {
-        @include bold();
-        text-align: center;
-
-        & > div {
-          font-size: 13px !important;
-          width: 44% !important;
-          justify-content: center !important;
-          padding: 0 !important;
-        }
-
-        & > div + div {
-          padding-right: 0px !important;
-          width: 56% !important;
-        }
-        padding: padding(0.5) padding();
       }
     }
 
     &__column {
       display: flex;
       justify-content: space-evenly;
-
-      max-width: $column-max-width;
       width: $column-max-width;
+      max-width: $column-max-width;
       margin: 0 auto;
-
-      & > div {
-        width: 100%;
-      }
     }
   }
 </style>

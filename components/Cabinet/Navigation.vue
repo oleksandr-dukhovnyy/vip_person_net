@@ -28,19 +28,18 @@
 
 <style lang="scss" scoped>
   .navigation {
-    width: max-content;
-    &--muted {
-      font-style: italic;
-      color: #212529;
-    }
-
-    max-width: $max-site-content-width;
-
     display: grid;
     grid-template-columns: 12px 1fr;
-    align-items: center;
     grid-gap: padding();
+    align-items: center;
+    width: max-content;
+    max-width: $max-site-content-width;
     cursor: pointer;
+
+    &--muted {
+      color: #212529;
+      font-style: italic;
+    }
 
     @include container(1.75, 3.5);
 
@@ -50,9 +49,9 @@
 
     p {
       margin: 0;
-      font-weight: 400;
-      font-size: 15px;
       color: #dc3545;
+      font-size: 15px;
+      font-weight: 400;
       opacity: 0.65;
     }
   }

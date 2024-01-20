@@ -59,24 +59,26 @@
 <style scoped lang="scss">
   .error {
     @include page;
-    padding-top: padding(5);
+
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: padding(5);
 
     &__title {
       display: flex;
-      width: max-content;
       justify-content: space-between;
       align-items: center;
+      width: max-content;
       margin: auto;
 
       &--code {
-        font-size: $font-size-big;
         margin-right: padding();
-        border-right: 1px solid #000;
         padding-right: padding(4);
+        border-right: 1px solid #000;
+        font-size: $font-size-big;
       }
+
       &--title {
         margin: 0;
         padding-left: padding(4);
@@ -85,8 +87,8 @@
     }
 
     &__description {
-      padding-top: padding(3);
       width: 100%;
+      padding-top: padding(3);
       text-align: center;
     }
   }

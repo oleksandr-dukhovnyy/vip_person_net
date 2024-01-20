@@ -56,8 +56,8 @@
 
     @include media-down('t-sm') {
       grid-template-columns: 100%;
-      margin: 0 auto;
       width: 100%;
+      margin: 0 auto;
     }
 
     &__select {

@@ -14,7 +14,7 @@
     img {
       width: 84px;
       height: 36px;
-      // outline: 1px solid coral;
+
       @include scalable(1.1);
     }
   }

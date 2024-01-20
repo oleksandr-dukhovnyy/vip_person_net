@@ -68,15 +68,15 @@
     @include container;
 
     &__name {
-      font-weight: 300;
       font-size: $font-size-header;
+      font-weight: 300;
     }
 
     &__percents {
-      width: max-content;
       display: flex;
-      column-gap: padding(2);
       align-items: flex-end;
+      width: max-content;
+      column-gap: padding(2);
     }
 
     &__month {

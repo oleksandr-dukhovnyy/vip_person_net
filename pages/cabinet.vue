@@ -41,7 +41,7 @@
     () => store.getters['AUTH_LOGIN_LOADING']
   );
   const CLIENT_DATA = computed(() => store.getters['CLIENT_DATA']);
-  const CLIENT = computed(() => store.getters['CLIENT']);
+  // const CLIENT = computed(() => store.getters['CLIENT']);
 
   const client = computed(() => {
     return CLIENT_DATA.value !== null && CLIENT_DATA.value !== undefined
@@ -56,14 +56,17 @@
 <style lang="scss" scoped>
   .cabinet {
     @include container(0);
+
     padding: 70px 0;
     background-color: #fff;
+
     // border-radius: $border-radius;
     // @include shadow;
 
     &--contain {
       @include page(0, 0, 40px);
       @include content-container;
+
       padding: 0;
     }
 

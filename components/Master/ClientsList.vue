@@ -37,20 +37,20 @@
 
 <style scoped lang="scss">
   .clients-list {
-    margin-top: 10px;
-    @include container(0.5);
     width: 230px;
-
+    margin-top: 10px;
+    padding-right: 0;
     border: 1px solid #c2c2c2;
     border-radius: $border-radius;
-    padding-right: 0px;
+
+    @include container(0.5);
 
     &__client {
-      cursor: pointer;
       padding: padding(0.5);
       border: 1px solid #fff;
       font-size: 14px;
       line-height: 1;
+      cursor: pointer;
 
       .c-small {
         font-size: 13px;

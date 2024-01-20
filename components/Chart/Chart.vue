@@ -49,10 +49,9 @@
 
 <style lang="scss" scoped>
   .chart {
-    padding: 10px 10px 0 0;
     display: flex;
-    // justify-content: center;
     width: 100%;
+    padding: 10px 10px 0 0;
     transition: 0.5s;
 
     canvas {

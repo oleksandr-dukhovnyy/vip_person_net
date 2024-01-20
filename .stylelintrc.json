@@ -20,6 +20,12 @@
         ]
       }
     ],
+    "function-no-unknown": [
+      true,
+      {
+        "ignoreFunctions": ["padding"]
+      }
+    ],
     "selector-class-pattern": "[a-z]+[a-z-]*[a-z]",
     "media-feature-range-notation": "prefix",
     "order/properties-order": [

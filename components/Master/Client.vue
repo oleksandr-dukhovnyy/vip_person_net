@@ -31,6 +31,7 @@
 <style scoped lang="scss">
   .client {
     @include container;
+
     padding: 0 0 0 padding();
 
     @include media-down('m') {
@@ -42,8 +43,8 @@
     }
 
     &__chart {
-      margin: auto;
       width: 100%;
+      margin: auto;
     }
   }
 </style>

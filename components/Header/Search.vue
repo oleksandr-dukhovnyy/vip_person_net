@@ -39,35 +39,28 @@
 <style scoped lang="scss">
   $search-width: 154px;
   $shot-color: #ffb800;
-  $search_icon-width: 16px;
+  $search-icon-width: 16px;
 
   .search {
-    width: $search-width;
-
     display: grid;
-    grid-template-columns: $search_icon-width 1fr;
+    grid-template-columns: $search-icon-width 1fr;
     grid-gap: padding();
     align-items: center;
-
+    width: $search-width;
     height: 34px;
     padding: 0 padding();
-    background: #ececec;
     border-radius: $border-radius;
+    background: #ececec;
 
     &__icon {
-      width: $search_icon-width;
+      width: $search-icon-width;
       margin: auto;
     }
 
     &__input {
       @include input;
+
       border: none;
     }
-
-    // &__rezult {
-    // 	&--shot {
-    // 		color: $shot-color;
-    // 	}
-    // }
   }
 </style>

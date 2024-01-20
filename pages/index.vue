@@ -11,7 +11,7 @@
 
 <style lang="scss" scoped>
   .main {
-    @include page();
+    @include page;
 
     display: flex;
     justify-content: center;

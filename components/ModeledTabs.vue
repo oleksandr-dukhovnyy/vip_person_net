@@ -49,12 +49,12 @@
 
       &-item {
         padding: 8px 16px;
-        background-color: #f7f7f7;
-        opacity: 0.6;
-        border-radius: 5px 5px 0 0;
-        cursor: pointer;
         border: 1px solid #ccc;
         border-bottom: none;
+        border-radius: 5px 5px 0 0;
+        background-color: #f7f7f7;
+        opacity: 0.6;
+        cursor: pointer;
         transition: opacity 300ms;
 
         &--active {
@@ -68,9 +68,9 @@
     }
 
     &__body {
-      background-color: #f7f7f7;
       border: 1px solid #ccc;
-      border-radius: 0 5px 5px 5px;
+      border-radius: 0 5px 5px;
+      background-color: #f7f7f7;
     }
   }
 </style>

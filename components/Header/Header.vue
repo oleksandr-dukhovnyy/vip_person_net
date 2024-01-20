@@ -174,50 +174,49 @@
 
 <style lang="scss" scoped>
   .header {
-    width: 100%;
-    height: $header-height;
     position: fixed;
-
     display: flex;
     justify-content: space-between;
+    width: 100%;
     max-width: $max-site-content-width;
+    height: $header-height;
 
     @include container(1, 2.4);
+
     @include media-down('m') {
       @include container(1, 0);
     }
 
     &__wrapper {
-      height: $header-height;
-      background-color: #fff;
-      width: 100%;
-      margin-bottom: padding(2);
+      position: fixed;
+      z-index: 2;
       display: flex;
       justify-content: center;
-      z-index: 2;
-
-      position: fixed;
+      width: 100%;
+      height: $header-height;
+      margin-bottom: padding(2);
+      background-color: #fff;
 
       .space {
-        height: $header-height;
         width: 1px;
+        height: $header-height;
       }
 
-      @include shadow();
+      @include shadow;
 
       &.show-full-header {
-        background-color: transparent;
-        height: 40px;
-        box-shadow: none;
         display: flex;
         justify-content: center;
         width: 100%;
+        height: 40px;
+        background-color: transparent;
+        box-shadow: none;
 
         .header__hidden__container {
-          width: 100%;
-          max-width: $max-site-content-width;
           display: flex;
           justify-content: flex-start;
+          width: 100%;
+          max-width: $max-site-content-width;
         }
 
         .space {
@@ -234,43 +233,6 @@
         display: grid;
         grid-auto-flow: column;
         grid-gap: padding(2);
-
-        .user {
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-
-          img {
-            $size: 20px;
-            width: $size;
-            height: $size;
-          }
-
-          &__link {
-            display: flex;
-            gap: 14px;
-
-            .network-status {
-              margin: auto 0;
-              width: 8px;
-              height: 8px;
-              border-radius: 50%;
-              background-color: #b5b5b5;
-
-              &--online {
-                background-color: #2fe519;
-              }
-
-              &--offline {
-                background-color: #dd4545;
-              }
-
-              &--unknown {
-                background-color: #b5b5b5;
-              }
-            }
-          }
-        }
       }
     }
 
@@ -278,19 +240,17 @@
       position: relative;
 
       &--container {
-        position: absolute;
-        background-color: #fff;
-        padding: padding() padding() (padding() + 2px) padding();
-        right: 0px;
-        top: 30px;
-        min-width: 150px;
-
         $dbr: 10px;
 
-        border-radius: $dbr 0 $dbr $dbr;
-
+        position: absolute;
+        top: 30px;
+        right: 0;
         display: flex;
         flex-direction: column;
+        min-width: 150px;
+        padding: padding() padding() (padding() + 2px) padding();
+        border-radius: $dbr 0 $dbr $dbr;
+        background-color: #fff;
 
         @include shadow;
       }
@@ -313,8 +273,42 @@
   }
 
   .user {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
     img {
       @include scalable;
+
+      $size: 20px;
+
+      width: $size;
+      height: $size;
+    }
+
+    &__link {
+      display: flex;
+      gap: 14px;
+
+      .network-status {
+        width: 8px;
+        height: 8px;
+        margin: auto 0;
+        border-radius: 50%;
+        background-color: #b5b5b5;
+
+        &--online {
+          background-color: #2fe519;
+        }
+
+        &--offline {
+          background-color: #dd4545;
+        }
+
+        &--unknown {
+          background-color: #b5b5b5;
+        }
+      }
     }
   }
 </style>

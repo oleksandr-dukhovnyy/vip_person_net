@@ -89,19 +89,18 @@
 <style scoped lang="scss">
   .client-info {
     @include container(1);
-    border: 1px solid #c2c2c2;
-    border-radius: $border-radius;
 
     display: grid;
     grid-template-columns: 1fr;
     grid-row-gap: 10px;
     margin: 0 auto;
+    border: 1px solid #c2c2c2;
+    border-radius: $border-radius;
 
     button {
       width: 190px;
       height: 40px;
       margin: 0 auto padding(0.5);
-
       font-size: 15px;
     }
 
@@ -115,12 +114,13 @@
     }
 
     &__line {
+      // text-align: center;
+      padding: 0 0 padding();
+
       // display: grid;
       // grid-gap: 10px;
       // grid-template-columns: 85px 1fr;
       font-size: 13px;
-      // text-align: center;
-      padding: 0 0 padding();
 
       p {
         margin: 0;
@@ -134,14 +134,15 @@
     // }
 
     &__client {
-      font-weight: 600;
       font-size: 14px;
+      font-weight: 600;
+
       // text-align: center;
       line-height: 1;
 
       span {
-        opacity: 0.5;
         font-size: 13px;
+        opacity: 0.5;
       }
 
       &--last {
@@ -157,8 +158,8 @@
 
     &__title {
       span {
-        opacity: 0.5;
         font-size: 12px;
+        opacity: 0.5;
       }
     }
   }

@@ -378,13 +378,13 @@
 
   button {
     &.btn-success {
-      background-color: $green-btn-color;
       border: 1px solid $green-btn-color;
+      background-color: $green-btn-color;
     }
 
     &.btn-dark {
-      background-color: $black-btn-color;
       border: 1px solid $black-btn-color;
+      background-color: $black-btn-color;
     }
   }
 
@@ -395,13 +395,13 @@
   }
 
   .actions {
-    padding: padding() 0;
     display: flex;
+    padding: padding() 0;
 
     @include media-down('t-l') {
       display: grid;
-      grid-template-columns: 1fr;
       grid-template-rows: repeat(2, max-content);
+      grid-template-columns: 1fr;
     }
 
     &.closed-editor {
@@ -409,12 +409,11 @@
     }
 
     &__new-action {
-      text-align: right;
-
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-gap: padding();
       justify-items: flex-start;
+      text-align: right;
 
       & > div {
         display: flex;
@@ -423,13 +422,11 @@
 
       &--button {
         display: flex;
-        align-items: center;
         justify-content: center;
-
-        font-size: 20px;
+        align-items: center;
         width: 40px;
         height: 40px;
-
+        font-size: 20px;
         text-align: 40px;
 
         img {
@@ -452,27 +449,25 @@
       }
 
       @include media-down('m-s') {
-        grid-template-columns: 100%;
         grid-template-rows: max-content max-content;
+        grid-template-columns: 100%;
         justify-content: center;
       }
     }
 
     &__action-editor {
-      margin-left: padding();
-
-      padding: padding();
+      display: grid;
+      grid-template-rows: 104px 1fr;
+      grid-gap: padding();
+      max-width: 255px;
 
       // width: (235px + paddng(2));
       min-height: 250px;
       max-height: 400px;
-      max-width: 255px;
+      margin-left: padding();
+      padding: padding();
       border: 1px solid rgb(194, 194, 194);
       border-radius: $border-radius;
-
-      display: grid;
-      grid-template-rows: 104px 1fr;
-      grid-gap: padding();
 
       @include media-down('t-l') {
         margin: padding() auto;
@@ -490,18 +485,20 @@
 
       &--inpus {
         margin: padding();
+
         input {
           @include input;
-          padding: padding();
+
           margin-bottom: padding();
+          padding: padding();
         }
 
         select {
           width: 100%;
+          margin-bottom: padding();
+          padding: padding();
           border: 1px solid rgb(194, 194, 194);
           border-radius: $border-radius;
-          padding: padding();
-          margin-bottom: padding();
           font-size: $font-size-small;
         }
       }
@@ -509,9 +506,9 @@
 
     &__list-contain {
       display: grid;
-      width: 100%;
       grid-template-columns: repeat(1, 1fr);
       grid-gap: padding();
+      width: 100%;
 
       .el-tab-pane {
         display: grid;

@@ -134,40 +134,37 @@
 
 <style scoped lang="scss">
   $id-cs: 18px;
-
   $grid: $id-cs 1fr 0.5fr 1.3fr 1fr;
 
   .actions {
     &__empty {
-      width: 100%;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      width: 100%;
       height: 50px;
+      padding-top: 15px;
       color: #a2a2a2;
       font-size: 1em;
       line-height: 1;
-      padding-top: 15px;
     }
 
     &__table {
       display: grid;
-      grid-gap: padding();
       grid-template-columns: $grid;
-      border-bottom: 1px solid $gray;
+      grid-gap: padding();
+      place-items: center center;
       padding: padding(0.3) 1px;
+      border-right: 1px solid #a2a2a2;
+      border-bottom: 1px solid $gray;
+      border-left: 1px solid #a2a2a2;
       font-size: 13px;
-      justify-items: center;
-      align-items: center;
       line-height: 1;
 
-      border-left: 1px solid #a2a2a2;
-      border-right: 1px solid #a2a2a2;
-
       @include media-down('m') {
+        grid-template-columns: $grid;
         grid-gap: padding();
         justify-content: space-between;
-        grid-template-columns: $grid;
       }
 
       @include media-down('m-s') {
@@ -181,6 +178,7 @@
       & > div {
         width: 100%;
         text-align: center;
+
         // outline: 1px dotted coral;
       }
 
@@ -205,10 +203,6 @@
       &--contain {
         width: 100%;
 
-        // border-left: 1px solid #a2a2a2;
-        // border-right: 1px solid #a2a2a2;
-        // border-top: 1px solid #a2a2a2;
-
         @include media-down('m-s') {
           overflow-x: scroll;
         }
@@ -216,30 +210,26 @@
 
       &--date {
         span {
-          opacity: 0.5;
           font-size: 12px;
+          opacity: 0.5;
         }
 
         text-align: center;
       }
 
       &--value {
-        text-align: right !important;
         width: 100%;
+        text-align: right !important;
       }
 
       &--header {
-        font-weight: 600;
-        font-size: 14px;
-        text-align: center;
+        padding: padding() 1px;
         border: none;
         border-bottom: 1px solid #a2a2a2;
-        padding: padding() 1px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
       }
-
-      // &--value {
-      //   text-align: right;
-      // }
     }
   }
 </style>

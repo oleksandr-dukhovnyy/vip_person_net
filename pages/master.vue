@@ -92,13 +92,12 @@
 <style lang="scss">
   .master {
     max-width: 1400px;
-    margin: 0 auto;
-    @include page;
     min-height: 101vh;
-    padding: 75px;
 
-    padding-left: 0;
-    padding-right: 0;
+    @include page;
+
+    margin: 0 auto;
+    padding: 75px 0;
 
     @include media-down('m') {
       padding: padding(2) 0 0;
