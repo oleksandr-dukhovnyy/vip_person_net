@@ -17,7 +17,8 @@
           <div class="login__title login__title">Email</div>
           <input
             ref="email"
-            v-model="email"
+            v-model="form.email"
+            placeholder="Email"
             type="text"
             @keydown.enter="password?.focus()"
           />
@@ -27,7 +28,8 @@
           <div class="login__title login__title">Пароль</div>
           <input
             ref="password"
-            v-model="password"
+            v-model="form.password"
+            placeholder="Пароль"
             type="password"
             @keydown.enter="send?.focus()"
           />
