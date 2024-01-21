@@ -112,6 +112,10 @@
     // border: 1px solid black;
 
     &__input {
+      @include input;
+
+      padding: padding();
+
       &--contain {
         display: grid;
         grid-template-rows: repeat(3, 40px);
@@ -131,10 +135,6 @@
         align-items: center;
         font-size: $font-size-micro;
       }
-
-      @include input;
-
-      padding: padding();
     }
 
     &__header,
